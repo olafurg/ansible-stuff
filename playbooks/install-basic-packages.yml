@@ -1,0 +1,12 @@
+---
+- hosts: debian
+  tasks:
+    - name: Install basic packages
+      become: true
+      apt:
+        name:
+          - vim
+          - git
+          - curl
+        state: present
+        update_cache: true
