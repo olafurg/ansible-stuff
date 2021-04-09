@@ -8,5 +8,6 @@
           - vim
           - git
           - curl
+          - htop
         state: present
         update_cache: true
