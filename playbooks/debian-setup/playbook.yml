@@ -4,10 +4,6 @@
     - name: Install basic packages
       become: true
       apt:
-        name:
-          - vim
-          - git
-          - curl
-          - htop
-        state: present
+        name: vim, git, curl, htop
+        state: latest
         update_cache: true

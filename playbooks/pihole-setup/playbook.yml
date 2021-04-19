@@ -1,0 +1,20 @@
+---
+- name: Pihole setup
+  hosts: pihole
+  become: yes
+  tasks:
+    - name: Ensure required packages are installed
+      apt:
+        name: vim, git, curl, htop
+        state: latest
+        update_cache: true
+  
+    - name: Maintain adlists
+      copy:
+        src: templates/adlists.list
+        dest: /etc/pihole/adlists.list
+        owner: root
+        group: root
+        backup: yes
+    - name: Update Gravity database
+      shell: pihole -g -r >> gravityupdate.log

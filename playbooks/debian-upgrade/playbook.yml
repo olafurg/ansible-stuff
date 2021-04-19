@@ -1,5 +1,5 @@
 ---
-- name: Update Debian based boxes
+- name: Upgrade Debian based boxes
   hosts: debian
   become: true
   tasks:

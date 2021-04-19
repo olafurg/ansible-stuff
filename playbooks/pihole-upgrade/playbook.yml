@@ -1,7 +1,7 @@
 ---
-- name: Update Pihole software
+- name: Upgrade Pihole software
   hosts: pihole
   become: yes
   tasks:
-    - name: Run update command
+    - name: Run upgrade command
       shell: pihole -up >> /tmp/pihole-upgrade.txt
