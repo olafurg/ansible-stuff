@@ -35,8 +35,8 @@
 
 - name: Change default shell to (oh-my-)zsh
   vars:
-    the_user: "{{ ansible_user_id }}"
+    current_user: "{{ ansible_user_id }}"
   become: true
   user:
-    name: "{{ the_user }}"
+    name: "{{ current_user }}"
     shell: /usr/bin/zsh
