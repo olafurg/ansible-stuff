@@ -1,0 +1,22 @@
+---
+- name: "Set up Ubuntu WSL localhost"
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: Install basic packages
+      become: true
+      apt:
+        name: 
+          - vim
+          - git
+          - curl
+          - htop
+        state: latest
+        update_cache: true
+    
+    - name: Install and configure oh-my-zsh
+      include_role: 
+        name: oh_my_zsh
+
+      

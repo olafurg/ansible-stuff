@@ -1,0 +1,42 @@
+---
+- name: Install Zsh and Git
+  become: true
+  apt:
+    name:
+      - zsh
+      - git
+    state: latest
+
+- name: Check if .zshrc exists
+  stat:
+    path: ~/.zshrc
+  register: stat_rc_result
+
+- name: Check if .oh-my-zsh exists
+  stat:
+    path: ~/.oh-my-zsh
+  register: stat_oh_my_zsh
+
+- name: Get oh-my-zsh install script if needed
+  get_url: 
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp
+  when: not stat_oh_my_zsh.stat.exists
+
+- name: Install oh-my-zsh if needed
+  command: sh /tmp/install.sh
+  register: stat_install_oh_my_zsh
+  when: not stat_oh_my_zsh.stat.exists
+
+- name: Replace default .zshrc with custom one
+  copy:
+    src=../files/.zshrc
+    dest=~/.zshrc
+
+- name: Change default shell to (oh-my-)zsh
+  vars:
+    the_user: "{{ ansible_user_id }}"
+  become: true
+  user:
+    name: "{{ the_user }}"
+    shell: /usr/bin/zsh
