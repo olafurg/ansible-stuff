@@ -5,15 +5,13 @@
   tasks:
     - name: Ensure required packages are installed
       apt:
-        name: vim, git, curl, htop
+        name: 
+          - vim
+          - git
+          - curl
+          - htop
         state: latest
         update_cache: true
-
-    - name: Upgrade Pihole software
-      hosts: pihole
-      tasks:
-        - name: Run upgrade command
-          shell: pihole -up >> /tmp/pihole-upgrade.txt
 
     - name: Maintain adlists
       copy:
@@ -22,5 +20,6 @@
         owner: root
         group: root
         backup: yes
+
     - name: Update Gravity database
-      shell: pihole -g -r >> gravityupdate.log
+      shell: pihole -g -r >> /tmp/gravityupdate.log
