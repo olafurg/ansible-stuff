@@ -7,16 +7,15 @@
     - name: Install basic packages
       become: true
       apt:
-        name: 
+        name:
           - vim
           - git
           - curl
           - htop
+          - tree
         state: latest
         update_cache: true
-    
-    - name: Install and configure oh-my-zsh
-      include_role: 
-        name: oh_my_zsh
 
-      
+    - name: Install and configure oh-my-zsh
+      include_role:
+        name: oh_my_zsh
