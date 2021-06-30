@@ -11,4 +11,6 @@ and
 
     ./install_environment.sh
 
-Running the latter should suffice when scripts are updated.
+Running the latter should suffice when scripts are updated. You can also run only the Ansible Playbook with:
+
+    ansible-playbook main.yml -K
