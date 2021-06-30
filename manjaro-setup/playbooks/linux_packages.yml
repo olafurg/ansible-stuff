@@ -1,0 +1,23 @@
+---
+- name:
+  hosts: localhost
+  connection: local
+  become: yes
+  vars_files:
+    - ../lists/pacman_package_list.yml
+  tasks:
+    - name: Upgrade pacman
+      pacman:
+        upgrade: yes
+    - name: Install pacman packages
+      pacman:
+        name: "{{ pacman_packages }}"
+        state: latest
+
+- name: Clear pacman cache
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Clear Linux and AUR caches
+      shell: pacman -Scc --noconfirm
