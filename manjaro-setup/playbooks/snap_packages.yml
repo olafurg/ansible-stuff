@@ -1,0 +1,18 @@
+---
+- name:
+  hosts: localhost
+  connection: local
+  become: yes
+  vars_files:
+    - ../lists/snap_package_list.yml
+  tasks:
+    - name: Install snaps
+      snap:
+        name: "{{ snap_packages }}"
+        state: present
+
+    - name: Remove snaps
+      snap:
+        name:
+          - hey-mail
+        state: absent
