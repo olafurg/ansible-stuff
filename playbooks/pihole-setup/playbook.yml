@@ -2,6 +2,10 @@
 - name: Pihole setup
   hosts: pihole
   become: yes
+
+  roles:
+  - oh_my_zsh
+
   tasks:
     - name: Ensure required packages are installed
       apt:
@@ -11,15 +15,31 @@
           - curl
           - htop
         state: latest
-        update_cache: true
 
-    - name: Maintain adlists
-      copy:
-        src: templates/adlists.list
-        dest: /etc/pihole/adlists.list
-        owner: root
-        group: root
-        backup: yes
+    - name: Get pihole installer
+      get_url:
+        url: https://install.pi-hole.net
+        dest: /tmp/basic-install.sh
 
-    - name: Update Gravity database
-      shell: pihole -g -r >> /tmp/gravityupdate.log
+    - name: Install pihole
+      become: yes
+      command: bash /tmp/basic-install.sh
+
+    # - name: Remove old adlists
+    #   file: 
+    #     path: /etc/pihole/
+    #     state: absent
+    #   with_fileglob: 
+    #     - /etc/pihole
+
+    # - name: Upload configured adlists
+    #   copy:
+    #     src: templates/adlists.list
+    #     dest: /etc/pihole/adlists.list
+    #     owner: root
+    #     group: root
+    #     backup: yes
+
+    # - name: Update Gravity database
+    #   shell: pihole -g -r >> /tmp/gravityupdate.log
+    u4pPktbc
