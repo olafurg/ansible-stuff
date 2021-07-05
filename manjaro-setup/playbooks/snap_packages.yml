@@ -1,5 +1,5 @@
 ---
-- name:
+- name: Install desired Snap packages
   hosts: localhost
   connection: local
   become: yes

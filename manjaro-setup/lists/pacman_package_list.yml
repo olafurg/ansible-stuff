@@ -37,6 +37,7 @@ pacman_packages:
 - terminator
 - tex-gyre-fonts
 - tmux
+- tpm2-abrmd
 - traceroute
 - tree
 - ttf-ms-fonts
