@@ -1,3 +1,4 @@
 ---
 - import_playbook: playbooks/linux_packages.yml
 - import_playbook: playbooks/snap_packages.yml
+- import_playbook: playbooks/linux_services.yml

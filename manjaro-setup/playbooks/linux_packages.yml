@@ -1,5 +1,5 @@
 ---
-- name:
+- name: Install desired Pacman packages
   hosts: localhost
   connection: local
   become: yes

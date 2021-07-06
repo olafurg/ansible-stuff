@@ -32,10 +32,12 @@ pacman_packages:
 - slack-desktop
 - speedtest-cli
 - stellarium
+- system-config-printer # For more fine-grained management of printers.
 - teams
 - terminator
 - tex-gyre-fonts
 - tmux
+- tpm2-abrmd
 - traceroute
 - tree
 - ttf-ms-fonts
