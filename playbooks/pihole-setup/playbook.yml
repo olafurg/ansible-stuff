@@ -15,6 +15,7 @@
           - curl
           - htop
         state: latest
+        update_cache: true
 
     - name: Get pihole installer
       get_url:
@@ -42,4 +43,3 @@
 
     # - name: Update Gravity database
     #   shell: pihole -g -r >> /tmp/gravityupdate.log
-    u4pPktbc

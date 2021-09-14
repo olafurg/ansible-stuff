@@ -13,6 +13,7 @@
           - curl
           - htop
           - tree
+          - traceroute
         state: latest
         update_cache: true
 
