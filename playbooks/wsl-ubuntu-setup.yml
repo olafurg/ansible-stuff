@@ -27,3 +27,7 @@
     - name: Install and configure git
       include_role:
         name: git
+
+    - name: Install and configure vim
+      include_role:
+        name: vim
