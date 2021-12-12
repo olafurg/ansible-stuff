@@ -10,6 +10,7 @@ Moved:
 * git and config (role)
 * vim (role)
 * tmux (role)
+* terraform (role)
 
 Next:
 * ruby configs (.gemrc, .rspec, etc.)
