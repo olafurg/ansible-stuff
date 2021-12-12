@@ -31,3 +31,7 @@
     - name: Install and configure vim
       include_role:
         name: vim
+
+    - name: Install and configure tmux
+      include_role:
+        name: tmux

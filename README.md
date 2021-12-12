@@ -9,6 +9,7 @@ Moved:
 * oh-my-zsh install (role)
 * git and config (role)
 * vim (role)
+* tmux (role)
 
 Next:
 * ruby configs (.gemrc, .rspec, etc.)

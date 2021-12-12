@@ -1,0 +1,12 @@
+---
+- name: Install tmux
+  become: true
+  apt:
+    name:
+      - tmux
+    state: latest
+
+- name: Put the tmux config file in place
+  copy:
+    src=../files/.tmux.conf
+    dest=~/
