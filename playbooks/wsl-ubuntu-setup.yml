@@ -14,9 +14,16 @@
           - htop
           - tree
           - traceroute
+          - nmap
+          - masscan
+          - glances
         state: latest
         update_cache: true
 
     - name: Install and configure oh-my-zsh
       include_role:
         name: oh_my_zsh
+
+    - name: Install and configure git
+      include_role:
+        name: git
