@@ -20,18 +20,8 @@
         state: latest
         update_cache: true
 
-    - name: Install and configure oh-my-zsh
-      include_role:
-        name: oh_my_zsh
-
-    - name: Install and configure git
-      include_role:
-        name: git
-
-    - name: Install and configure vim
-      include_role:
-        name: vim
-
-    - name: Install and configure tmux
-      include_role:
-        name: tmux
+  roles:
+    - oh_my_zsh
+    - git
+    - vim
+    - tmux
