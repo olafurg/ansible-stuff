@@ -14,3 +14,9 @@ Next:
 * ruby configs (.gemrc, .rspec, etc.)
 * terminator
 * mousewheel config
+
+To run a playbook, for example:
+
+    ansible-playbook playbooks/wsl-ubuntu-setup.yml -K
+
+The ```-K``` is to prompt for sudo password.
