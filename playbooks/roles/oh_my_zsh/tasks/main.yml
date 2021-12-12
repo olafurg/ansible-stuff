@@ -33,6 +33,11 @@
     src=../files/.zshrc
     dest=~/.zshrc
 
+- name: Put custom aliases file in place
+  copy:
+    src=../files/aliases.zsh
+    dest=~/.oh-my-zsh/custom/
+
 - name: Change default shell to (oh-my-)zsh
   vars:
     current_user: "{{ ansible_user_id }}"
