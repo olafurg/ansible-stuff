@@ -8,7 +8,7 @@ Moved:
 * package installs
 * oh-my-zsh install (role)
 * git and config (role)
-* vim
+* vim (role)
 
 Next:
 * ruby configs (.gemrc, .rspec, etc.)
