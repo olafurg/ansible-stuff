@@ -17,6 +17,13 @@ Next:
 * terminator
 * mousewheel config
 
+To set up a new machine, you need to install ansible first.
+    
+    sudo apt-get update && sudo apt-get upgrade
+    sudo apt-get install ansible
+
+Then clone the repository and run a playbook.
+
 To run a playbook, for example:
 
     ansible-playbook playbooks/wsl-ubuntu-setup.yml -K
