@@ -1,7 +1,6 @@
 ---
 - name: Pihole setup
   hosts: pihole
-  become: yes
 
   roles:
   - base-packages-debian
@@ -13,6 +12,7 @@
   tasks:
 
     - name: Install unattended upgrades
+      become: true
       apt:
         name:
         - unattended-upgrades
