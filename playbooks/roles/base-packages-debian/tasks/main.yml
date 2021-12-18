@@ -1,0 +1,15 @@
+- name: Install basic packages
+  become: true
+  apt:
+    name: 
+      - curl
+      - git
+      - htop
+      - masscan
+      - nmap
+      - tree
+      - traceroute
+      - vim
+      - whois
+    state: latest
+    update_cache: true

@@ -4,27 +4,28 @@
   become: yes
 
   roles:
+  - base-packages-debian
+  - git
   - oh_my_zsh
+  - vim
+  - tmux
 
   tasks:
-    - name: Ensure required packages are installed
+
+    - name: Install unattended upgrades
       apt:
-        name: 
-          - vim
-          - git
-          - curl
-          - htop
+        name:
+        - unattended-upgrades
         state: latest
-        update_cache: true
 
-    - name: Get pihole installer
-      get_url:
-        url: https://install.pi-hole.net
-        dest: /tmp/basic-install.sh
+    # - name: Get pihole installer
+    #   get_url:
+    #     url: https://install.pi-hole.net
+    #     dest: /tmp/basic-install.sh
 
-    - name: Install pihole
-      become: yes
-      command: bash /tmp/basic-install.sh
+    # - name: Install pihole
+    #   become: yes
+    #   command: bash /tmp/basic-install.sh
 
     # - name: Remove old adlists
     #   file: 
