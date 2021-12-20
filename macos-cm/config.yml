@@ -1,0 +1,30 @@
+# Homebrew taps to use
+homebrew_taps:
+  - homebrew/core
+  - homebrew/cask
+
+# Homebrew packages to install
+homebrew_installed_packages:
+  - python3
+  - mas # mac app store apps installation ability
+
+# Homebrew cask apps to install
+homebrew_cask_apps:
+  - bitwarden
+  - brave-browser
+  - discord
+  - easy-move-plus-resize
+  - firefox
+  - iterm2
+  - microsoft-edge
+  - microsoft-teams
+  - rectangle
+  - signal
+  - spotify
+  - visual-studio-code
+  - workflowy
+  - zoom
+
+# Mac App Store Apps to install
+mas_installed_apps:
+  - { id: 1295203466, name: "Microsoft Remote Desktop" }
