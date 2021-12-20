@@ -2,7 +2,7 @@
 - name: Install vim
   homebrew:
     name:
-      - vim
+      - macvim
     state: latest
 
 - name: Put .vimrc in place
