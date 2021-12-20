@@ -10,6 +10,7 @@
     - geerlingguy.mac.mas
     - vim
     - git
+    - powerline-fonts
   
   tasks:
   
