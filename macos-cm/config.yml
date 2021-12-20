@@ -18,6 +18,7 @@ homebrew_cask_apps:
   - iterm2
   - microsoft-edge
   - microsoft-teams
+  - miro
   - rectangle
   - signal
   - spotify

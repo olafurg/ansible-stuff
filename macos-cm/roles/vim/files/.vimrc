@@ -90,7 +90,7 @@ let b:ale_fixers = {
 set number
 
 " jk is esc
-inoremap jk <esc>l
+inoremap jk <esc>
 
 " Enable filetype plugins
 filetype plugin on
@@ -118,7 +118,10 @@ set wrap linebreak
 set spell spelllang=en_us " spell check
 
 " Yank to clipboard
-set clipboard=unnamedplus " Linux
+"set clipboard=unnamedplus " Linux
+
+" MacOS backspace
+set backspace=indent,eol,start
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
