@@ -1,0 +1,16 @@
+---
+- name: Install vim
+  homebrew:
+    name:
+      - macvim
+    state: latest
+
+- name: Put .vimrc in place
+  copy:
+    src=../files/.vimrc
+    dest=~/
+
+- name: Put .vim directory in place
+  copy:
+    src=../folders/.vim
+    dest=~/

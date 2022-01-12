@@ -1,0 +1,16 @@
+---
+- name: Install and configure git
+  homebrew:
+    name:
+      - git
+    state: latest
+
+- name: Put gitconfig file in place
+  copy:
+    src=../files/.gitconfig
+    dest=~/
+
+- name: Put gitignore file in place
+  copy:
+    src=../files/.gitignore
+    dest=~/
