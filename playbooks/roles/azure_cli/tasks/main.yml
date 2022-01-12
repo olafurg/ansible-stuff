@@ -8,7 +8,7 @@
       - apt-transport-https
       - lsb-release
       - gnupg
-    state: latest
+    state: present
 
 - name: Add MS signing key
   become: true
@@ -32,5 +32,5 @@
   become: true
   apt:
     name: azure-cli
-    state: latest
+    state: present
     update_cache: yes

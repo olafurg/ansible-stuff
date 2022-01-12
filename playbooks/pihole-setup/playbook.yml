@@ -8,15 +8,16 @@
   - oh_my_zsh
   - vim
   - tmux
+  # - grafana # Seems not supported by Pihole armv6
 
   tasks:
 
-    - name: Install unattended upgrades
-      become: true
-      apt:
-        name:
-        - unattended-upgrades
-        state: latest
+    # - name: Install unattended upgrades
+    #   become: true
+    #   apt:
+    #     name:
+    #     - unattended-upgrades
+    #     state: latest
 
     # - name: Get pihole installer
     #   get_url:
