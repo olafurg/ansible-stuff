@@ -15,6 +15,7 @@ homebrew_cask_apps:
   - discord
   - easy-move-plus-resize
   - firefox
+  - flux
   - iterm2
   - microsoft-edge
   - microsoft-teams
