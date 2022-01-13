@@ -6,6 +6,7 @@ homebrew_taps:
 # Homebrew packages to install
 homebrew_installed_packages:
   - python3
+  - gh # GitHub
   - mas # mac app store apps installation ability
 
 # Homebrew cask apps to install
@@ -15,7 +16,7 @@ homebrew_cask_apps:
   - discord
   - easy-move-plus-resize
   - firefox
-  - flux
+  - flux # Night Shift that works
   - iterm2
   - microsoft-edge
   - microsoft-teams
