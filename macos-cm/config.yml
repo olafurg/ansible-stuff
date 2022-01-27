@@ -5,9 +5,11 @@ homebrew_taps:
 
 # Homebrew packages to install
 homebrew_installed_packages:
-  - python3
+  - awscli
+  - azure-cli
   - gh # GitHub
   - mas # mac app store apps installation ability
+  - python3
 
 # Homebrew cask apps to install
 homebrew_cask_apps:
@@ -17,6 +19,7 @@ homebrew_cask_apps:
   - easy-move-plus-resize
   - firefox
   - flux # Night Shift that works
+  - github
   - iterm2
   - microsoft-edge
   - microsoft-teams
@@ -24,6 +27,7 @@ homebrew_cask_apps:
   - rectangle
   - signal
   - spotify
+  - tidal # Music
   - visual-studio-code
   - workflowy
   - zoom
@@ -31,3 +35,4 @@ homebrew_cask_apps:
 # Mac App Store Apps to install
 mas_installed_apps:
   - { id: 1295203466, name: "Microsoft Remote Desktop" }
+  - { id: 1482454543, name: "Twitter" }
