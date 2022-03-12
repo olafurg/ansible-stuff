@@ -5,7 +5,7 @@
     name:
       - zsh
       - git
-    state: latest
+    state: present
 
 - name: Check if .zshrc exists
   stat:

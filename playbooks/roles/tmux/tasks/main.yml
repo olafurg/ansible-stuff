@@ -4,7 +4,7 @@
   apt:
     name:
       - tmux
-    state: latest
+    state: present
 
 - name: Put the tmux config file in place
   copy:

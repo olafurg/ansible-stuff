@@ -5,5 +5,5 @@
       become: true
       apt:
         name: vim, git, curl, htop
-        state: latest
+        state: present
         update_cache: true

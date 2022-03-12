@@ -32,5 +32,5 @@
   become: true
   apt:
     name: azure-cli
-    state: latest
+    state: present
     update_cache: yes

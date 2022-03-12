@@ -1,0 +1,11 @@
+[Unit]
+Description=CloudFlare DNS over HTTPS Proxy
+Wants=network-online.target
+After=network.target network-online.target
+ 
+[Service]
+ExecStart=cloudflared proxy-dns --port 54 --upstream https://o0kz8fjt5j.cloudflare-gateway.com/dns-query
+Restart=on-abort
+ 
+[Install]
+WantedBy=multi-user.target
