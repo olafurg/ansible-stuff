@@ -22,12 +22,6 @@
     var: install_output.stdout_lines
   when: not cloudflared_installed.stat.exists
 
-# - name: Put config files in place
-#   become: yes
-#   copy:
-#     src: ../files/config.yml
-#     dest: /etc/cloudflared/
-
 - name: Remove all config for old DNS servers in 01-pihole.conf
   become: yes
   lineinfile:
@@ -35,19 +29,20 @@
     regexp: '(^server=.*)'
     state: absent
 
+- name: Delete old DNS config as it's not needed now (using cloudflared)
+  become: yes
+  lineinfile:
+    path: /etc/pihole/setupVars.conf
+    regexp: '(^PIHOLE_DNS.*)'
+    state: absent
+
 - name: Add proper config for DNS upstream (use cloudflared)
   become: yes
   lineinfile:
-    path: /etc/dnsmasq.d/01-pihole.conf
-    line: 'server=127.0.0.1#54'
-    state: present
-
-- name: Uncomment DNS config as it's not needed now (using cloudflared)
-  become: yes
-  replace:
     path: /etc/pihole/setupVars.conf
-    regexp: '(^PIHOLE_DNS.*)'
-    replace: '# \1'
+    insertbefore: '(^DNS_FQDN)'
+    line: 'PIHOLE_DNS_1=127.0.0.1#54'
+    state: present
 
 - name: Restart pihole-FTL.service
   become: yes
