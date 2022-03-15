@@ -40,7 +40,7 @@
   become: yes
   lineinfile:
     path: /etc/pihole/setupVars.conf
-    insertbefore: '(^DNS_FQDN)'
+    insertafter: '(^CACHE_SIZE)'
     line: 'PIHOLE_DNS_1=127.0.0.1#54'
     state: present
 
