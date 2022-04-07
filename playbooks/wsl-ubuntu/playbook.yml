@@ -1,5 +1,5 @@
 ---
-- name: "Set up Ubuntu WSL localhost"
+- name: Set up Ubuntu WSL localhost
   hosts: localhost
   connection: local
   tasks:
