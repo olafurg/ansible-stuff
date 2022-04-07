@@ -1,7 +1,7 @@
 - name: Install basic packages
   become: true
   apt:
-    name: 
+    name:
       - curl
       - git
       - htop
@@ -11,5 +11,5 @@
       - traceroute
       - vim
       - whois
-    state: latest
+    state: present
     update_cache: true

@@ -8,16 +8,29 @@
   - oh_my_zsh
   - vim
   - tmux
-  # - grafana # Seems not supported by Pihole armv6
+  - cloudflared
 
   tasks:
 
-    # - name: Install unattended upgrades
-    #   become: true
-    #   apt:
-    #     name:
-    #     - unattended-upgrades
-    #     state: latest
+    - name: Install unattended upgrades
+      become: true
+      apt:
+        name:
+        - unattended-upgrades
+        state: present
+
+    # To avoid DNS packet size errors after started to use CF Gateway for upstream.
+    - name: Configure DNS packet size, create file if doesn't exist
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/dnsmasq.d/99-edns.conf
+        line: edns-packet-max=1232
+        state: present
+        create: yes
+
+    - name: Restart DNS service following the change above
+      become: yes
+      ansible.builtin.shell: pihole restartdns
 
     # - name: Get pihole installer
     #   get_url:
@@ -29,10 +42,10 @@
     #   command: bash /tmp/basic-install.sh
 
     # - name: Remove old adlists
-    #   file: 
+    #   file:
     #     path: /etc/pihole/
     #     state: absent
-    #   with_fileglob: 
+    #   with_fileglob:
     #     - /etc/pihole
 
     # - name: Upload configured adlists

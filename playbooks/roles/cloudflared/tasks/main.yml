@@ -1,0 +1,65 @@
+---
+- name: Check if cloudflared is installed
+  stat:
+    path: /usr/local/bin/cloudflared
+  register: cloudflared_installed
+
+- name: Download cloudflared if not installed - armhf 32 bit
+  become: yes
+  get_url:
+    url: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm
+    dest: /usr/local/bin/cloudflared
+    mode: '0755'
+  when: not cloudflared_installed.stat.exists
+
+- name: Verify installation
+  shell: cloudflared -v
+  register: install_output
+  when: not cloudflared_installed.stat.exists
+
+- name: Output the command output from above
+  debug:
+    var: install_output.stdout_lines
+  when: not cloudflared_installed.stat.exists
+
+- name: Remove all config for old DNS servers in 01-pihole.conf
+  become: yes
+  lineinfile:
+    path: /etc/dnsmasq.d/01-pihole.conf
+    regexp: '(^server=.*)'
+    state: absent
+
+- name: Delete old DNS config as it's not needed now (using cloudflared)
+  become: yes
+  lineinfile:
+    path: /etc/pihole/setupVars.conf
+    regexp: '(^PIHOLE_DNS.*)'
+    state: absent
+
+- name: Add proper config for DNS upstream (use cloudflared)
+  become: yes
+  lineinfile:
+    path: /etc/pihole/setupVars.conf
+    insertafter: '(^CACHE_SIZE)'
+    line: 'PIHOLE_DNS_1=127.0.0.1#54'
+    state: present
+
+- name: Restart pihole-FTL.service
+  become: yes
+  ansible.builtin.systemd:
+    name: pihole-FTL
+    state: restarted
+
+- name: Set up cloudflared to run as a service
+  become: yes
+  copy:
+    src: ../files/dnsproxy.service
+    dest: /etc/systemd/system/
+
+- name: Ensure the cloudflared dnsproxy.service is enabled and running
+  become: yes
+  ansible.builtin.systemd:
+    name: dnsproxy
+    daemon_reload: yes
+    state: started
+    enabled: yes

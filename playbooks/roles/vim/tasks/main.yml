@@ -4,7 +4,7 @@
   apt:
     name:
       - vim
-    state: latest
+    state: present
 
 - name: Put .vimrc in place
   copy:

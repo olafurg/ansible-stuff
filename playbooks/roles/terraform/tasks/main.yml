@@ -20,5 +20,5 @@
   become: true
   apt:
     name: terraform
-    state: latest
+    state: present
     update_cache: yes
