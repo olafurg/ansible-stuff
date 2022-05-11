@@ -36,3 +36,4 @@ homebrew_cask_apps:
 mas_installed_apps:
   - { id: 1295203466, name: "Microsoft Remote Desktop" }
   - { id: 1482454543, name: "Twitter" }
+  - { id: 1352778147, name: "Bitwarden" }
