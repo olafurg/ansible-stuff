@@ -8,7 +8,7 @@
       - apt-transport-https
       - lsb-release
       - gnupg
-    state: latest
+    state: present
 
 - name: Add MS signing key
   become: true

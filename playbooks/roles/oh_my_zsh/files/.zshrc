@@ -98,6 +98,9 @@ alias docker='sudo docker'
 alias docker-compose='sudo docker-compose'
 alias xo='xdg-open &>/dev/null'
 
+# More aliases
+source ~/.oh-my-zsh/custom/aliases.zsh
+
 # open ~/.zshrc in using the default editor specified in $EDITOR
 alias ec="$EDITOR $HOME/.zshrc"
 alias sc="source $HOME/.zshrc"
