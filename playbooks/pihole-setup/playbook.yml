@@ -27,6 +27,21 @@
         line: edns-packet-max=1232
         state: present
         create: yes
+    # Respond only on interface eth0
+    # - https://docs.pi-hole.net/ftldns/interfaces/?h=interface
+    - name: Respond only on interface eth0 - delete old config
+      become: yes
+      lineinfile:
+        path: /etc/dnsmasq.d/01-pihole.conf
+        regexp: '(^local-service.*)' # "Allow only local requests"
+        state: absent
+
+    - name: Respond only on interface eth0 - set correct config
+      become: yes
+      lineinfile:
+        path: /etc/dnsmasq.d/01-pihole.conf
+        line: 'interface=eth0' # Respond only on interface eth0
+        state: present
 
     - name: Restart DNS service following the change above
       become: yes
