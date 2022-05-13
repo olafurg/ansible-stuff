@@ -27,25 +27,44 @@
         line: edns-packet-max=1232
         state: present
         create: yes
-    # Respond only on interface eth0
+
+    # Respond only on interface eth0, needed since there are >1 networks (subnets) at home
     # - https://docs.pi-hole.net/ftldns/interfaces/?h=interface
-    - name: Respond only on interface eth0 - delete old config
+    - name: Respond only on interface eth0 - delete old config 1
       become: yes
       lineinfile:
         path: /etc/dnsmasq.d/01-pihole.conf
         regexp: '(^local-service.*)' # "Allow only local requests"
         state: absent
 
-    - name: Respond only on interface eth0 - set correct config
+    - name: Respond only on interface eth0 - set correct config 1
       become: yes
       lineinfile:
         path: /etc/dnsmasq.d/01-pihole.conf
+        insertafter: '(^bogus-priv)'
         line: 'interface=eth0' # Respond only on interface eth0
         state: present
 
-    - name: Restart DNS service following the change above
+    - name: Respond only on interface eth0 - delete old config 2
       become: yes
-      ansible.builtin.shell: pihole restartdns
+      lineinfile:
+        path: /etc/pihole/setupVars.conf
+        regexp: '(^DNSMASQ_LISTENING.*)'
+        state: absent
+
+    - name: Respond only on interface eth0 - set correct config 2
+      become: yes
+      lineinfile:
+        path: /etc/pihole/setupVars.conf
+        insertafter: '(^DNS_BOGUS.*)'
+        line: 'DNSMASQ_LISTENING=single' # Respond only on interface eth0
+        state: present
+
+    - name: Restart DNS service following the changes above
+      become: yes
+      ansible.builtin.systemd:
+        name: pihole-FTL
+        state: restarted
 
     # - name: Get pihole installer
     #   get_url:
