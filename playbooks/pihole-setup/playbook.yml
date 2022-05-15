@@ -12,6 +12,15 @@
 
   tasks:
 
+    # - name: Get pihole installer
+    #   get_url:
+    #     url: https://install.pi-hole.net
+    #     dest: /tmp/basic-install.sh
+
+    # - name: Install pihole
+    #   become: yes
+    #   command: bash /tmp/basic-install.sh
+
     - name: Install unattended upgrades
       become: true
       apt:
@@ -66,29 +75,12 @@
         name: pihole-FTL
         state: restarted
 
-    # - name: Get pihole installer
-    #   get_url:
-    #     url: https://install.pi-hole.net
-    #     dest: /tmp/basic-install.sh
+    # https://firebog.net
+    - name: Insert adlist into the gravity.db database
+      become: yes
+      ansible.builtin.command: sqlite3 /etc/pihole/gravity.db "insert or ignore into adlist (address, comment) values (\"{{ item }}\", \"Ansible\")";
+      loop: "{{ lookup ('file', 'templates/adlists.list').splitlines() }}"
 
-    # - name: Install pihole
-    #   become: yes
-    #   command: bash /tmp/basic-install.sh
-
-    # - name: Remove old adlists
-    #   file:
-    #     path: /etc/pihole/
-    #     state: absent
-    #   with_fileglob:
-    #     - /etc/pihole
-
-    # - name: Upload configured adlists
-    #   copy:
-    #     src: templates/adlists.list
-    #     dest: /etc/pihole/adlists.list
-    #     owner: root
-    #     group: root
-    #     backup: yes
-
-    # - name: Update Gravity database
-    #   shell: pihole -g -r >> /tmp/gravityupdate.log
+    - name: Rebuild the Gravity database
+      become: yes
+      shell: pihole -g
