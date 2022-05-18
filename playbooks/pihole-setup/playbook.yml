@@ -21,12 +21,12 @@
     #   become: yes
     #   command: bash /tmp/basic-install.sh
 
-    - name: Install unattended upgrades
-      become: true
-      apt:
-        name:
-        - unattended-upgrades
-        state: present
+    # - name: Install unattended upgrades
+    #   become: true
+    #   apt:
+    #     name:
+    #     - unattended-upgrades
+    #     state: present
 
     # To avoid DNS packet size errors after started to use CF Gateway for upstream.
     - name: Configure DNS packet size, create file if doesn't exist
@@ -75,7 +75,11 @@
         name: pihole-FTL
         state: restarted
 
-    # https://firebog.net
+    # Add adlists, from https://firebog.net
+    - name: Wipe the old Gravity database (in case some URLs were removed from before)
+      become: yes
+      shell: pihole -g -r recreate
+
     - name: Insert adlist into the gravity.db database
       become: yes
       ansible.builtin.command: sqlite3 /etc/pihole/gravity.db "insert or ignore into adlist (address, comment) values (\"{{ item }}\", \"Ansible\")";
