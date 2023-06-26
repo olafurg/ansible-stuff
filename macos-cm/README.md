@@ -1,19 +1,19 @@
-# First run (on a new Mac)
+# Instructions
 
-From here: https://austincloud.guru/2020/05/07/automating-macos-configuration/
+From here: https://github.com/olafurg/mac-dev-playbook
 
-    git clone https://${YOUR_GIT_REPO}
-    cd ${YOUR_GIT_REPO}
+1. Ensure Apple's command line tools are installed (`xcode-select --install` to launch the installer).
 
-then
+2. [Install Ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html):
 
-    sudo easy_install pip
-    sudo pip install ansible
-    ansible-galaxy collection install geerlingguy.mac --ignore-certs
-    # osascript needed to setup sandboxing for the terminal
-    osascript -e 'tell application "Finder"' -e 'set _b to bounds of window of desktop' -e 'end tell'
-    ansible-playbook main.yml -i inventory -K
+    1. Run the following command to add Python 3 to your $PATH: `export PATH="$HOME/Library/Python/3.9/bin:/opt/homebrew/bin:$PATH"`
+    2. Upgrade Pip: `sudo pip3 install --upgrade pip`
+    3. Install Ansible: `pip3 install ansible`
 
-Following any changes, it's sufficient to just run the playbook:
+3. Clone or download this repository to your local computer and `cd` into this directory.
 
-    ansible-playbook main.yml -i inventory -K
+4. Run `ansible-galaxy install -r requirements.yml` inside this directory to install required Ansible roles.
+
+5. Run `ansible-playbook main.yml --ask-become-pass` inside this directory. Enter your macOS account password when prompted for the 'BECOME' password.
+
+6. Following changes or updates, run steps 4 and/or 5 as appropriate.

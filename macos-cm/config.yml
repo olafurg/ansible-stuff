@@ -7,23 +7,24 @@ homebrew_taps:
 homebrew_installed_packages:
   - awscli
   - azure-cli
-  - gh # GitHub
-  - mas # mac app store apps installation ability
-  - python3
+  - gh
+  - htop
+  - terraform
+  - tree
+  - wget
 
 # Homebrew cask apps to install
 homebrew_cask_apps:
-  - arc # Browser - arc.net
-  - bitwarden
+  - arc
   - brave-browser
   - discord
   - easy-move-plus-resize
   - firefox
-  - flux # Night Shift that works
-  - github
+  - flux
   - iterm2
-  - microsoft-edge
+  - raycast
   - rectangle
+  - shottr
   - signal
   - spotify
   - visual-studio-code
@@ -31,5 +32,8 @@ homebrew_cask_apps:
 
 # Mac App Store Apps to install
 mas_installed_apps:
-  - { id: 1295203466, name: "Microsoft Remote Desktop" }
+  - { id: 1440147259, name: "AdGuard for Safari" }
   - { id: 1352778147, name: "Bitwarden" }
+  - { id: 688211836, name: "EasyRes" }
+  - { id: 1295203466, name: "Microsoft Remote Desktop" }
+  - { id: 803453959, name: "Slack" }

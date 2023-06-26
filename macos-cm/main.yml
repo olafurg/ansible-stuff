@@ -11,9 +11,3 @@
     - vim
     - git
     - powerline-fonts
-  
-  tasks:
-  
-    - name: run this on OSX type systems
-      debug: msg="hello from {{ ansible_distribution }}"
-      when: ansible_distribution == 'MacOSX'

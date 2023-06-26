@@ -1,3 +1,8 @@
+# From here: https://galaxy.ansible.com/geerlingguy/mac
+
 ---
-- name: geerlingguy.mac.homebrew
-- name: geerlingguy.mac.mas
+roles:
+  - name: elliotweiser.osx-command-line-tools
+
+collections:
+- name: geerlingguy.mac
