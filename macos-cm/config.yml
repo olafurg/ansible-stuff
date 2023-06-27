@@ -35,5 +35,6 @@ mas_installed_apps:
   - { id: 1440147259, name: "AdGuard for Safari" }
   - { id: 1352778147, name: "Bitwarden" }
   - { id: 688211836, name: "EasyRes" }
+  - { id: 1480068668, name: "Facebook Messenger" }
   - { id: 1295203466, name: "Microsoft Remote Desktop" }
   - { id: 803453959, name: "Slack" }
