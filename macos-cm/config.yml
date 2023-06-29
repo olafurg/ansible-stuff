@@ -33,6 +33,7 @@ homebrew_cask_apps:
 # Mac App Store Apps to install
 mas_installed_apps:
   - { id: 1440147259, name: "AdGuard for Safari" }
+  - { id: 973134470, name: "Be Focused - Pomodoro timer" }
   - { id: 1352778147, name: "Bitwarden" }
   - { id: 688211836, name: "EasyRes" }
   - { id: 1480068668, name: "Facebook Messenger" }
