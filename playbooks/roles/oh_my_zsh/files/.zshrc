@@ -133,3 +133,6 @@ export PATH="$PATH:/opt/yarn-1.19.1/bin"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
+
+# Let xdg-open open the default browser in Windows
+export BROWSER="powershell.exe /C start"
