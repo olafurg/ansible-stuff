@@ -22,7 +22,6 @@ homebrew_cask_apps:
   - firefox
   - flux
   - iterm2
-    #  - perforce
   - raycast
   - rectangle
   - shottr
