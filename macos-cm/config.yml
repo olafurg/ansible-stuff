@@ -15,6 +15,7 @@ homebrew_installed_packages:
 
 # Homebrew cask apps to install
 homebrew_cask_apps:
+  - 1password
   - arc
   - brave-browser
   - discord
@@ -34,8 +35,8 @@ homebrew_cask_apps:
 mas_installed_apps:
   - { id: 1440147259, name: "AdGuard for Safari" }
   - { id: 973134470, name: "Be Focused - Pomodoro timer" }
-  - { id: 1352778147, name: "Bitwarden" }
   - { id: 688211836, name: "EasyRes" }
   - { id: 1480068668, name: "Facebook Messenger" }
   - { id: 1295203466, name: "Microsoft Remote Desktop" }
+  - { id: 1274495053, name: "Microsoft To Do" }
   - { id: 803453959, name: "Slack" }
