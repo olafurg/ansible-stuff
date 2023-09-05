@@ -1,7 +1,7 @@
 # Homebrew taps to use
 homebrew_taps:
-  - homebrew/core
   - homebrew/cask
+  - homebrew/core
 
 # Homebrew packages to install
 homebrew_installed_packages:
@@ -23,6 +23,7 @@ homebrew_cask_apps:
   - firefox
   - flux
   - iterm2
+  - microsoft-edge
   - raycast
   - rectangle
   - shottr
