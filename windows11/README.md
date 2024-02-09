@@ -17,4 +17,4 @@ Setting up a fresh machine is a bit of a thing.
     1. Download npiperelay, extract the executable and put in that directory
     1. In WSL: 
         1. Run: ```./wsl_prep.sh```
-        1. 
+1. Reboot the computer

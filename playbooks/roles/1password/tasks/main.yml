@@ -15,7 +15,7 @@
 
 - name: Move .agent-bridge to its place and make executable
   ansible.builtin.copy:
-    src: ../files/agent-bridge.sh
+    src: ../files/.agent-bridge.sh
     dest: "{{ ansible_env.HOME }}/.agent-bridge.sh"
     mode: '0755' # make executable
 
