@@ -1,7 +1,0 @@
----
-- name: Windows stuff
-  hosts: olig-vm
-  tasks:
-    - name: echo a message
-      debug:
-        msg: "this is working"

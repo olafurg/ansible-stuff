@@ -17,7 +17,11 @@
   ansible.builtin.copy:
     src: ../files/.agent-bridge.sh
     dest: "{{ ansible_env.HOME }}/.agent-bridge.sh"
-    mode: '0755' # make executable
+
+- name: Ensure .agent-bridge.sh is executable
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.agent-bridge.sh"
+    mode: '0755'
 
 - name: Add source command to .zshrc
   ansible.builtin.lineinfile:
