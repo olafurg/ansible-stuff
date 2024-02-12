@@ -6,6 +6,7 @@ $apps = @(
     "XP8C9QZMS2PC1T", # Brave Browser, msstore
     "Git.Git",
     "XP89DCGQ3K6VLD", # MS PowerToys, msstore
+    "OpenWhisperSystems.Signal",
     "9NCBCSZSJRSB" # Spotify, msstore
     # Add more package IDs here
 )
