@@ -1,6 +1,7 @@
 ## Windows 11 machine
 Setting up a fresh machine is a bit of a thing.
 
+1. Run ```wingetinstall.ps1``` to install Windows apps.
 1. Install and log in to 1Password
 1. Log in to GitHub
 1. Install WSL
