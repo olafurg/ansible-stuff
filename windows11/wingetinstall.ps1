@@ -2,8 +2,11 @@
 
 # List of applications to install (Replace the placeholders with actual package IDs)
 $apps = @(
+    "AltSnap.AltSnap",
+    "XP8C9QZMS2PC1T", # Brave Browser, msstore
     "Git.Git",
-    "AltSnap.AltSnap"
+    "XP89DCGQ3K6VLD", # MS PowerToys, msstore
+    "9NCBCSZSJRSB" # Spotify, msstore
     # Add more package IDs here
 )
 
