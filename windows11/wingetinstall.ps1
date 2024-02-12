@@ -4,6 +4,7 @@
 $apps = @(
     "AltSnap.AltSnap",
     "XP8C9QZMS2PC1T", # Brave Browser, msstore
+    "Discord.Discord",
     "Git.Git",
     "Greenshot.Greenshot",
     "XP89DCGQ3K6VLD", # MS PowerToys, msstore
