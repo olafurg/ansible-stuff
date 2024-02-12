@@ -9,7 +9,7 @@ $apps = @(
     "Greenshot.Greenshot",
     "XP89DCGQ3K6VLD", # MS PowerToys, msstore
     "OpenWhisperSystems.Signal",
-    "9NCBCSZSJRSB", # Spotify, msstore
+    "9NCBCSZSJRSB" # Spotify, msstore
 )
 
 # Iterate over each application and install it
