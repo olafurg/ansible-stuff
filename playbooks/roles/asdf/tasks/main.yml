@@ -1,0 +1,24 @@
+---
+- name: Install prerequisites (git, curl)
+  become: true
+  apt:
+    name:
+      - git
+      - curl
+    state: present
+
+- name: Clone the asdf repo
+  git:
+    repo: 'https://github.com/asdf-vm/asdf.git'
+    dest: '{{ ansible_env.HOME }}/.asdf'
+    version: 'v0.14.0'
+    clone: yes
+    update: yes
+  become: no
+
+- name: Add .asdf/asdf.sh to .zshrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: '. "$HOME/.asdf/asdf.sh"'
+    create: yes
+  become: no
