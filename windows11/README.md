@@ -13,6 +13,7 @@ Setting up a fresh machine is a bit of a thing.
 1. In 1Password > Settings > Developer
     1. Enable "Use the SSH agent"
     1. Enable "Integrate with 1Password CLI"
+1. Run ```configure-1pass.ps1```
 1. Configure WSL to work with 1Password, for SSH keys and such (guide here: https://www.notion.so/olafurg/1Password-30b9cb836f05445f97618a6471f79b4f):
     1. In Windows:
         1. Set up the 1Password SSH agent config file (toml) in Windows
