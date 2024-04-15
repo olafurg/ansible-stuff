@@ -21,7 +21,7 @@ Next:
 To set up a new machine, you need to install ansible first.
     
     sudo apt-get update && sudo apt-get upgrade
-    sudo apt-get install ansible
+    sudo apt-get -y install ansible git
 
 Then clone the repository and run a playbook.
 
