@@ -1,0 +1,34 @@
+---
+- name: Set up Ubuntu desktop localhost
+  hosts: localhost
+  connection: local
+  tasks:
+
+    # - name: Install basic packages
+    #   become: true
+    #   apt:
+    #     name:
+    #       - ansible
+    #       - vim
+    #       - git
+    #       - curl
+    #       - htop
+    #       - tree
+    #       - traceroute
+    #       - nmap
+    #       - masscan
+    #       - glances
+    #       - whois
+    #     state: latest
+    #     update_cache: true
+
+  roles:
+    - base-packages-debian
+    - oh_my_zsh
+    - git
+    - vim
+    - tmux
+    - terraform
+    # - azure_cli
+    - gh
+    - asdf

@@ -45,3 +45,8 @@
   user:
     name: "{{ current_user }}"
     shell: /usr/bin/zsh
+
+- name: Ask user to reboot
+  ansible.builtin.debug:
+    msg:
+    - "PLEASE REBOOT YOUR COMPUTER FOR CHANGES TO TAKE EFFECT"
