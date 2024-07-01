@@ -1,0 +1,70 @@
+# From here: https://support.1password.com/install-linux/#debian-or-ubuntu
+
+- name: Download 1password GPG key
+  ansible.builtin.get_url:
+    url: https://downloads.1password.com/linux/keys/1password.asc
+    dest: /tmp/1password.asc
+    mode: '0644'
+
+- name: Convert the GPG key to keyring format and move to the appropriate directory
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg /tmp/1password.asc
+  become: true
+
+- name: Clean up the temporary file
+  ansible.builtin.file:
+    path: /tmp/1password.asc
+    state: absent
+
+- name: Add 1Password APT repository
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main'
+    state: present
+    filename: '1password'
+
+- name: Create directory for debsig policy
+  ansible.builtin.file:
+    path: /etc/debsig/policies/AC2D62742012EA22/
+    state: directory
+    mode: '0755'
+    recurse: true
+  become: true
+
+- name: Download 1Password debsig policy
+  ansible.builtin.get_url:
+    url: https://downloads.1password.com/linux/debian/debsig/1password.pol
+    dest: /etc/debsig/policies/AC2D62742012EA22/1password.pol
+    mode: '0644'
+  become: true
+
+- name: Create directory for debsig keyring
+  ansible.builtin.file:
+    path: /usr/share/debsig/keyrings/AC2D62742012EA22/
+    state: directory
+    mode: '0755'
+    recurse: true
+  become: true
+
+- name: Download 1Password GPG key for debsig and convert to keyring format
+  ansible.builtin.get_url:
+    url: https://downloads.1password.com/linux/keys/1password.asc
+    dest: /tmp/1password.asc
+    mode: '0644'
+
+- name: Convert the GPG key to keyring format and move to debsig directory
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg /tmp/1password.asc
+  become: true
+
+- name: Clean up the temporary GPG key file
+  ansible.builtin.file:
+    path: /tmp/1password.asc
+    state: absent
+  become: true
+
+- name: Update APT package lists and install 1Password
+  ansible.builtin.apt:
+    update_cache: yes
+    name: 1password
+    state: present
+  become: true
