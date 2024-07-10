@@ -9,8 +9,15 @@
 - name: Create Prometheus configuration file
   template:
     src: prometheus.yml.j2
-    dest: /etc/prometheus/prometheus.yml
+    dest: "{{ prometheus_config_dir }}/prometheus.yml"
     owner: prometheus
     group: prometheus
     mode: '0644'
+  become: yes
+
+- name: Ensure Prometheus service is started and enabled
+  ansible.builtin.systemd:
+    name: prometheus
+    state: started
+    enabled: yes
   become: yes
