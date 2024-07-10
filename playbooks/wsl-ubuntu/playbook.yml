@@ -22,13 +22,15 @@
         update_cache: true
 
   roles:
-    - oh_my_zsh
-    - git
-    - vim
-    - tmux
-    - terraform
-    - azure_cli
-    - gh
-    - 1password
-    - asdf
-    
+    # - oh_my_zsh
+    # - git
+    # - vim
+    # - tmux
+    # - terraform
+    # - azure_cli
+    # - gh
+    # - 1password-wsl
+    # - asdf
+    - prometheus
+    - grafana
+    - node_exporter

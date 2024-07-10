@@ -1,30 +1,52 @@
 ---
-- name: Ensure Grafana base packages are installed
+- name: Install Grafana prerequisites
   become: true
   apt:
     name:
       - apt-transport-https
       - software-properties-common
       - wget
-    state: present
-    update_cache: yes
+    state: latest
+    update_cache: true
 
-- name: Add Grafana signing key
-  become: true
-  ansible.builtin.apt_key:
-    url: https://packages.grafana.com/gpg.key
-    state: present
+- name: Create directory for apt keyrings
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: yes
 
-- name: Add their repository into sources list
-  become: true
-  ansible.builtin.apt_repository:
-    repo: "deb https://packages.grafana.com/oss/deb stable main"
-    state: present
-    filename: grafana
+- name: Download and add Grafana GPG key
+  ansible.builtin.shell: |
+    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+  become: yes
 
-- name: Install Grafana
-  become: true
+- name: Add Grafana APT repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
+    state: present
+    filename: grafana # The OSS package, see https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
+  become: yes
+
+- name: Update APT package list and install Grafana
   apt:
     name: grafana
-    state: latest
+    state: present
     update_cache: yes
+  become: yes
+
+- name: Reload and start Grafana service
+  ansible.builtin.systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+
+# Toggle the commented out lines as you wish.
+# - name: Enable Grafana to start at boot
+#   ansible.builtin.systemd:
+#     name: grafana-server
+#     enabled: yes
+#     state: started
+#   become: yes
