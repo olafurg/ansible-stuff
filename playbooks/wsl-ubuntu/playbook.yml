@@ -31,6 +31,6 @@
     # - gh
     # - 1password-wsl
     # - asdf
-    - prometheus
+    # - prometheus
     - grafana
-    - node_exporter
+    # - node_exporter

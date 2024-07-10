@@ -6,7 +6,7 @@
       - apt-transport-https
       - software-properties-common
       - wget
-    state: latest
+    state: present
     update_cache: true
 
 - name: Create directory for apt keyrings
@@ -30,15 +30,36 @@
 
 - name: Update APT package list and install Grafana
   apt:
-    name: grafana
+    name: "grafana={{ grafana_version }}"
     state: present
     update_cache: yes
+  become: yes
+
+- name: Configure Grafana paths
+  lineinfile:
+    path: "{{ grafana_config_dir }}/grafana.ini"
+    line: "data = {{ grafana_data_dir }}"
+    create: yes
+  become: yes
+
+- name: Configure Grafana log path
+  lineinfile:
+    path: "{{ grafana_config_dir }}/grafana.ini"
+    line: "logs = {{ grafana_log_dir }}"
+    create: yes
+  become: yes
+
+- name: Ensure Grafana is listening on the correct port
+  lineinfile:
+    path: "{{ grafana_config_dir }}/grafana.ini"
+    regexp: "^;?http_port ="
+    line: "http_port = {{ grafana_port }}"
   become: yes
 
 - name: Reload and start Grafana service
   ansible.builtin.systemd:
     name: grafana-server
-    state: started
+    state: restarted
     enabled: yes
     daemon_reload: yes
   become: yes
