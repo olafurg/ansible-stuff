@@ -1,0 +1,6 @@
+---
+grafana_version: '11.1.0'
+grafana_config_dir: '/etc/grafana'
+grafana_data_dir: '/var/lib/grafana'
+grafana_log_dir: '/var/log/grafana'
+grafana_port: 3030

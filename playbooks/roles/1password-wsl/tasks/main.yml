@@ -1,12 +1,11 @@
----
-
 # WSL piece is taken from here mostly: https://dev.to/d4vsanchez/use-1password-ssh-agent-in-wsl-2j6m
-
+---
 - name: Install WSL prerequisites for 1Password setup
   become: true
   apt:
     name: socat
     state: present
+    update_cache: yes
 
 - name: Make $HOME/.1password directory
   ansible.builtin.file:
