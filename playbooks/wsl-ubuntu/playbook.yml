@@ -3,7 +3,6 @@
   hosts: localhost
   connection: local
   tasks:
-
     - name: Install basic packages
       become: true
       apt:
@@ -18,19 +17,19 @@
           - masscan
           - glances
           - whois
-        state: latest
+        state: present
         update_cache: true
 
   roles:
-    # - oh_my_zsh
-    # - git
-    # - vim
-    # - tmux
-    # - terraform
-    # - azure_cli
-    # - gh
-    # - 1password-wsl
-    # - asdf
+    - oh_my_zsh
+    - git
+    - vim
+    - tmux
+    - terraform
+    - azure_cli
+    - gh
+    - 1password-wsl
+    - asdf
     - prometheus
     - grafana
     - node_exporter
