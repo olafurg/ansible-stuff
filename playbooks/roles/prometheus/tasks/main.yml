@@ -12,7 +12,7 @@
     dest: "{{ prometheus_config_dir }}/prometheus.yml"
     owner: prometheus
     group: prometheus
-    mode: '0644'
+    mode: '0755'
   become: yes
 
 - name: Ensure Prometheus service is started and enabled
