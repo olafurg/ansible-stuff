@@ -24,14 +24,12 @@
         update_cache: true
 
   roles:
-    - base-packages-debian
-    - oh_my_zsh
-    - git
-    - vim
-    - tmux
-    - terraform
-    # - azure_cli
-    - gh
-    - asdf
     - 1password-debian-ubuntu-desktop
-    - signal-debian-ubuntu-desktop
+    - asdf
+    - base-packages-debian
+    - gh
+    - git
+    - oh_my_zsh
+    - terraform
+    - tmux
+    - vim    
