@@ -9,17 +9,17 @@
       apt:
         name:
           - ansible
-          - vim
-          - git
           - curl
-          - htop
-          - tree
-          - traceroute
-          - nmap
-          - masscan
+          - git
           - glances
-          - whois
+          - htop
+          - masscan
+          - nmap
+          - traceroute
+          - tree
           - ttf-mscorefonts-installer
+          - vim
+          - whois
         state: latest
         update_cache: true
 
