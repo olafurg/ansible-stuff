@@ -22,6 +22,14 @@
           - whois
         state: latest
         update_cache: true
+    
+    - name: Install snap packages
+      become: true
+      snap:
+        name:
+          - code
+          - signal
+        state: present
 
   roles:
     - 1password-debian-ubuntu-desktop
