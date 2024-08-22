@@ -6,6 +6,7 @@
       - git
       - htop
       - masscan
+      - sshpass
       - nmap
       - tree
       - traceroute
