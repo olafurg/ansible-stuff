@@ -28,6 +28,14 @@
     #     - unattended-upgrades
     #     state: present
 
+    # Add adlists
+    - name: Add adlist to pihole
+      become: yes
+      shell: |
+        pihole -a adlist add "{{ item.url }}" "{{ item.comment }}"
+      with_items:
+        - { url: "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt", comment: "AdGuard's DNS filter list is a solid choice for blocking ads, trackers, and some phishing domains. It's well-maintained and designed for a smooth browsing experience." }
+
     # To avoid DNS packet size errors after started to use CF Gateway for upstream.
     - name: Configure DNS packet size, create file if doesn't exist
       become: true
@@ -74,16 +82,6 @@
       ansible.builtin.systemd:
         name: pihole-FTL
         state: restarted
-
-    # Add adlists, from https://firebog.net
-    - name: Wipe the old Gravity database (in case some URLs were removed from before)
-      become: yes
-      shell: pihole -g -r recreate
-
-    - name: Insert adlist into the gravity.db database
-      become: yes
-      ansible.builtin.command: sqlite3 /etc/pihole/gravity.db "insert or ignore into adlist (address, comment) values (\"{{ item }}\", \"Ansible\")";
-      loop: "{{ lookup ('file', 'templates/adlists.list').splitlines() }}"
 
     - name: Rebuild the Gravity database
       become: yes
