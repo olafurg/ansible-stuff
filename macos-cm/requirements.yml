@@ -1,8 +1,0 @@
-# From here: https://galaxy.ansible.com/geerlingguy/mac
-
----
-roles:
-  - name: elliotweiser.osx-command-line-tools
-
-collections:
-- name: geerlingguy.mac
