@@ -4,24 +4,17 @@ My Ansible config. So far only for local machine and server.
 
 Actively moving stuff over from the dotfiles repo.
 
-## Linux
-Moved:
-* package installs
-* oh-my-zsh install (role)
-* git and config (role)
-* vim (role)
-* tmux (role)
-* terraform (role)
+TODO:
+[ ] check oh-my-zsh idempotancy
+[ ] terminator
+[ ] mousewheel config
 
-Next:
-* ruby configs (.gemrc, .rspec, etc.)
-* terminator
-* mousewheel config
+## Linux - Debian or Ubuntu
 
 To set up a new machine, you need to install ansible first.
     
-    sudo apt-get update && sudo apt-get upgrade
-    sudo apt-get -y install ansible git
+    sudo apt update && sudo apt-get upgrade
+    sudo apt -y install ansible git curl
 
 Then clone the repository and run a playbook.
 
@@ -31,7 +24,16 @@ To run a playbook, for example:
 
 The ```-K``` is to prompt for sudo password.
 
-## MacOS
+## macOS
 See the ```macos-cm``` directory. Run a playbook on the Mac itself with:
 
     ansible-playbook main.yml -i inventory -K
+
+## When conditionals
+
+  ```
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+  when: ansible_facts['os_family'] in ['Darwin', 'Linux', 'Windows']
+  ```
+
+  https://techviewleo.com/list-of-ansible-os-family-distributions-facts/

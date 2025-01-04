@@ -1,0 +1,86 @@
+---
+- name: Pihole setup
+  hosts: pihole
+
+  roles:
+  - debian_ubuntu_base
+  - oh_my_zsh
+  - tmux
+  - cloudflared
+
+  tasks:
+
+    # - name: Get pihole installer
+    #   get_url:
+    #     url: https://install.pi-hole.net
+    #     dest: /tmp/basic-install.sh
+
+    # - name: Install pihole
+    #   become: yes
+    #   command: bash /tmp/basic-install.sh
+
+    # - name: Install unattended upgrades
+    #   become: true
+    #   apt:
+    #     name:
+    #     - unattended-upgrades
+    #     state: present
+
+    # Add adlists
+    - name: Add adlist to pihole
+      become: yes
+      shell: |
+        pihole -a adlist add "{{ item.url }}" "{{ item.comment }}"
+      with_items:
+        - { url: "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt", comment: "AdGuard's DNS filter list is a solid choice for blocking ads, trackers, and some phishing domains. It's well-maintained and designed for a smooth browsing experience." }
+
+    # To avoid DNS packet size errors after started to use CF Gateway for upstream.
+    - name: Configure DNS packet size, create file if doesn't exist
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/dnsmasq.d/99-edns.conf
+        line: edns-packet-max=1232
+        state: present
+        create: yes
+
+    # Respond only on interface eth0, needed since there are >1 networks (subnets) at home
+    # - https://docs.pi-hole.net/ftldns/interfaces/?h=interface
+    - name: Respond only on interface eth0 - delete old config 1
+      become: yes
+      lineinfile:
+        path: /etc/dnsmasq.d/01-pihole.conf
+        regexp: '(^local-service.*)' # "Allow only local requests"
+        state: absent
+
+    - name: Respond only on interface eth0 - set correct config 1
+      become: yes
+      lineinfile:
+        path: /etc/dnsmasq.d/01-pihole.conf
+        insertafter: '(^bogus-priv)'
+        line: 'interface=eth0' # Respond only on interface eth0
+        state: present
+
+    - name: Respond only on interface eth0 - delete old config 2
+      become: yes
+      lineinfile:
+        path: /etc/pihole/setupVars.conf
+        regexp: '(^DNSMASQ_LISTENING.*)'
+        state: absent
+
+    - name: Respond only on interface eth0 - set correct config 2
+      become: yes
+      lineinfile:
+        path: /etc/pihole/setupVars.conf
+        insertafter: '(^DNS_BOGUS.*)'
+        line: 'DNSMASQ_LISTENING=single' # Respond only on interface eth0
+        state: present
+
+    - name: Restart DNS service following the changes above
+      become: yes
+      ansible.builtin.systemd:
+        name: pihole-FTL
+        state: restarted
+
+    - name: Rebuild the Gravity database
+      become: yes
+      shell: pihole -g

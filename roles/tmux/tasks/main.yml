@@ -1,0 +1,13 @@
+---
+- name: Install tmux
+  become: true
+  apt:
+    name:
+      - tmux
+    state: present
+
+- name: Create symlink for .tmux.conf
+  file:
+    src: "{{ role_path }}/files/.tmux.conf"
+    dest: "{{ ansible_env.HOME }}/.tmux.conf"
+    state: link

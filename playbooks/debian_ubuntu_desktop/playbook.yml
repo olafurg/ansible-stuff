@@ -1,0 +1,19 @@
+---
+- name: Set up Debian/Ubuntu desktop
+  hosts: localhost
+
+  roles:
+    - debian_base
+    - oh_my_zsh
+    - git
+    - asdf
+    - azure_cli
+    - gh
+    - ghostty
+    - ruby
+    # - signal
+    # - terraform
+    - tmux
+    - vim
+    # - visual_studio_code
+    - 1password

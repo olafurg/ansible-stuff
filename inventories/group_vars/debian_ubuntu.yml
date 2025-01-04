@@ -1,0 +1,11 @@
+debian_ubuntu_base_packages:
+  - ansible
+  - curl
+  - git
+  - htop
+  - masscan
+  - nmap
+  - traceroute
+  - tree
+  - vim
+  - whois

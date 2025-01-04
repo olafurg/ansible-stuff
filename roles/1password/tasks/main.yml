@@ -1,0 +1,4 @@
+# From here: https://support.1password.com/install-linux/#debian-or-ubuntu
+- name: Install 1Password on Debian/Ubuntu
+  include_tasks: debian_ubuntu.yml
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']

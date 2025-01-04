@@ -1,0 +1,29 @@
+---
+- name: Upgrade Debian/Ubuntu
+  hosts: debian_ubuntu
+  become: true
+  tasks:
+    - name: Update apt repo and cache
+      apt: 
+        update_cache: true 
+        force_apt_get: true
+
+    - name: Upgrade all packages
+      apt: 
+        upgrade: dist
+        force_apt_get: true
+
+    - name: Check if a reboot is needed
+      register: reboot_required_file
+      stat: path=/var/run/reboot-required get_md5=no
+
+    - name: Reboot if needed
+      reboot:
+        msg: "Reboot required, initiating..."
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file.stat.exists
+

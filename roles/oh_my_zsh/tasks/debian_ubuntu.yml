@@ -1,0 +1,65 @@
+---
+- name: Install Zsh and Git
+  become: true
+  apt:
+    name:
+      - zsh
+      - git
+    state: present
+
+# Just to verify the installation worked
+- name: Check if Zsh is installed
+  command: which zsh
+  register: zsh_installed
+  failed_when: zsh_installed.rc != 0
+
+- name: Check if zsh is the configured shell
+  command: echo $SHELL
+  register: current_shell
+  changed_when: false
+
+- name: Change default shell to Zsh
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  when: current_shell.stdout != "/usr/bin/zsh"
+
+- name: Check if .oh-my-zsh exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_installed
+
+- name: Get oh-my-zsh install script
+  get_url: 
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Install oh-my-zsh
+  command: sh /tmp/install.sh
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Create symlink for .zshrc
+  file:
+    src: "{{ role_path }}/files/.zshrc"
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    state: link
+    force: true
+
+- name: Remove existing $ZSH/custom directory (if it exists)
+  file:
+    path: $ZSH/custom
+    state: absent
+
+- name: Create symlink for $ZSH/custom
+  file:
+    src: "{{ role_path }}/files/custom"
+    dest: "$ZSH/custom"
+    state: link
+    force: true
+
+- name: Ask user to reboot
+  ansible.builtin.debug:
+    msg:
+    - "PLEASE REBOOT YOUR COMPUTER TO ENSURE CHANGES TAKE EFFECT"

@@ -1,9 +1,0 @@
----
-- hosts: debian
-  tasks:
-    - name: Install basic packages
-      become: true
-      apt:
-        name: vim, git, curl, htop
-        state: present
-        update_cache: true

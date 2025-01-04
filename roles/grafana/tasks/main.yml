@@ -1,0 +1,80 @@
+---
+- name: Install Grafana prerequisites
+  become: true
+  apt:
+    name:
+      - apt-transport-https
+      - software-properties-common
+      - wget
+    state: present
+
+- name: Create directory for apt keyrings
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download and add Grafana GPG key
+  ansible.builtin.shell: |
+    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+  become: yes
+
+- name: Add Grafana APT repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
+    state: present
+    filename: grafana # The OSS package, see https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
+  become: yes
+
+- name: Check installed Grafana version
+  command: dpkg-query -W -f='${Version}' grafana
+  register: grafana_installed_version
+  ignore_errors: yes
+
+- name: Install specific version of Grafana
+  apt:
+    name: "grafana={{ grafana_version }}"
+    state: present
+    update_cache: yes
+  become: yes
+  when: grafana_installed_version.stdout != grafana_version
+
+- name: Configure Grafana paths
+  lineinfile:
+    path: "{{ grafana_config_dir }}/grafana.ini"
+    line: "data = {{ grafana_data_dir }}"
+    create: yes
+  become: yes
+
+- name: Configure Grafana log path
+  lineinfile:
+    path: "{{ grafana_config_dir }}/grafana.ini"
+    line: "logs = {{ grafana_log_dir }}"
+    create: yes
+  become: yes
+
+- name: Ensure Grafana is listening on the correct port
+  lineinfile:
+    path: "{{ grafana_config_dir }}/grafana.ini"
+    regexp: "^;?http_port ="
+    line: "http_port = {{ grafana_port }}"
+  become: yes
+  notify:
+    - Restart Grafana
+
+- name: Reload and start Grafana service
+  ansible.builtin.systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+
+# Toggle the commented out lines as you wish.
+# - name: Enable Grafana to start at boot
+#   ansible.builtin.systemd:
+#     name: grafana-server
+#     enabled: yes
+#     state: started
+#   become: yes
