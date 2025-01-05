@@ -12,6 +12,7 @@
   command: which zsh
   register: zsh_installed
   failed_when: zsh_installed.rc != 0
+  changed_when: false
 
 - name: Check if zsh is the configured shell
   command: echo $SHELL
@@ -29,6 +30,7 @@
   stat:
     path: "{{ ansible_env.HOME }}/.oh-my-zsh"
   register: oh_my_zsh_installed
+  changed_when: false
 
 - name: Get oh-my-zsh install script
   get_url: 
@@ -62,4 +64,6 @@
 - name: Ask user to reboot
   ansible.builtin.debug:
     msg:
-    - "PLEASE REBOOT YOUR COMPUTER TO ENSURE CHANGES TAKE EFFECT"
+    - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
+  changed_when: false
+  

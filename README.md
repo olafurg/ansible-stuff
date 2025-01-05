@@ -5,9 +5,9 @@ My Ansible config. So far only for local machine and server.
 Actively moving stuff over from the dotfiles repo.
 
 TODO:
-[ ] check oh-my-zsh idempotancy
-[ ] terminator
-[ ] mousewheel config
+- [ ] check oh-my-zsh idempotancy
+- [ ] terminator
+- [ ] mousewheel config
 
 ## Linux - Debian or Ubuntu
 

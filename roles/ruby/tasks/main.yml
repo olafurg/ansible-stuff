@@ -4,9 +4,11 @@
     src: "{{ role_path }}/files/.gemrc"
     dest: "{{ ansible_env.HOME }}/.gemrc"
     state: link
+    force: true
 
 - name: Create symlink for .rspec
   file:
     src: "{{ role_path }}/files/.rspec"
     dest: "{{ ansible_env.HOME }}/.rspec"
     state: link
+    force: true

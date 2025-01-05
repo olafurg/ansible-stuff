@@ -1,0 +1,9 @@
+---
+- name: Include snapd role for this installation
+  import_role:
+    name: snapd
+
+- name: Install Signal
+  community.general.snap:
+    name: signal-desktop
+    state: present

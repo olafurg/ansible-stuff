@@ -1,5 +1,5 @@
 ---
-- name: Install Signal on Debian/Ubuntu
+- name: Install Snapd on Debian/Ubuntu
   include_tasks: debian_ubuntu.yml
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
   

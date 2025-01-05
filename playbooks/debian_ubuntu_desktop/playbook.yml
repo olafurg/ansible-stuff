@@ -11,7 +11,7 @@
     - gh
     - ghostty
     - ruby
-    # - signal
+    - signal
     # - terraform
     - tmux
     - vim
