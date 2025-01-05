@@ -1,16 +1,14 @@
 - name: Install Debian/Ubuntu base packages
   become: true
   apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - ansible
-    - curl
-    - git
-    - htop
-    - masscan
-    - nmap
-    - traceroute
-    - tree
-    - vim
-    - whois
+    name:
+      - ansible
+      - curl
+      - git
+      - htop
+      - masscan
+      - nmap
+      - traceroute
+      - tree
+      - vim
+      - whois
