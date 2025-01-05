@@ -4,16 +4,16 @@
 
   roles:
     - debian_base # Must be first in the list
-    - oh_my_zsh
-    - git
+    - 1password
     - asdf
     - azure_cli
     - gh
     - ghostty
+    - git
+    - oh_my_zsh
     - ruby
     - signal
     - terraform
     - tmux
     - vim
-    # - visual_studio_code
-    - 1password
+    - visual_studio_code

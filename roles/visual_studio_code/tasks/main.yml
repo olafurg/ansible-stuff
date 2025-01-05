@@ -1,7 +1,5 @@
-- name: Install Visual Studio Code
-  become: true
-  snap:
-    name:
-      - code
-    state: present
-    classic: true
+---
+- name: Install Visual Studio Code on Debian/Ubuntu
+  include_tasks: debian_ubuntu.yml
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+  
