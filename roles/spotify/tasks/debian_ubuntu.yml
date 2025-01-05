@@ -1,0 +1,11 @@
+---
+- name: Include snapd role for this installation
+  import_role:
+    name: snapd
+
+- name: Install Spotify
+  become: true
+  snap:
+    name:
+      - spotify
+    state: present
