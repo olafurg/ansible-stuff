@@ -14,7 +14,7 @@
   failed_when: zsh_installed.rc != 0
   changed_when: false
 
-- name: Check if zsh is the configured shell
+- name: Check if Zsh is the configured shell
   command: echo $SHELL
   register: current_shell
   changed_when: false
@@ -32,13 +32,13 @@
   register: oh_my_zsh_installed
   changed_when: false
 
-- name: Get oh-my-zsh install script
+- name: Get Oh My Zsh install script
   get_url: 
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     dest: /tmp
   when: not oh_my_zsh_installed.stat.exists
 
-- name: Install oh-my-zsh
+- name: Install Oh My Zsh
   command: sh /tmp/install.sh
   when: not oh_my_zsh_installed.stat.exists
 
@@ -61,7 +61,7 @@
     state: link
     force: true
 
-- name: Ask user to reboot
+- name: Ask user to restart
   ansible.builtin.debug:
     msg:
     - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
