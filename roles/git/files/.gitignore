@@ -12,3 +12,5 @@ undodir/*
 
 .DS_Store
 .vscode
+
+wget-log*
