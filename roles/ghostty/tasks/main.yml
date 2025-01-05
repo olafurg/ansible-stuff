@@ -1,5 +1,8 @@
 ---
 - name: Install Ghostty on Debian/Ubuntu
+  vars:
+    ghostty_version: "1.0.1"
+    ghostty_deb_url: "https://github.com/mkasberg/ghostty-ubuntu/releases/download/1.0.1-0-ppa1/ghostty_1.0.1-0.ppa1_amd64_22.04.deb"
   include_tasks: debian_ubuntu.yml
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
   
