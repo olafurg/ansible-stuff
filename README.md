@@ -3,7 +3,6 @@
 My Ansible config. Installations and config/dotfiles.
 
 TODO:
-- [ ] tmux
 - [ ] vim
 - [ ] vs code
 - [ ] macos

@@ -3,7 +3,7 @@
   hosts: localhost
 
   roles:
-    - debian_base
+    - debian_base # Must be first in the list
     - oh_my_zsh
     - git
     - asdf

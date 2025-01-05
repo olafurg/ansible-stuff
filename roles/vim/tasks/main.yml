@@ -1,26 +1,4 @@
 ---
-- name: Install vim
-  become: true
-  apt:
-    name:
-      - vim
-    state: present
-  when: ansible_facts['os_family'] in ['Linux']
-
-- name: Create symlink for .vimrc
-  ansible.builtin.file:
-    src: "{{ role_path }}/files/.vimrc"
-    dest: $HOME/.vimrc
-    state: link
-    force: true
-
-- name: Remove existing .vim/UltiSnips directory (if it exists)
-  file:
-    path: "{{ ansible_env.HOME }}/.vim/UltiSnips"
-    state: absent
-
-- name: Create symlink for .vim/UltiSnips folder
-  file:
-    src: "{{ role_path }}/files/.vim/UltiSnips"
-    dest: "{{ ansible_env.HOME }}/.vim/UltiSnips"
-    state: link
+- name: Install Vim on Debian/Ubuntu
+  include_tasks: debian_ubuntu.yml
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
