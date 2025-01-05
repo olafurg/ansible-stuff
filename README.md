@@ -1,30 +1,31 @@
 # Ansible stuff
 
-My Ansible config. So far only for local machine and server.
-
-Actively moving stuff over from the dotfiles repo.
+My Ansible config. Installations and config/dotfiles.
 
 TODO:
-- [ ] check oh-my-zsh idempotancy
-- [ ] terminator
-- [ ] mousewheel config
+- [ ] tmux
+- [ ] vim
+- [ ] vs code
+- [ ] macos
+- [ ] manjaro/arch
+- [ ] terminator from setup-linux
+- [ ] mousewheel config from setup-linux
 
 ## Linux - Debian or Ubuntu
 
-To set up a new machine, you need to install ansible first.
+To prep:
     
-    sudo apt update && sudo apt-get upgrade
+    sudo apt update && sudo apt upgrade
     sudo apt -y install ansible git curl
 
-Then clone the repository and run a playbook.
+Then clone the repository and run a playbook. For example:
 
-To run a playbook, for example:
-
-    ansible-playbook playbooks/wsl-ubuntu-setup.yml -K
+    ansible-playbook playbooks/debian-ubuntu.yml -K
 
 The ```-K``` is to prompt for sudo password.
 
 ## macOS
+_To be cleaned up_
 See the ```macos-cm``` directory. Run a playbook on the Mac itself with:
 
     ansible-playbook main.yml -i inventory -K
