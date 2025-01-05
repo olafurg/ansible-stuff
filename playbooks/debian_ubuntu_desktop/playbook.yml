@@ -12,7 +12,7 @@
     - ghostty
     - ruby
     - signal
-    # - terraform
+    - terraform
     - tmux
     - vim
     # - visual_studio_code

@@ -1,0 +1,31 @@
+---
+# From here: https://developer.hashicorp.com/terraform/install#linux
+- name: Check if Terraform is installed
+  command: terraform --version
+  register: terraform_check
+  failed_when: false
+  changed_when: false
+
+- name: Download and install HashiCorp GPG key
+  ansible.builtin.shell: |
+    wget -O - https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  become: true
+  when: terraform_check.rc != 0
+
+- name: Add HashiCorp repository
+  become: true
+  ansible.builtin.shell: |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+  args:
+    creates: /etc/apt/sources.list.d/hashicorp.list
+  when: terraform_check.rc != 0
+
+- name: Install Terraform
+  become: true
+  ansible.builtin.apt:
+    name: terraform
+    state: present
+    update_cache: yes
+  when: terraform_check.rc != 0
