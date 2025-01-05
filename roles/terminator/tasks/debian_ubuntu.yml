@@ -1,0 +1,19 @@
+---
+- name: Install Terminator
+  become: true
+  apt:
+    name:
+      - terminator
+    state: present
+
+- name: Ensure the Terminator config dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/terminator"
+    state: directory
+
+- name: Create symlink for Terminator config
+  file:
+    src: "{{ role_path }}/files/config"
+    dest: "{{ ansible_env.HOME }}/.config/terminator/config"
+    state: link
+    force: true

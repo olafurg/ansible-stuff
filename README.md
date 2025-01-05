@@ -3,11 +3,8 @@
 My Ansible config. Installations and config/dotfiles.
 
 TODO:
-- [ ] vim
-- [ ] vs code
-- [ ] macos
+- [ ] macos from other repo
 - [ ] manjaro/arch
-- [ ] terminator from setup-linux
 - [ ] mousewheel config from setup-linux
 
 ## Linux - Debian or Ubuntu

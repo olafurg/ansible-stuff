@@ -13,6 +13,7 @@
     - oh_my_zsh
     - ruby
     - signal
+    - terminator
     - terraform
     - tmux
     - vim
