@@ -1,38 +1,30 @@
-#!/bin/bash
+#!/bin/zsh
 
-# Function to install Homebrew
-install_homebrew() {
+# Ensure Homebrew is installed
+if ! command -v brew &> /dev/null; then
     echo "Homebrew not found. Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     if ! command -v brew &> /dev/null; then
         echo "Homebrew installation failed. Please install it manually and re-run this script."
         exit 1
     fi
-    echo "Homebrew installed successfully!"
-}
-
-# Ensure Homebrew is installed
-if ! command -v brew &> /dev/null; then
-    install_homebrew
 fi
 
-# Ensure Python and Pip are installed via Homebrew
-echo "Installing Python and Pip via Homebrew..."
-brew install python
+# Ensure Python and Pipx are installed via Homebrew
+echo "Installing Python and Pipx via Homebrew..."
+brew install python pipx
 
-# Install Ansible globally via Homebrew
-echo "Installing Ansible globally via Homebrew..."
-brew install ansible || true  # Continue even if there are link conflicts
+# Reload shell to apply PATH changes (if necessary)
+echo "Reloading shell to apply PATH changes..."
+source ~/.zshrc || source ~/.bashrc || echo "Please restart your terminal or reload your shell manually."
 
-# Resolve potential linking conflicts for Ansible
-if [ -f /opt/homebrew/bin/ansible ]; then
-    echo "Resolving Homebrew link conflicts for Ansible..."
-    brew link --overwrite ansible
-fi
+# Install Ansible via Pipx
+echo "Installing Ansible via Pipx..."
+pipx install ansible
 
 # Verify Ansible installation
 if ! command -v ansible &> /dev/null; then
-    echo "Ansible installation failed. Check your Homebrew setup."
+    echo "Ansible installation failed. Check your Pipx setup."
     exit 1
 fi
 

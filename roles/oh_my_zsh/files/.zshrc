@@ -146,3 +146,8 @@ export BROWSER="powershell.exe /C start"
 . $(brew --prefix asdf)/libexec/asdf.sh
 
 . $(brew --prefix asdf)/libexec/asdf.sh
+
+# Created by `pipx` on 2025-01-06 20:46:20
+export PATH="$PATH:/Users/olig/.local/bin"
+
+. $(brew --prefix asdf)/libexec/asdf.sh

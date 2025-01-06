@@ -13,7 +13,9 @@ Run the `setup.sh` script from the repo root directory.
 
     playbooks/macos_setup/setup.sh
 
-The script ensures prerequisites are installed and runs the setup playbook. You can also run the playbook manually if you're sure you have prerequisites. See the script for how that's run.
+The script ensures prerequisites are installed and runs the setup playbook. Those being for example Homebrew, python, pipx and ansible.
+
+After the initial setup you can keep running the setup script or run only the playbook if you're sure you have the environment set up. See the script for how the playbook is run.
 
 ## Linux Debian/Ubuntu
 To prep:
