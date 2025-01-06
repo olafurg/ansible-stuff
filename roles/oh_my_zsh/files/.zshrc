@@ -137,8 +137,11 @@ complete -o nospace -C /usr/bin/terraform terraform
 # Let xdg-open open the default browser in Windows
 export BROWSER="powershell.exe /C start"
 
-
 # Created by `pipx` on 2025-01-06 21:27:49
 export PATH="$PATH:/Users/olafurg/.local/bin"
 
-. $(brew --prefix asdf)/libexec/asdf.sh
+# BEGIN ANSIBLE-ASDF-MACOS
+if [[ "$(uname)" == "Darwin" ]]; then
+  . $(brew --prefix asdf)/libexec/asdf.sh
+fi
+# END ANSIBLE-ASDF-MACOS

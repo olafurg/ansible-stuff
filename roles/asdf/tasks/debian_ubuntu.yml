@@ -28,13 +28,16 @@
   become: no
   when: asdf_installed.rc != 0
 
-- name: Add asdf to .zshrc
-  ansible.builtin.lineinfile:
+- name: Add asdf initialization to .zshrc
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: '. "$HOME/.asdf/asdf.sh"'
+    block: |
+      if [[ "$(uname)" == "Linux" ]]; then
+        . "$HOME/.asdf/asdf.sh"
+      fi
+    marker: "# {mark} ANSIBLE-ASDF-DEBIAN"
+    state: present
     create: yes
-  become: no
-  when: asdf_installed.rc != 0
 
 - name: Create symlink for .asdfrc
   file:

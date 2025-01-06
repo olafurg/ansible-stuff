@@ -7,12 +7,16 @@
       - asdf # Should be last, the others are dependencies
     state: present
 
-- name: Ensure asdf initialization in ~/.zshrc
-  ansible.builtin.lineinfile:
+- name: Add asdf initialization to .zshrc
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    regexp: '^\\. .*asdf.*$'  # Match any existing asdf initialization line
-    line: "\n. $(brew --prefix asdf)/libexec/asdf.sh"  # Replace it with the correct initialization
-    state: present  # Ensure the line exists
+    block: |
+      if [[ "$(uname)" == "Darwin" ]]; then
+        . $(brew --prefix asdf)/libexec/asdf.sh
+      fi
+    marker: "# {mark} ANSIBLE-ASDF-MACOS"
+    state: present
+    create: yes
 
 - name: Create symlink for .asdfrc
   file:
