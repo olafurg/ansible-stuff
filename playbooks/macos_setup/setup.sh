@@ -23,26 +23,20 @@ brew install python pipx
 # Ensure Pipx path is added to PATH
 echo "Ensuring pipx path is added to PATH..."
 pipx ensurepath
-export PATH="$HOME/.local/bin:$PATH"  # Add pipx default path
-export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"  # Add Ansible virtual environment
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"
 
-# Debug PATH
-echo "PATH after pipx ensurepath and export: $PATH"
-
-# Install or fix Ansible installation via Pipx
-echo "Installing or fixing Ansible via Pipx..."
-pipx install ansible
+# Install Ansible via Pipx (skip if already installed)
+if ! command -v ansible &> /dev/null; then
+    echo "Installing Ansible via Pipx..."
+    pipx install ansible
+else
+    echo "Ansible is already installed. Skipping installation."
+fi
 
 # Verify Ansible installation
 if ! command -v ansible &> /dev/null; then
-    echo "Ansible not found in PATH. Attempting to link manually..."
-    ln -sf ~/.local/pipx/venvs/ansible/bin/ansible ~/.local/bin/ansible
-    ln -sf ~/.local/pipx/venvs/ansible/bin/ansible-playbook ~/.local/bin/ansible-playbook
-    ln -sf ~/.local/pipx/venvs/ansible/bin/ansible-galaxy ~/.local/bin/ansible-galaxy
-fi
-
-if ! command -v ansible &> /dev/null; then
-    echo "Ansible installation failed. Check your Pipx setup."
+    echo "Ansible installation failed. Please check your Pipx setup."
     exit 1
 fi
 
