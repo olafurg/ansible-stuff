@@ -3,14 +3,14 @@
 My Ansible config. Installations and config/dotfiles.
 
 TODO:
-- [ ] macos from other repo
+- [ ] macos git vim powerline tmux
 - [ ] manjaro/arch
 - [ ] mousewheel config from setup-linux
 
 ## Linux - Debian or Ubuntu
 
 To prep:
-    
+
     sudo apt update && sudo apt upgrade
     sudo apt -y install ansible git curl
 
@@ -29,8 +29,7 @@ See the ```macos-cm``` directory. Run a playbook on the Mac itself with:
 ## When conditionals
 
   ```
-  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
-  when: ansible_facts['os_family'] in ['Darwin', 'Linux', 'Windows']
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu', 'Darwin', 'Windows']
   ```
 
   https://techviewleo.com/list-of-ansible-os-family-distributions-facts/
