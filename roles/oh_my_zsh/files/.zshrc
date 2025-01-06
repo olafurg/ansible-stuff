@@ -145,3 +145,9 @@ if [[ "$(uname)" == "Darwin" ]]; then
   . $(brew --prefix asdf)/libexec/asdf.sh
 fi
 # END ANSIBLE-ASDF-MACOS
+source /home/olig/.agent-bridge.sh
+# BEGIN ANSIBLE-ASDF-DEBIAN
+if [[ "$(uname)" == "Linux" ]]; then
+  . "$HOME/.asdf/asdf.sh"
+fi
+# END ANSIBLE-ASDF-DEBIAN

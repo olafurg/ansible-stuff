@@ -16,6 +16,7 @@
     src: "{{ role_path }}/files/.agent-bridge.sh"
     dest: "{{ ansible_env.HOME }}/.agent-bridge.sh"
     state: link
+    force: true
 
 - name: Ensure .agent-bridge.sh is executable
   ansible.builtin.file:
