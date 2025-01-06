@@ -10,12 +10,6 @@ if ! command -v brew &> /dev/null; then
     fi
 fi
 
-# Ensure Ansible is not installed via Homebrew to avoid conflicts
-if command -v ansible &> /dev/null; then
-    echo "Ansible found. Uninstalling Ansible..."
-    brew uninstall ansible
-fi
-
 # Ensure Python and Pipx are installed via Homebrew
 echo "Installing Python and Pipx via Homebrew..."
 brew install python pipx
