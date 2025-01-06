@@ -11,9 +11,9 @@
     - geerlingguy.mac.homebrew # Ensure homebrew is installed
     - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
     # Below: Non-Homebrew-Apps and/or require config files to be arranged
-    - oh_my_zsh
     - asdf
     - git
+    - oh_my_zsh
     # - powerline-fonts
     - vim
   

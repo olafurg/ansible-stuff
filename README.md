@@ -3,7 +3,7 @@
 My Ansible config. Installations and config/dotfiles.
 
 TODO:
-- [ ] macos powerline tmux ruby
+- [ ] macos powerline tmux ruby ghostty
 - [ ] playbook setup scripts
 - [ ] manjaro/arch
 - [ ] mousewheel config from setup-linux
