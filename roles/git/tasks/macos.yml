@@ -1,7 +1,6 @@
 ---
 - name: Install Git
-  become: true
-  apt:
+  homebrew:
     name:
       - git
     state: present

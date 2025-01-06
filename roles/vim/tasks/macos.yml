@@ -1,9 +1,8 @@
 ---
 - name: Install Vim
-  become: true
-  apt:
+  homebrew:
     name:
-      - vim
+      - macvim
     state: present
 
 - name: Create symlink for .vimrc
