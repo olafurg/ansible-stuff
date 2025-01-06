@@ -6,15 +6,17 @@
   vars:
     homebrew_taps:
       - homebrew/services  # Keep only necessary taps
+      - hashicorp/tap # Terraform
 
+  # Base roles and non-Homebrew-Apps and/or apps which require config files to be arranged
   roles:
     - geerlingguy.mac.homebrew # Ensure homebrew is installed
     - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
-    # Below: Non-Homebrew-Apps and/or require config files to be arranged
     - asdf
     - git
     - oh_my_zsh
     # - powerline-fonts
+    - terraform
     - vim
   
   # Homebrew apps that require no config files to be arranged
@@ -26,7 +28,6 @@
           - azure-cli
           - gh
           - htop
-          - terraform
           - tree
           - wget
         state: present

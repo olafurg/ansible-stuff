@@ -1,0 +1,5 @@
+---
+- name: Install Terraform on macOS
+  homebrew:
+    name: hashicorp/tap/terraform
+    state: present
