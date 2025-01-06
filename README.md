@@ -3,7 +3,7 @@
 My Ansible config. Installations and config/dotfiles.
 
 TODO:
-- [ ] macos git vim powerline tmux
+- [ ] macos git vim powerline tmux ruby
 - [ ] manjaro/arch
 - [ ] mousewheel config from setup-linux
 
