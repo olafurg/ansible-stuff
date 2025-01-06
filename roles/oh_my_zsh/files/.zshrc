@@ -136,3 +136,5 @@ complete -o nospace -C /usr/bin/terraform terraform
 # Let xdg-open open the default browser in Windows
 export BROWSER="powershell.exe /C start"
 . "$HOME/.asdf/asdf.sh"
+
+. /usr/local/opt/asdf/libexec/asdf.sh

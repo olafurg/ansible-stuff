@@ -1,0 +1,47 @@
+---
+- name: Set up macOS
+  hosts: localhost
+  vars_files: 
+    - vars/mas_apps.yml
+  roles:
+    - geerlingguy.mac.homebrew # Ensure homebrew is installed
+    - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
+    # Below: Non-Homebrew-Apps and/or require config files to be arranged
+    - oh_my_zsh
+    - asdf
+    - git
+    # - powerline-fonts
+    - vim
+  
+  # Homebrew apps that require no config files to be arranged
+  tasks:
+    - name: Install Homebrew (no-cask) apps
+      community.general.homebrew:
+        name:
+          - awscli
+          - azure-cli
+          - gh
+          - htop
+          - terraform
+          - tree
+          - wget
+        state: present
+    
+    - name: Install Homebrew cask apps
+      community.general.homebrew_cask:
+        name:
+          - 1password
+          - brave-browser
+          - discord
+          - easy-move-plus-resize
+          - firefox
+          - font-jetbrains-mono
+          - flux
+          - ghostty
+          - raycast
+          - rectangle
+          - shottr
+          - signal
+          - spotify
+          - visual-studio-code
+        state: present

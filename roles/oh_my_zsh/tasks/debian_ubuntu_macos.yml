@@ -1,11 +1,20 @@
 ---
-- name: Install Zsh and Git
+- name: Install Zsh and Git on Debian/Ubuntu
   become: true
   apt:
     name:
       - zsh
       - git
     state: present
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Install Zsh and Git on macOS
+  homebrew:
+    name:
+      - zsh
+      - git
+    state: present
+  when: ansible_facts['os_family'] in ['Darwin']
 
 # Just to verify the installation worked
 - name: Check if Zsh is installed
@@ -19,12 +28,18 @@
   register: current_shell
   changed_when: false
 
-- name: Change default shell to Zsh
+- name: Change default shell to Zsh on Debian/Ubuntu
   become: true
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
-  when: current_shell.stdout != "/usr/bin/zsh"
+  when: current_shell.stdout != "/usr/bin/zsh" and ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Change default shell to Zsh on macOS
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+  when: current_shell.stdout != "/bin/zsh" and ansible_facts['os_family'] in ['Darwin']
 
 - name: Check if .oh-my-zsh exists
   stat:
@@ -66,4 +81,4 @@
     msg:
     - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
   changed_when: false
-  
+  when: not oh_my_zsh_installed.stat.exists

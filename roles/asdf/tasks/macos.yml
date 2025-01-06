@@ -1,0 +1,25 @@
+---
+- name: Install asdf and dependencies
+  homebrew:
+    name:
+      - coreutils
+      - curl
+      - asdf # Should be last, the others are dependencies
+    state: present
+
+- name: Check if a line ending with libexec/asdf.sh exists in ~/.zshrc
+  shell: |
+    grep -q "libexec/asdf.sh$" ~/.zshrc
+  register: asdf_check
+  ignore_errors: true
+  failed_when: asdf_check.rc not in [0, 1]  # Only fail on unexpected errors
+
+- name: Add asdf initialization to ~/.zshrc if it doesn't exist
+  shell: echo "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+  when: asdf_check.rc != 0
+
+- name: Create symlink for .asdfrc
+  file:
+    src: "{{ role_path }}/files/.asdfrc"
+    dest: "{{ ansible_env.HOME }}/.asdfrc"
+    state: link

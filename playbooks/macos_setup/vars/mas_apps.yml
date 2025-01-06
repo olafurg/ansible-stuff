@@ -1,0 +1,15 @@
+---
+# Mac App Store Apps to install
+mas_installed_apps:
+  - { id: 1440147259, name: "AdGuard for Safari" }
+  - { id: 973134470,  name: "Be Focused - Pomodoro timer" }
+  - { id: 1480068668, name: "Facebook Messenger" }
+  # - { id: 823766827,  name: "Microsoft OneDrive" }
+  # - { id: 462058435,  name: "Microsoft Excel" }
+  # - { id: 462054704,  name: "Microsoft Word" }
+  # - { id: 462062816,  name: "Microsoft PowerPoint" }
+  # - { id: 985367838,  name: "Microsoft Outlook" }
+  # - { id: 784801555,  name: "Microsoft OneNote" }
+  # - { id: 1295203466, name: "Microsoft Remote Desktop" }
+  - { id: 1274495053, name: "Microsoft To Do" }
+  # - { id: 803453959,  name: "Slack" }
