@@ -142,3 +142,7 @@ export BROWSER="powershell.exe /C start"
 . $(brew --prefix asdf)/libexec/asdf.sh
 
 . $(brew --prefix asdf)/libexec/asdf.sh
+
+. $(brew --prefix asdf)/libexec/asdf.sh
+
+. $(brew --prefix asdf)/libexec/asdf.sh
