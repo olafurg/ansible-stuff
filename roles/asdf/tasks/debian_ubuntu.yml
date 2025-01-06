@@ -41,4 +41,4 @@
     src: "{{ role_path }}/files/.asdfrc"
     dest: "{{ ansible_env.HOME }}/.asdfrc"
     state: link
-  # when: always create the symlink in case the config updates
+    force: true

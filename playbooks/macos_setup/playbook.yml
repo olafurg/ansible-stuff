@@ -3,6 +3,10 @@
   hosts: localhost
   vars_files: 
     - vars/mas_apps.yml
+  vars:
+    homebrew_taps:
+      - homebrew/services  # Keep only necessary taps
+
   roles:
     - geerlingguy.mac.homebrew # Ensure homebrew is installed
     - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
