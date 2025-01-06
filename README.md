@@ -4,11 +4,18 @@ My Ansible config. Installations and config/dotfiles.
 
 TODO:
 - [ ] macos git vim powerline tmux ruby
+- [ ] playbook setup scripts
 - [ ] manjaro/arch
 - [ ] mousewheel config from setup-linux
 
-## Linux - Debian or Ubuntu
+## macOS
+Run the `setup.sh` script from the repo root directory.
 
+    playbooks/macos_setup/setup.sh
+
+The script ensures prerequisites are installed and runs the setup playbook. You can also run the playbook manually if you're sure you have prerequisites. See the script for how that's run.
+
+## Linux Debian/Ubuntu
 To prep:
 
     sudo apt update && sudo apt upgrade
@@ -16,18 +23,20 @@ To prep:
 
 Then clone the repository and run a playbook. For example:
 
-    ansible-playbook playbooks/debian-ubuntu.yml -K
+    ansible-playbook playbooks/debian_ubuntu_desktop.yml -K
 
-The ```-K``` is to prompt for sudo password.
+The `-K` is to prompt for sudo password.
 
-## macOS
-_To be cleaned up_
-See the ```macos-cm``` directory. Run a playbook on the Mac itself with:
+## Linux Manjaro
+See README.md in that playbook dir. Needs integrating with roles/configs.
 
-    ansible-playbook main.yml -i inventory -K
+## Windows
+See README.md in that playbook dir. Very little.
 
 ## When conditionals
+To use in OS conditionals.
 
+Example:
   ```
   when: ansible_facts['os_family'] in ['Debian', 'Ubuntu', 'Darwin', 'Windows']
   ```
