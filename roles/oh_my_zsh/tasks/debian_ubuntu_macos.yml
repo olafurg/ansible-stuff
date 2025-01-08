@@ -64,15 +64,15 @@
     state: link
     force: true
 
-- name: Remove existing $ZSH/custom directory (if it exists)
+- name: Remove existing custom directory (if it exists)
   file:
-    path: $ZSH/custom
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
     state: absent
 
 - name: Create symlink for $ZSH/custom
   file:
     src: "{{ role_path }}/files/custom"
-    dest: "$ZSH/custom"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
     state: link
     force: true
 

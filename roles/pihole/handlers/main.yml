@@ -1,0 +1,6 @@
+---
+- name: Restart Pi-hole
+  become: true
+  service:
+    name: pihole-FTL
+    state: restarted
