@@ -1,4 +1,8 @@
 ---
-- name: Install Oh My Zsh on Debian/Ubuntu or macOS
-  include_tasks: debian_ubuntu_macos.yml
-  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu', 'Darwin']
+- name: Install Oh My Zsh on Debian/Ubuntu
+  include_tasks: debian_ubuntu.yml
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+
+- name: Install Oh My Zsh on macOS
+  include_tasks: macos.yml
+  when: ansible_facts['os_family'] in ['Darwin']

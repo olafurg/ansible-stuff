@@ -1,0 +1,89 @@
+---
+- name: Install Zsh and Git on Debian/Ubuntu
+  become: true
+  apt:
+    name:
+      - zsh
+      - git
+    state: present
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Install Zsh and Git on macOS
+  homebrew:
+    name:
+      - zsh
+      - git
+    state: present
+  when: ansible_facts['os_family'] in ['Darwin']
+
+# Just to verify the installation worked
+- name: Check if Zsh is installed
+  command: which zsh
+  register: zsh_installed
+  failed_when: zsh_installed.rc != 0
+  changed_when: false
+
+- name: Check if Zsh is the configured shell
+  command: echo $SHELL
+  register: current_shell
+  changed_when: false
+
+- name: Change default shell to Zsh on Debian/Ubuntu
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  when: current_shell.stdout != "/usr/bin/zsh" and ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Change default shell to Zsh on macOS
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+  when: current_shell.stdout != "/bin/zsh" and ansible_facts['os_family'] in ['Darwin']
+
+- name: Check if .oh-my-zsh exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_installed
+  changed_when: false
+
+- name: Get Oh My Zsh install script
+  get_url: 
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Install Oh My Zsh
+  command: sh /tmp/install.sh
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Create symlink for .zshrc
+  file:
+    src: "{{ role_path }}/files/.zshrc_macos"
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    state: link
+    force: true
+
+- name: Remove existing custom directory (if it exists)
+  file:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    state: absent
+
+- name: Ensure custom directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    state: directory
+
+- name: Create symlink to aliases
+  file:
+    src: "{{ role_path }}/files/custom/aliases_macos.zsh"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
+    state: link
+    force: true
+
+- name: Ask user to restart terminal
+  ansible.builtin.debug:
+    msg:
+    - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
+  changed_when: false
+  when: not oh_my_zsh_installed.stat.exists

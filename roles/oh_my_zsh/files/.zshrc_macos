@@ -94,9 +94,6 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias docker='sudo docker'
-alias docker-compose='sudo docker-compose'
-alias xo='xdg-open &>/dev/null'
 
 # More aliases
 source ~/.oh-my-zsh/custom/aliases.zsh
@@ -105,9 +102,6 @@ source ~/.oh-my-zsh/custom/aliases.zsh
 alias ec="$EDITOR $HOME/.zshrc"
 alias sc="source $HOME/.zshrc"
 
-# RVM support 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
-
 # User path
 export PATH=$PATH:~/bin
 
@@ -115,18 +109,8 @@ export PATH=$PATH:~/bin
 # Change ls colours
 #LS_COLORS="ow=01;36;40" && export LS_COLORS
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
 # Set MYVIMRC variable
 export MYVIMRC=~/.vimrc
-
-# NVM config
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Docker config
-#export DOCKER_HOST=tcp://localhost:2375
 
 # Yarn config
 export PATH="$PATH:/opt/yarn-1.19.1/bin"
@@ -136,15 +120,4 @@ complete -o nospace -C /usr/bin/terraform terraform
 
 # Created by `pipx` on 2025-01-06 21:27:49
 export PATH="$PATH:/Users/olafurg/.local/bin"
-
-# BEGIN ANSIBLE-ASDF-MACOS
-if [[ "$(uname)" == "Darwin" ]]; then
-  . $(brew --prefix asdf)/libexec/asdf.sh
-fi
-# END ANSIBLE-ASDF-MACOS
-source /home/olig/.agent-bridge.sh
-# BEGIN ANSIBLE-ASDF-DEBIAN
-if [[ "$(uname)" == "Linux" ]]; then
-  . "$HOME/.asdf/asdf.sh"
-fi
-# END ANSIBLE-ASDF-DEBIAN
+. $(brew --prefix asdf)/libexec/asdf.sh

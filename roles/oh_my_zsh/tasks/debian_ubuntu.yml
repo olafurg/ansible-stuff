@@ -6,15 +6,6 @@
       - zsh
       - git
     state: present
-  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
-
-- name: Install Zsh and Git on macOS
-  homebrew:
-    name:
-      - zsh
-      - git
-    state: present
-  when: ansible_facts['os_family'] in ['Darwin']
 
 # Just to verify the installation worked
 - name: Check if Zsh is installed
@@ -33,13 +24,6 @@
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
-  when: current_shell.stdout != "/usr/bin/zsh" and ansible_facts['distribution'] in ['Debian', 'Ubuntu']
-
-- name: Change default shell to Zsh on macOS
-  user:
-    name: "{{ ansible_user_id }}"
-    shell: /bin/zsh
-  when: current_shell.stdout != "/bin/zsh" and ansible_facts['os_family'] in ['Darwin']
 
 - name: Check if .oh-my-zsh exists
   stat:
@@ -59,7 +43,7 @@
 
 - name: Create symlink for .zshrc
   file:
-    src: "{{ role_path }}/files/.zshrc"
+    src: "{{ role_path }}/files/.zshrc_debian_ubuntu"
     dest: "{{ ansible_env.HOME }}/.zshrc"
     state: link
     force: true
@@ -69,14 +53,19 @@
     path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
     state: absent
 
-- name: Create symlink for $ZSH/custom
+- name: Ensure custom directory exists
   file:
-    src: "{{ role_path }}/files/custom"
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    state: directory
+
+- name: Create symlink to aliases
+  file:
+    src: "{{ role_path }}/files/custom/aliases_debian_ubuntu.zsh"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
     state: link
     force: true
 
-- name: Ask user to restart
+- name: Ask user to restart terminal
   ansible.builtin.debug:
     msg:
     - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"

@@ -12,10 +12,10 @@
   roles:
     - geerlingguy.mac.homebrew # Ensure homebrew is installed
     - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
-    - asdf
+    - oh_my_zsh
     - git
     - ghostty
-    - oh_my_zsh
+    - asdf
     # - powerline-fonts
     - terraform
     - vim
