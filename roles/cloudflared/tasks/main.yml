@@ -10,8 +10,7 @@
     url: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm
     dest: /usr/local/bin/cloudflared
     mode: '0755'
-    force: yes
-  # when: not cloudflared_installed.stat.exists
+  when: not cloudflared_installed.stat.exists
 
 - name: Verify installation
   shell: cloudflared -v
