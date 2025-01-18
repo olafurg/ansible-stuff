@@ -4,13 +4,14 @@
 
   roles:
     - debian_base # Must be first in the list
+    - oh_my_zsh
     - 1password
     - asdf
     - azure_cli
+    - brave
     - gh
     - ghostty
     - git
-    - oh_my_zsh
     - ruby
     - signal
     - spotify
