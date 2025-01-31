@@ -2,6 +2,14 @@
 - name: Set up Debian/Ubuntu WSL localhost
   hosts: localhost
   connection: local
+
+  tasks:
+    - name: Install WSL specific packages
+      become: true
+      apt:
+        name:
+          - wslu # Needed so WSL can launch Windows system browser
+        state: present
   
   roles:
     - debian_base
@@ -10,10 +18,10 @@
     - gh
     - vim
     - tmux
-    - terraform
+    # - terraform
     - azure_cli
     - 1password_wsl
     - asdf
-    - prometheus
-    - grafana
-    - node_exporter
+    # - prometheus
+    # - grafana
+    # - node_exporter

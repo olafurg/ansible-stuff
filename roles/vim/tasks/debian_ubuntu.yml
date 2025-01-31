@@ -13,10 +13,15 @@
     state: link
     force: true
 
-- name: Remove existing .vim/UltiSnips directory (if it exists)
+- name: Remove existing ~/.vim/UltiSnips directory (if it exists)
   file:
     path: "{{ ansible_env.HOME }}/.vim/UltiSnips"
     state: absent
+
+- name: Ensure ~/.vim directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.vim"
+    state: directory
 
 - name: Create symlink for .vim/UltiSnips folder
   file:
