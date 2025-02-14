@@ -11,6 +11,7 @@
     name:
       - ansible
       - curl
+      - dnsutils # dig, nslookup, nsupdate
       - git
       - htop
       - masscan
