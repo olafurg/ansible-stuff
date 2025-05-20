@@ -3,14 +3,6 @@
   hosts: localhost
   connection: local
 
-  tasks:
-    - name: Install WSL specific packages
-      become: true
-      apt:
-        name:
-          - wslu # Needed so WSL can launch Windows system browser
-        state: present
-  
   roles:
     - debian_base
     - oh_my_zsh
@@ -21,7 +13,7 @@
     # - terraform
     - azure_cli
     - 1password_wsl
-    - asdf
+    # - asdf
     # - prometheus
     # - grafana
     # - node_exporter
