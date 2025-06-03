@@ -8,8 +8,8 @@
 	co = checkout
 	br = branch
 [user]
-	email = olafur.g@gmail.com
-	name = Ólafur Guðmundsson
+	email = 1510904+olafurg@users.noreply.github.com
+	name = Olafur Gudmundsson
 [credential]
 	helper = cache --timeout=3600
 [core]
