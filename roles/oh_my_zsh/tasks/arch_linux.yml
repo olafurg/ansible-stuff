@@ -1,0 +1,73 @@
+---
+# Just to verify the installation worked
+- name: Check if Zsh is installed
+  command: which zsh
+  register: zsh_installed
+  failed_when: zsh_installed.rc != 0
+  changed_when: false
+
+- name: Check if Zsh is the configured shell
+  command: echo $SHELL
+  register: current_shell
+  changed_when: false
+
+- name: Change default shell to Zsh on Arch Linux
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  when: current_shell.stdout != "/usr/bin/zsh"
+
+- name: Check if .oh-my-zsh exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_installed
+  changed_when: false
+
+- name: Get Oh My Zsh install script
+  get_url: 
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Install Oh My Zsh
+  command: sh /tmp/install.sh
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Remove existing custom directory (if it exists)
+  file:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    state: absent
+
+- name: Ensure custom directory structure exists
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases"
+
+- name: Create symlink to distro-specific aliases
+  file:
+    src: "{{ role_path }}/files/custom/aliases_arch_linux.zsh"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
+    state: link
+    force: true
+
+- name: Append custom sourcing to .zshrc for aliases
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      # Source distro-specific aliases if they exist
+      if [ -f "$HOME/.oh-my-zsh/custom/aliases.zsh" ]; then
+        source "$HOME/.oh-my-zsh/custom/aliases.zsh"
+      fi
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - oh-my-zsh custom aliases"
+    insertafter: "source $ZSH/oh-my-zsh.sh"
+
+- name: Ask user to restart terminal
+  ansible.builtin.debug:
+    msg:
+    - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
+  changed_when: false
+  when: not oh_my_zsh_installed.stat.exists 
