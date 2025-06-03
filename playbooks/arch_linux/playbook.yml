@@ -4,7 +4,7 @@
   connection: local
 
   tasks:
-    - name: Install base packages
+    - name: Install Arch Linux base packages
       become: true
       pacman:
         name:
@@ -16,9 +16,9 @@
         state: present
         update_cache: false
 
-  # roles:
-  #   - oh_my_zsh
-  #   - git
+  roles:
+    - oh_my_zsh
+    - git
   #   - gh
   #   - vim
   #   - tmux

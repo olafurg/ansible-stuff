@@ -6,3 +6,7 @@
 - name: Install Git on macOS
   include_tasks: macos.yml
   when: ansible_facts['os_family'] in ['Darwin']
+
+- name: Install Git on Arch Linux
+  include_tasks: arch_linux.yml
+  when: ansible_facts['os_family'] == 'Archlinux'

@@ -1,9 +1,10 @@
 ---
 # Just to verify the installation worked
 - name: Check if Zsh is installed
-  command: which zsh
+  stat:
+    path: /usr/sbin/zsh
   register: zsh_installed
-  failed_when: zsh_installed.rc != 0
+  failed_when: not zsh_installed.stat.exists
   changed_when: false
 
 - name: Check if Zsh is the configured shell
@@ -15,8 +16,8 @@
   become: true
   user:
     name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
-  when: current_shell.stdout != "/usr/bin/zsh"
+    shell: /usr/sbin/zsh
+  when: current_shell.stdout != "/usr/sbin/zsh"
 
 - name: Check if .oh-my-zsh exists
   stat:
@@ -25,7 +26,7 @@
   changed_when: false
 
 - name: Get Oh My Zsh install script
-  get_url: 
+  get_url:
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     dest: /tmp
   when: not oh_my_zsh_installed.stat.exists
@@ -44,8 +45,7 @@
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
-    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases"
+  - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
 
 - name: Create symlink to distro-specific aliases
   file:
@@ -70,4 +70,4 @@
     msg:
     - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
   changed_when: false
-  when: not oh_my_zsh_installed.stat.exists 
+  when: not oh_my_zsh_installed.stat.exists
