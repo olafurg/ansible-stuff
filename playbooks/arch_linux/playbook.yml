@@ -20,7 +20,7 @@
     - oh_my_zsh
     - git
     - gh
-  #   - vim
+    - vim
   #   - tmux
   #   - terraform
   #   - azure_cli
