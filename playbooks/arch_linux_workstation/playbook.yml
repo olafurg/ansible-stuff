@@ -3,19 +3,8 @@
   hosts: localhost
   connection: local
 
-  tasks:
-    - name: Install Arch Linux base packages
-      become: true
-      pacman:
-        name:
-          - git
-          - zsh
-          - htop
-          - bind # DNS resolver
-          - fastfetch # System info
-        state: present
-
   roles:
+    - base_arch
     - arch_wsl # ONLY if running on WSL
     - oh_my_zsh
     - git

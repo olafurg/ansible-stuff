@@ -3,6 +3,6 @@
   hosts: pihole
 
   roles:
-  - debian_base
+  - base_debian_ubuntu
   - pihole
   # - cloudflared

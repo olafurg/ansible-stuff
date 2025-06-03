@@ -1,0 +1,11 @@
+---
+- name: Install Arch Linux base packages
+  become: true
+  pacman:
+    name:
+      - git
+      - zsh
+      - htop
+      - bind # DNS resolver
+      - fastfetch # System info
+    state: present 

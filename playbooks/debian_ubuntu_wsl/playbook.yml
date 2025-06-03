@@ -4,7 +4,7 @@
   connection: local
 
   roles:
-    - debian_base
+    - base_debian_ubuntu
     - oh_my_zsh
     - git
     - gh

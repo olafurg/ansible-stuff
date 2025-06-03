@@ -1,9 +1,10 @@
 ---
 - name: Set up Debian/Ubuntu desktop
   hosts: localhost
+  become: true
 
   roles:
-    - debian_base # Must be first in the list
+    - base_debian_ubuntu # Must be first in the list
     - oh_my_zsh
     - 1password
     - asdf

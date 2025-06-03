@@ -1,0 +1,15 @@
+---
+- name: Set up Arch Linux WSL localhost
+  hosts: localhost
+  connection: local
+  roles:
+    - base_arch
+    - arch_wsl # ONLY if running on WSL
+    - oh_my_zsh
+    - git
+    - gh
+    - vim
+  #   - tmux
+  #   - terraform
+  #   - azure_cli
+  #   - 1password_wsl
