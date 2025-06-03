@@ -9,10 +9,10 @@
       pacman:
         name:
           - bind # DNS resolver
-          - git
-          - zsh
-          - htop
           - fastfetch
+          - git
+          - htop
+          - zsh
         state: present
         update_cache: false
 
