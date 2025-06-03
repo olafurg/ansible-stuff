@@ -7,4 +7,4 @@ sudo pacman -Syu
 sudo pacman -S --needed git curl ansible
 
 # Run the playbook with locale set
-LANG=C.UTF-8 LC_ALL=C.UTF-8 ansible-playbook playbooks/arch_linux/playbook.yml -K
+LANG=C.UTF-8 LC_ALL=C.UTF-8 ansible-playbook playbooks/arch_linux_workstation/playbook.yml -K
