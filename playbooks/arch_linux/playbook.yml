@@ -8,15 +8,15 @@
       become: true
       pacman:
         name:
-          - bind # DNS resolver
-          - fastfetch
           - git
-          - htop
           - zsh
+          - htop
+          - bind # DNS resolver
+          - fastfetch # System info
         state: present
-        update_cache: false
 
   roles:
+    - arch_wsl # ONLY if running on WSL
     - oh_my_zsh
     - git
     - gh
@@ -25,7 +25,3 @@
   #   - terraform
   #   - azure_cli
   #   - 1password_wsl
-    # - asdf
-    # - prometheus
-    # - grafana
-    # - node_exporter
