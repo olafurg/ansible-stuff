@@ -19,7 +19,7 @@
   roles:
     - oh_my_zsh
     - git
-  #   - gh
+    - gh
   #   - vim
   #   - tmux
   #   - terraform
