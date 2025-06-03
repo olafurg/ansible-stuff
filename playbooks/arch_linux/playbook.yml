@@ -14,7 +14,7 @@
           - htop
           - fastfetch
         state: present
-        update_cache: true
+        update_cache: false
 
   # roles:
   #   - oh_my_zsh
