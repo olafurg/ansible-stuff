@@ -14,7 +14,6 @@
       - zsh
       - git
     state: present
-  when: ansible_facts['os_family'] in ['Darwin']
 
 # Just to verify the installation worked
 - name: Check if Zsh is installed
@@ -39,7 +38,7 @@
   user:
     name: "{{ ansible_user_id }}"
     shell: /bin/zsh
-  when: current_shell.stdout != "/bin/zsh" and ansible_facts['os_family'] in ['Darwin']
+  when: current_shell.stdout != "/bin/zsh"
 
 - name: Check if .oh-my-zsh exists
   stat:
@@ -57,29 +56,35 @@
   command: sh /tmp/install.sh
   when: not oh_my_zsh_installed.stat.exists
 
-- name: Create symlink for .zshrc
-  file:
-    src: "{{ role_path }}/files/.zshrc_macos"
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    state: link
-    force: true
-
 - name: Remove existing custom directory (if it exists)
   file:
     path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
     state: absent
 
-- name: Ensure custom directory exists
+- name: Ensure custom directory structure exists
   file:
-    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
 
-- name: Create symlink to aliases
+- name: Create symlink to distro-specific aliases
   file:
     src: "{{ role_path }}/files/custom/aliases_macos.zsh"
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
     state: link
     force: true
+
+- name: Append custom sourcing to .zshrc for aliases
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      # Source distro-specific aliases if they exist
+      if [ -f "$HOME/.oh-my-zsh/custom/aliases.zsh" ]; then
+        source "$HOME/.oh-my-zsh/custom/aliases.zsh"
+      fi
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - oh-my-zsh custom aliases"
+    insertafter: "source $ZSH/oh-my-zsh.sh"
 
 - name: Ask user to restart terminal
   ansible.builtin.debug:

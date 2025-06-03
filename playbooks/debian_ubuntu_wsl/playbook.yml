@@ -10,7 +10,7 @@
     - gh
     - vim
     - tmux
-    # - terraform
+    - terraform
     - azure_cli
     - 1password_wsl
     # - asdf
