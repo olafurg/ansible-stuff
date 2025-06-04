@@ -2,7 +2,7 @@
 # Just to verify the installation worked
 - name: Check if Zsh is installed
   stat:
-    path: /usr/sbin/zsh
+    path: /usr/bin/zsh
   register: zsh_installed
   failed_when: not zsh_installed.stat.exists
   changed_when: false
@@ -16,8 +16,8 @@
   become: true
   user:
     name: "{{ ansible_user_id }}"
-    shell: /usr/sbin/zsh
-  when: current_shell.stdout != "/usr/sbin/zsh"
+    shell: /usr/bin/zsh
+  when: current_shell.stdout != "/usr/bin/zsh"
 
 - name: Check if .oh-my-zsh exists
   stat:
