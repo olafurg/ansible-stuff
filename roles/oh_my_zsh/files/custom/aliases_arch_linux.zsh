@@ -5,3 +5,4 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias digs='dig +short'
 alias update='sudo pacman -Syu'
+alias up=update
