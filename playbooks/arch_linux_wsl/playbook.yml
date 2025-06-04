@@ -9,7 +9,7 @@
     - git
     - gh
     - vim
+    - terraform
   #   - tmux
-  #   - terraform
   #   - azure_cli
   #   - 1password_wsl
