@@ -1,23 +1,16 @@
 ---
-# Just to verify the installation worked
-- name: Check if Zsh is installed
-  stat:
-    path: /usr/bin/zsh
-  register: zsh_installed
-  failed_when: not zsh_installed.stat.exists
-  changed_when: false
+- name: Install Zsh
+  become: true
+  pacman:
+    name: zsh
+    state: present
 
-- name: Check if Zsh is the configured shell
-  command: echo $SHELL
-  register: current_shell
-  changed_when: false
-
-- name: Change default shell to Zsh on Arch Linux
+- name: Change default shell to Zsh
   become: true
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
-  when: current_shell.stdout != "/usr/bin/zsh"
+  register: shell_change
 
 - name: Check if .oh-my-zsh exists
   stat:

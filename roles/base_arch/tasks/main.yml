@@ -4,7 +4,6 @@
   pacman:
     name:
       - git
-      - zsh
       - htop
       - bind # DNS resolver
       - fastfetch # System info
