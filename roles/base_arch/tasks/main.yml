@@ -5,6 +5,7 @@
     name:
       - git
       - htop
-      - bind # DNS resolver
+      - bind # dig and friends: https://wiki.archlinux.org/title/Bind
       - fastfetch # System info
+      - inetutils # telnet and friends: https://wiki.archlinux.org/title/Telnet
     state: present 
