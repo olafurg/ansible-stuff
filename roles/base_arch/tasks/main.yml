@@ -7,5 +7,29 @@
       - htop
       - bind # dig and friends: https://wiki.archlinux.org/title/Bind
       - fastfetch # System info
+      - base-devel # Required for AUR packages
       - inetutils # telnet and friends: https://wiki.archlinux.org/title/Telnet
     state: present 
+
+- name: Clone yay repository
+  git:
+    repo: https://aur.archlinux.org/yay.git
+    dest: /tmp/yay
+    version: master
+  become: true
+  become_user: "{{ ansible_user_id }}"
+
+- name: Build and install yay
+  become: true
+  become_user: "{{ ansible_user_id }}"
+  shell:
+    cmd: makepkg -si --noconfirm
+    chdir: /tmp/yay
+  args:
+    creates: /usr/bin/yay
+
+- name: Clean up yay build directory
+  file:
+    path: /tmp/yay
+    state: absent
+  become: true
