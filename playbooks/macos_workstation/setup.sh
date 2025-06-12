@@ -36,8 +36,8 @@ fi
 
 # Install required Ansible Galaxy roles and collections
 echo "Installing Ansible Galaxy roles and collections..."
-ansible-galaxy install -r playbooks/macos_setup/requirements.yml
+ansible-galaxy install -r playbooks/macos_workstation/requirements.yml
 
 # Run the macOS playbook
 echo "Running macOS setup playbook..."
-ansible-playbook playbooks/macos_setup/playbook.yml -K
+ansible-playbook playbooks/macos_workstation/playbook.yml -K
