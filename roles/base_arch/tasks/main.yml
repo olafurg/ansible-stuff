@@ -12,22 +12,17 @@
     state: present 
 
 - name: Clone yay repository
-  become: true
   git:
     repo: https://aur.archlinux.org/yay.git
-    dest: /tmp/yay
-    version: master
+    dest: ~/tmp/yay
 
 - name: Build and install yay
-  become: true
   shell:
     cmd: makepkg -si --noconfirm
-    chdir: /tmp/yay
-  args:
-    creates: /usr/bin/yay
+    chdir: ~/tmp/yay
 
 - name: Clean up yay build directory
   become: true
   file:
-    path: /tmp/yay
+    path: ~/tmp/yay
     state: absent
