@@ -1,0 +1,5 @@
+---
+- name: Install Tmux on macOS
+  homebrew:
+    name: tmux
+    state: present

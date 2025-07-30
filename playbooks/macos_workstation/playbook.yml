@@ -18,6 +18,7 @@
     - asdf
     # - powerline-fonts
     - terraform
+    - tmux
     - vim
   
   # Homebrew apps that require no config files to be arranged
