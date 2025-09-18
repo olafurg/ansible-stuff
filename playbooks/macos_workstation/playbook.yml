@@ -1,7 +1,7 @@
 ---
 - name: Set up macOS
   hosts: localhost
-  vars_files: 
+  vars_files:
     - vars/mas_apps.yml
   vars:
     homebrew_taps:
@@ -20,7 +20,7 @@
     - terraform
     - tmux
     - vim
-  
+
   # Homebrew apps that require no config files to be arranged
   tasks:
     - name: Install Homebrew (no-cask) apps
@@ -33,7 +33,7 @@
           - tree
           - wget
         state: present
-    
+
     - name: Install Homebrew cask apps
       community.general.homebrew_cask:
         name:
@@ -49,5 +49,6 @@
           - shottr
           - signal
           - spotify
+          - tidal
           - visual-studio-code
         state: present
