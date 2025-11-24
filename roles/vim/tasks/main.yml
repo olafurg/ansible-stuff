@@ -1,12 +1,15 @@
 ---
 - name: Install Vim on Debian/Ubuntu
-  include_tasks: debian_ubuntu.yml
+  ansible.builtin.include_tasks: debian_ubuntu.yml
   when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+  tags: [vim]
 
 - name: Install Vim on macOS
-  include_tasks: macos.yml
+  ansible.builtin.include_tasks: macos.yml
   when: ansible_facts['os_family'] in ['Darwin']
+  tags: [vim]
 
 - name: Install Vim on Arch Linux
-  include_tasks: arch_linux.yml
+  ansible.builtin.include_tasks: arch_linux.yml
   when: ansible_facts['os_family'] == 'Archlinux'
+  tags: [vim]

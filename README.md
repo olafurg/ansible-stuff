@@ -2,12 +2,6 @@
 
 My Ansible config. Installations and config/dotfiles.
 
-TODO:
-- [ ] macos powerline tmux ruby
-- [ ] playbook setup scripts
-- [ ] manjaro/arch
-- [ ] mousewheel config from setup-linux
-
 ## macOS
 Run the playbook's `setup.sh` script, from the repo root directory.
 
@@ -20,7 +14,7 @@ After the initial setup you can keep running the setup script or run only the pl
 ## Linux Debian/Ubuntu
 Run the playbook's `setup.sh` script, from the repo root directory. For example:
 
-    playbooks/debian_ubuntu_desktop/setup.sh
+    playbooks/debian_ubuntu_workstation/setup.sh
 
 The script ensures prerequisites are installed and runs the setup playbook. Those being for Ansible.
 

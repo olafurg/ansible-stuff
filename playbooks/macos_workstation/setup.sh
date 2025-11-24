@@ -1,11 +1,13 @@
 #!/bin/zsh
+set -e  # Exit on error
+set -u  # Exit on undefined variable
 
 # Ensure Homebrew is installed
 if ! command -v brew &> /dev/null; then
     echo "Homebrew not found. Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     if ! command -v brew &> /dev/null; then
-        echo "Homebrew installation failed. Please install it manually and re-run this script."
+        echo "ERROR: Homebrew installation failed. Please install it manually and re-run this script."
         exit 1
     fi
 fi
@@ -30,13 +32,14 @@ fi
 
 # Verify Ansible installation
 if ! command -v ansible &> /dev/null; then
-    echo "Ansible installation failed. Please check your Pipx setup."
+    echo "ERROR: Ansible installation failed. Try running 'pipx ensurepath' and restart your terminal."
     exit 1
 fi
 
 # Install required Ansible Galaxy roles and collections
 echo "Installing Ansible Galaxy roles and collections..."
-ansible-galaxy install -r playbooks/macos_workstation/requirements.yml
+ansible-galaxy collection install geerlingguy.mac
+ansible-galaxy role install elliotweiser.osx-command-line-tools
 
 # Run the macOS playbook
 echo "Running macOS setup playbook..."

@@ -1,0 +1,26 @@
+---
+# ansible-lint configuration
+# See https://ansible-lint.readthedocs.io/
+
+# Exclude paths
+exclude_paths:
+  - .git/
+  - .github/
+  - .molecule/
+  - .vscode/
+
+# Enable checking of loop variable prefixes in roles
+loop_var_prefix: "{role}_"
+
+# Offline mode disables installation of requirements.yml
+offline: false
+
+# Skip specific rules (uncomment to skip)
+skip_list:
+  - yaml[line-length]  # Allow longer lines in YAML files
+  # - name[casing]  # Uncomment to skip task name casing checks
+  # - fqcn[action-core]  # Uncomment to skip FQCN checks for core modules
+
+# Warn on specific rules instead of failing
+warn_list:
+  - experimental  # Experimental rules are warnings only

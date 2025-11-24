@@ -1,7 +1,7 @@
 ---
 - name: Install Zsh and Git on Debian/Ubuntu
   become: true
-  apt:
+  ansible.builtin.apt:
     name:
       - zsh
       - git
@@ -9,7 +9,7 @@
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
 
 - name: Install Zsh and Git on macOS
-  homebrew:
+  community.general.homebrew:
     name:
       - zsh
       - git
@@ -17,59 +17,62 @@
 
 # Just to verify the installation worked
 - name: Check if Zsh is installed
-  command: which zsh
+  ansible.builtin.command: which zsh
   register: zsh_installed
   failed_when: zsh_installed.rc != 0
   changed_when: false
 
 - name: Check if Zsh is the configured shell
-  command: echo $SHELL
+  ansible.builtin.command: echo $SHELL
   register: current_shell
   changed_when: false
 
 - name: Change default shell to Zsh on Debian/Ubuntu
   become: true
-  user:
+  ansible.builtin.user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   when: current_shell.stdout != "/usr/bin/zsh" and ansible_facts['distribution'] in ['Debian', 'Ubuntu']
 
 - name: Change default shell to Zsh on macOS
-  user:
+  ansible.builtin.user:
     name: "{{ ansible_user_id }}"
     shell: /bin/zsh
   when: current_shell.stdout != "/bin/zsh"
 
 - name: Check if .oh-my-zsh exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
   register: oh_my_zsh_installed
   changed_when: false
 
 - name: Get Oh My Zsh install script
-  get_url: 
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-    dest: /tmp
+    dest: /tmp/install.sh
+    mode: '0755'
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Install Oh My Zsh
-  command: sh /tmp/install.sh
+  ansible.builtin.command: sh /tmp/install.sh
+  args:
+    creates: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Remove existing custom directory (if it exists)
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom"
     state: absent
 
 - name: Ensure custom directory structure exists
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
   with_items:
     - "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom"
 
 - name: Create symlink to distro-specific aliases
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/custom/aliases_macos.zsh"
     dest: "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
     state: link

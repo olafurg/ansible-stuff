@@ -1,12 +1,15 @@
 ---
 - name: Install Git on Debian/Ubuntu
-  include_tasks: debian_ubuntu.yml
+  ansible.builtin.include_tasks: debian_ubuntu.yml
   when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+  tags: [git]
 
 - name: Install Git on macOS
-  include_tasks: macos.yml
+  ansible.builtin.include_tasks: macos.yml
   when: ansible_facts['os_family'] in ['Darwin']
+  tags: [git]
 
 - name: Install Git on Arch Linux
-  include_tasks: arch_linux.yml
+  ansible.builtin.include_tasks: arch_linux.yml
   when: ansible_facts['os_family'] == 'Archlinux'
+  tags: [git]
