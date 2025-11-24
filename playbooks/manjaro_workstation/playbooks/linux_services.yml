@@ -2,8 +2,8 @@
 - name: Ensure services are running
   hosts: localhost
   connection: local
-  become: yes
+  become: true
 
   tasks:
-    - name: 
+    - name:
       ansible.builtin.systemd:

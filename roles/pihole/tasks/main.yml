@@ -6,7 +6,7 @@
 - name: Update package index
   become: true
   apt:
-    update_cache: yes
+    update_cache: true
 
 - name: Install prerequisites
   become: true
@@ -34,7 +34,7 @@
   service:
     name: pihole-FTL
     state: started
-    enabled: yes
+    enabled: true
 
 ########################################################################
 # 2) Network / DNS Configuration
@@ -46,7 +46,7 @@
     path: /etc/dnsmasq.d/99-edns.conf
     line: edns-packet-max=1232
     state: present
-    create: yes
+    create: true
   notify: Restart Pi-hole
 
 - name: Respond only on interface eth0 - remove old config line 1

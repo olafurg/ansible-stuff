@@ -4,4 +4,4 @@
   ansible.builtin.systemd:
     name: grafana-server
     state: restarted
-  become: yes
+  become: true

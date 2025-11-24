@@ -1,4 +1,4 @@
 ---
 snap_packages:
-- bitwarden
-- heroku
+  - bitwarden
+  - heroku

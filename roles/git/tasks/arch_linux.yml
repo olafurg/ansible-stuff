@@ -3,7 +3,7 @@
   become: true
   pacman:
     name:
-    - git
+      - git
     state: present
 
 - name: Create symlink for .gitconfig

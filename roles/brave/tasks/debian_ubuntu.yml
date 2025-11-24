@@ -27,7 +27,7 @@
 - name: Update apt cache
   become: true
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   when: brave_installed.rc != 0
 
 - name: Install Brave

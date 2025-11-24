@@ -2,7 +2,7 @@
 - name: Install desired Snap packages
   hosts: localhost
   connection: local
-  become: yes
+  become: true
   vars_files:
     - ../lists/snap_package_list.yml
   tasks:

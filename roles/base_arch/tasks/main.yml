@@ -9,7 +9,7 @@
       - fastfetch # System info
       - base-devel # Required for AUR packages
       - inetutils # telnet and friends: https://wiki.archlinux.org/title/Telnet
-    state: present 
+    state: present
 
 - name: Clone yay repository
   git:

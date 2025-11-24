@@ -11,4 +11,4 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: 'export BROWSER=wslview'
     regexp: '^export BROWSER='
-    state: present 
+    state: present

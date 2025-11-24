@@ -1,3 +1,4 @@
+---
 # Check if 1Password is already installed
 - name: Check if 1Password is already installed
   ansible.builtin.shell: "dpkg -l | grep -qw 1password"

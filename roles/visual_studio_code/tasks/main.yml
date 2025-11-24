@@ -2,4 +2,3 @@
 - name: Install Visual Studio Code on Debian/Ubuntu
   include_tasks: debian_ubuntu.yml
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
-  

@@ -92,6 +92,6 @@
 - name: Ask user to restart terminal
   ansible.builtin.debug:
     msg:
-    - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
+      - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
   changed_when: false
   when: not oh_my_zsh_installed.stat.exists

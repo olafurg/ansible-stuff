@@ -27,5 +27,5 @@
   ansible.builtin.apt:
     name: terraform
     state: present
-    update_cache: yes
+    update_cache: true
   when: terraform_check.rc != 0

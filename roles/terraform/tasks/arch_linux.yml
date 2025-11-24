@@ -4,4 +4,4 @@
   pacman:
     name: terraform
     state: present
-    update_cache: yes 
+    update_cache: true

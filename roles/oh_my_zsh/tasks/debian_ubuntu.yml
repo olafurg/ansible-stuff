@@ -32,7 +32,7 @@
   changed_when: false
 
 - name: Get Oh My Zsh install script
-  get_url: 
+  get_url:
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     dest: /tmp
   when: not oh_my_zsh_installed.stat.exists
@@ -75,6 +75,6 @@
 - name: Ask user to restart terminal
   ansible.builtin.debug:
     msg:
-    - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
+      - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
   changed_when: false
   when: not oh_my_zsh_installed.stat.exists

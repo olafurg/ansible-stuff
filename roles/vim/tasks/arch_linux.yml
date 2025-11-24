@@ -3,7 +3,7 @@
   become: true
   pacman:
     name:
-    - vim
+      - vim
     state: present
 
 - name: Create symlink for .vimrc

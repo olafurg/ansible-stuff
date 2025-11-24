@@ -27,4 +27,4 @@
   ansible.builtin.lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "source {{ ansible_env.HOME }}/.agent-bridge.sh"
-    create: yes
+    create: true
