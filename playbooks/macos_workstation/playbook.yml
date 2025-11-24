@@ -5,7 +5,6 @@
     - vars/mas_apps.yml
   vars:
     homebrew_taps:
-      - homebrew/services  # Keep only necessary taps
       - hashicorp/tap # Terraform
 
   # Base roles and non-Homebrew-Apps and/or apps which require config files to be arranged
