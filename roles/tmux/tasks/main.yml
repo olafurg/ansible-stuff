@@ -1,8 +1,8 @@
 ---
 - name: Install Tmux on Debian/Ubuntu
-  include_tasks: debian_ubuntu.yml
+  ansible.builtin.include_tasks: debian_ubuntu.yml
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
 
 - name: Install Tmux on macOS
-  include_tasks: macos.yml
+  ansible.builtin.include_tasks: macos.yml
   when: ansible_facts['os_family'] in ['Darwin']

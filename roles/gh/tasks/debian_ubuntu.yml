@@ -19,7 +19,7 @@
 
 - name: Update sources and install GitHub CLI
   become: true
-  apt:
+  ansible.builtin.apt:
     name: gh
     state: present
     update_cache: true

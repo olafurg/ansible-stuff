@@ -8,7 +8,7 @@
   changed_when: false
 
 - name: Compare installed version with desired version
-  set_fact:
+  ansible.builtin.set_fact:
     ghostty_needs_update: "{{ ghostty_version_installed.stdout | default('0.0.0') != ghostty_version }}"
 
 # - name: Debug version info

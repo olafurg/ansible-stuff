@@ -1,4 +1,4 @@
 ---
 - name: Install Signal on Debian/Ubuntu
-  include_tasks: debian_ubuntu.yml
+  ansible.builtin.include_tasks: debian_ubuntu.yml
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']

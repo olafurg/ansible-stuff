@@ -1,5 +1,7 @@
 # Ansible stuff
 
+[![Ansible Lint](https://github.com/olafurg/ansible-stuff/actions/workflows/ci.yml/badge.svg)](https://github.com/olafurg/ansible-stuff/actions/workflows/ci.yml)
+
 My Ansible config. Installations and config/dotfiles.
 
 ## macOS

@@ -5,6 +5,7 @@
     path: "{{ ansible_env.HOME }}/.local/bin"
     state: directory
     mode: '0755'
+    mode: '0755'
 
 - name: Create wslview script
   become: true

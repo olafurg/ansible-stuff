@@ -7,7 +7,7 @@
 
 - name: Ensure Brave prerequisites are installed
   become: true
-  apt:
+  ansible.builtin.apt:
     name: curl
     state: present
   when: brave_installed.rc != 0
@@ -32,7 +32,7 @@
 
 - name: Install Brave
   become: true
-  apt:
+  ansible.builtin.apt:
     name: brave-browser
     state: present
   when: brave_installed.rc != 0

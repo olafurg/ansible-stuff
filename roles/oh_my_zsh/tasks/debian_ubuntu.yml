@@ -1,7 +1,7 @@
 ---
 - name: Install Zsh and Git on Debian/Ubuntu
   become: true
-  apt:
+  ansible.builtin.apt:
     name:
       - zsh
       - git
@@ -21,18 +21,18 @@
 
 - name: Change default shell to Zsh on Debian/Ubuntu
   become: true
-  user:
+  ansible.builtin.user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
 
 - name: Check if .oh-my-zsh exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.oh-my-zsh"
   register: oh_my_zsh_installed
   changed_when: false
 
 - name: Get Oh My Zsh install script
-  get_url:
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     dest: /tmp
   when: not oh_my_zsh_installed.stat.exists
@@ -42,26 +42,27 @@
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Remove existing custom directory (if it exists)
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
     state: absent
 
 - name: Ensure custom directory structure exists
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
+    mode: '0755'
   with_items:
     - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
 
 - name: Create symlink to distro-specific aliases
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/custom/aliases_debian_ubuntu.zsh"
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
     state: link
     force: true
 
 - name: Append custom sourcing to .zshrc for aliases
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     block: |
       # Source distro-specific aliases if they exist

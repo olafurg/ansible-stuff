@@ -2,7 +2,7 @@
 ---
 - name: Install WSL prerequisites for 1Password setup
   become: true
-  apt:
+  ansible.builtin.apt:
     name: socat
     state: present
 
@@ -10,9 +10,10 @@
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.1password"
     state: directory
+    mode: '0755'
 
 - name: Create symlink for .agent-bridge
-  file:
+  ansible.builtin.file:
     src: "{{ role_path }}/files/.agent-bridge.sh"
     dest: "{{ ansible_env.HOME }}/.agent-bridge.sh"
     state: link

@@ -5,12 +5,12 @@
 
 - name: Update package index
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Install prerequisites
   become: true
-  apt:
+  ansible.builtin.apt:
     name:
       - curl
       - bash
@@ -19,7 +19,7 @@
 
 - name: Check if Pi-hole is already installed
   become: true
-  stat:
+  ansible.builtin.stat:
     path: /etc/pihole
   register: pihole_installed
 
@@ -31,7 +31,7 @@
 
 - name: Ensure Pi-hole service is running
   become: true
-  service:
+  ansible.builtin.service:
     name: pihole-FTL
     state: started
     enabled: true
@@ -42,7 +42,7 @@
 
 - name: Configure DNS packet size
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnsmasq.d/99-edns.conf
     line: edns-packet-max=1232
     state: present
@@ -51,7 +51,7 @@
 
 - name: Respond only on interface eth0 - remove old config line 1
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnsmasq.d/01-pihole.conf
     regexp: '(^local-service.*)'
     state: absent
@@ -59,7 +59,7 @@
 
 - name: Respond only on interface eth0 - set correct config line 1
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnsmasq.d/01-pihole.conf
     insertafter: '(^bogus-priv)'
     line: 'interface=eth0'  # Respond only on interface eth0
@@ -68,7 +68,7 @@
 
 - name: Respond only on interface eth0 - remove old config line 2
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/pihole/setupVars.conf
     regexp: '(^DNSMASQ_LISTENING.*)'
     state: absent
@@ -76,7 +76,7 @@
 
 - name: Respond only on interface eth0 - set correct config line 2
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/pihole/setupVars.conf
     insertafter: '(^DNS_BOGUS.*)'
     line: 'DNSMASQ_LISTENING=single'
@@ -94,11 +94,11 @@
   changed_when: false
 
 - name: Parse current adlists
-  set_fact:
+  ansible.builtin.set_fact:
     current_adlists: "{{ current_adlists_output.stdout_lines | select('search', '^http') | list }}"
 
 - name: Define desired adlists
-  set_fact:
+  ansible.builtin.set_fact:
     desired_adlists:
       # EasyList
       - https://v.firebog.net/hosts/Easylist.txt
@@ -159,11 +159,11 @@
   changed_when: false
 
 - name: Parse current whitelist
-  set_fact:
+  ansible.builtin.set_fact:
     current_whitelist: "{{ whitelist_output.stdout_lines }}"
 
 - name: Define desired whitelist
-  set_fact:
+  ansible.builtin.set_fact:
     desired_whitelist:
       - t.ly
       - www.bit.ly

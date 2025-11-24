@@ -1,6 +1,6 @@
 ---
 - name: Download Node Exporter
-  get_url:
+  ansible.builtin.get_url:
     url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
     dest: "/tmp/node_exporter.tar.gz"
 
@@ -19,7 +19,7 @@
   become: true
 
 - name: Create Node Exporter service file
-  copy:
+  ansible.builtin.copy:
     dest: /etc/systemd/system/node_exporter.service
     content: |
       [Unit]
@@ -35,12 +35,12 @@
   become: true
 
 - name: Reload systemd daemon
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
   become: true
 
 - name: Start Node Exporter
-  systemd:
+  ansible.builtin.systemd:
     name: node_exporter
     enabled: true
     state: started

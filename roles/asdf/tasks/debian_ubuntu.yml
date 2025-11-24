@@ -7,7 +7,7 @@
 
 - name: Install asdf prerequisites
   become: true
-  apt:
+  ansible.builtin.apt:
     name:
       - git
       - curl
@@ -20,7 +20,7 @@
   when: asdf_installed.rc != 0
 
 - name: Clone the asdf repo
-  git:
+  ansible.builtin.git:
     repo: 'https://github.com/asdf-vm/asdf.git'
     dest: '{{ ansible_env.HOME }}/.asdf'
     version: 'v0.15.0'

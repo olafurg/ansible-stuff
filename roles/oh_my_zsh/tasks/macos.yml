@@ -68,6 +68,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
+    mode: '0755'
   with_items:
     - "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom"
 
@@ -79,7 +80,7 @@
     force: true
 
 - name: Append custom sourcing to .zshrc for aliases
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ ansible_facts.env.HOME }}/.zshrc"
     block: |
       # Source distro-specific aliases if they exist
