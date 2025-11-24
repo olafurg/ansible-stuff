@@ -15,7 +15,6 @@
     - git
     - ghostty
     - asdf
-    # - powerline-fonts
     - terraform
     - tmux
     - vim
@@ -48,6 +47,6 @@
           - shottr
           - signal
           - spotify
-          - tidal
           - visual-studio-code
         state: present
+        install_options: force

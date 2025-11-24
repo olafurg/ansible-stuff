@@ -14,13 +14,13 @@
 - block:
     - name: Ensure the parent directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.config/ghostty"
+        path: "{{ ansible_facts.env.HOME }}/.config/ghostty"
         state: directory
 
     - name: Create symlink for config
       file:
         src: "{{ role_path }}/files/config"
-        dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
+        dest: "{{ ansible_facts.env.HOME }}/.config/ghostty/config"
         state: link
         force: true
   when: ansible_facts['os_family'] in ['Debian', "Ubuntu", "Darwin"]

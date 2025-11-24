@@ -42,7 +42,7 @@
 
 - name: Check if .oh-my-zsh exists
   stat:
-    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+    path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
   register: oh_my_zsh_installed
   changed_when: false
 
@@ -58,7 +58,7 @@
 
 - name: Remove existing custom directory (if it exists)
   file:
-    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom"
     state: absent
 
 - name: Ensure custom directory structure exists
@@ -66,18 +66,18 @@
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    - "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom"
 
 - name: Create symlink to distro-specific aliases
   file:
     src: "{{ role_path }}/files/custom/aliases_macos.zsh"
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
+    dest: "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
     state: link
     force: true
 
 - name: Append custom sourcing to .zshrc for aliases
   blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     block: |
       # Source distro-specific aliases if they exist
       if [ -f "$HOME/.oh-my-zsh/custom/aliases.zsh" ]; then

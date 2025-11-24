@@ -9,7 +9,7 @@
 
 - name: Add asdf initialization to .zshrc
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     regexp: '.*libexec\/asdf\.sh.*'
     line: '. $(brew --prefix asdf)/libexec/asdf.sh'
     state: present
@@ -17,6 +17,6 @@
 - name: Create symlink for .asdfrc
   ansible.builtin.file:
     src: "{{ role_path }}/files/.asdfrc"
-    dest: "{{ ansible_env.HOME }}/.asdfrc"
+    dest: "{{ ansible_facts.env.HOME }}/.asdfrc"
     state: link
     force: true
