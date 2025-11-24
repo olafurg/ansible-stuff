@@ -15,9 +15,6 @@
     creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
   become: true
   changed_when: false
-  args:
-    creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
-  become: true
   when: terraform_check.rc != 0
 
 - name: Add HashiCorp repository
