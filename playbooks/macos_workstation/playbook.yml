@@ -9,7 +9,6 @@
 
   # Base roles and non-Homebrew-Apps and/or apps which require config files to be arranged
   roles:
-    - geerlingguy.mac.homebrew # Ensure homebrew is installed
     - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
     - oh_my_zsh
     - git
