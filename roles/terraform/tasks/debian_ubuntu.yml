@@ -19,10 +19,11 @@
 
 - name: Add HashiCorp repository
   become: true
-  ansible.builtin.shell: |
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
-  args:
-    creates: /etc/apt/sources.list.d/hashicorp.list
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/hashicorp.list
+    content: |
+      deb [arch={{ ansible_architecture | default('amd64') }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_lsb.codename | default('focal') }} main
+    mode: '0644'
   when: terraform_check.rc != 0
 
 - name: Install Terraform

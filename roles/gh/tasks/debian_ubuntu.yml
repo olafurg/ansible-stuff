@@ -6,15 +6,36 @@
   failed_when: false
   changed_when: false
 
-- name: Fetch and add official GitHub CLI sources
+- name: Ensure wget is installed
   become: true
-  ansible.builtin.shell: |
-    (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
-      && sudo mkdir -p -m 755 /etc/apt/keyrings \
-      && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-      && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
-      && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-      && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+  ansible.builtin.apt:
+    name: wget
+    state: present
+  when: github_cli_installed.rc != 0
+
+- name: Ensure /etc/apt/keyrings exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: github_cli_installed.rc != 0
+
+- name: Download GitHub CLI keyring
+  become: true
+  ansible.builtin.get_url:
+    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    dest: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    mode: '0644'
+  when: github_cli_installed.rc != 0
+
+- name: Add GitHub CLI apt repository
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/github-cli.list
+    content: |
+      deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+    mode: '0644'
   when: github_cli_installed.rc != 0
 
 - name: Update sources and install GitHub CLI

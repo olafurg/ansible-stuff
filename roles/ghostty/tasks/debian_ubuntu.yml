@@ -26,7 +26,8 @@
 
 - name: Install Ghostty deb file
   become: true
-  ansible.builtin.shell: "dpkg -i /tmp/ghostty*.deb"
+  ansible.builtin.apt:
+    deb: /tmp/ghostty*.deb
   when: ghostty_needs_update
 
 - name: Remove Ghostty deb file

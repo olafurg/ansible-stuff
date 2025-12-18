@@ -23,10 +23,16 @@
     path: /etc/pihole
   register: pihole_installed
 
+- name: Download Pi-hole install script
+  ansible.builtin.get_url:
+    url: https://install.pi-hole.net
+    dest: /tmp/install-pihole.sh
+    mode: '0755'
+  when: not pihole_installed.stat.exists
+
 - name: Install Pi-hole (if not already installed)
   become: true
-  ansible.builtin.shell: |
-    curl -sSL https://install.pi-hole.net | bash
+  ansible.builtin.command: bash /tmp/install-pihole.sh
   when: not pihole_installed.stat.exists
 
 - name: Ensure Pi-hole service is running
