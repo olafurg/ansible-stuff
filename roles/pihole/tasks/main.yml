@@ -25,7 +25,7 @@
 
 - name: Install Pi-hole (if not already installed)
   become: true
-  shell: |
+  ansible.builtin.shell: |
     curl -sSL https://install.pi-hole.net | bash
   when: not pihole_installed.stat.exists
 
@@ -90,12 +90,12 @@
 - name: Retrieve current adlists
   become: true
   command: pihole -g
-  register: current_adlists_output
+  register: pihole_current_adlists_output
   changed_when: false
 
 - name: Parse current adlists
   ansible.builtin.set_fact:
-    current_adlists: "{{ current_adlists_output.stdout_lines | select('search', '^http') | list }}"
+    current_adlists: "{{ pihole_current_adlists_output.stdout_lines | select('search', '^http') | list }}"
 
 - name: Define desired adlists
   ansible.builtin.set_fact:
@@ -155,12 +155,12 @@
   shell: >
     sqlite3 /etc/pihole/gravity.db
     "SELECT domain FROM domainlist WHERE type=0;"
-  register: whitelist_output
+  register: pihole_whitelist_output
   changed_when: false
 
 - name: Parse current whitelist
   ansible.builtin.set_fact:
-    current_whitelist: "{{ whitelist_output.stdout_lines }}"
+    current_whitelist: "{{ pihole_whitelist_output.stdout_lines }}"
 
 - name: Define desired whitelist
   ansible.builtin.set_fact:

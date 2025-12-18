@@ -9,14 +9,14 @@
 
 # Just to verify the installation worked
 - name: Check if Zsh is installed
-  command: which zsh
-  register: zsh_installed
+  ansible.builtin.command: which zsh
+  register: oh_my_zsh_zsh_installed
   failed_when: zsh_installed.rc != 0
   changed_when: false
 
 - name: Check if Zsh is the configured shell
-  command: echo $SHELL
-  register: current_shell
+  ansible.builtin.command: echo $SHELL
+  register: oh_my_zsh_current_shell
   changed_when: false
 
 - name: Change default shell to Zsh on Debian/Ubuntu
@@ -38,7 +38,7 @@
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Install Oh My Zsh
-  command: sh /tmp/install.sh
+  ansible.builtin.command: sh /tmp/install.sh
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Remove existing custom directory (if it exists)

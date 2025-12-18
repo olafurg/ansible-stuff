@@ -1,0 +1,8 @@
+---
+collections:
+  - name: community.general
+  - name: community.crypto
+roles:
+  - name: geerlingguy.mac.homebrew
+  - name: geerlingguy.mac.mas
+# Add any other required collections or roles here as needed

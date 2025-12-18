@@ -29,6 +29,10 @@ jobs:
         run: |
           yamllint .
 
+      - name: Install Ansible requirements
+        run: |
+          ansible-galaxy install -r requirements.yml
+
       - name: Run ansible-lint
         run: |
           ansible-lint playbooks/*/playbook.yml roles/*/tasks/*.yml

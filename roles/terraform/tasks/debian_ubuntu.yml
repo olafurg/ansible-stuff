@@ -1,7 +1,7 @@
 ---
 # From here: https://developer.hashicorp.com/terraform/install#linux
 - name: Check if Terraform is installed
-  command: terraform --version
+  ansible.builtin.command: terraform --version
   register: terraform_check
   failed_when: false
   changed_when: false

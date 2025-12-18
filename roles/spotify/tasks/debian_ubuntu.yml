@@ -1,6 +1,6 @@
 ---
 - name: Include snapd role for this installation
-  import_role:
+  ansible.builtin.import_role:
     name: snapd
 
 - name: Install Spotify

@@ -24,7 +24,7 @@
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Install Oh My Zsh
-  command: sh /tmp/install.sh
+  ansible.builtin.command: sh /tmp/install.sh
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Remove existing custom directory (if it exists)

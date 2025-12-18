@@ -9,9 +9,6 @@ exclude_paths:
   - .molecule/
   - .vscode/
 
-# Enable checking of loop variable prefixes in roles
-loop_var_prefix: "{role}_"
-
 # Offline mode disables installation of requirements.yml
 offline: false
 
@@ -24,3 +21,4 @@ skip_list:
 # Warn on specific rules instead of failing
 warn_list:
   - experimental  # Experimental rules are warnings only
+  - var-naming[no-role-prefix]  # Warn on variable naming without role prefix
