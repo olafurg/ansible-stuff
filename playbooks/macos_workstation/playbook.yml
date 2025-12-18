@@ -1,15 +1,9 @@
 ---
 - name: Set up macOS
   hosts: localhost
-  vars_files:
-    - vars/mas_apps.yml
-  vars:
-    homebrew_taps:
-      - hashicorp/tap # Terraform
 
   # Base roles and non-Homebrew-Apps and/or apps which require config files to be arranged
   roles:
-    - geerlingguy.mac.mas # Ensure mas is installed, install Mac App Store apps via var file
     - oh_my_zsh
     - git
     - ghostty
@@ -52,5 +46,5 @@
     - name: Ensure specified Homebrew cask apps are not installed
       community.general.homebrew_cask:
         name:
-          - easy-move-plus-resize # Deprecated, replaced with SwiftShift
+          - easy-move-plus-resize # Deprecated, replaced with Swift Shift
         state: absent

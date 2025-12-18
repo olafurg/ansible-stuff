@@ -12,12 +12,12 @@ if ! command -v brew &> /dev/null; then
     fi
 fi
 
-# Ensure Python and Pipx are installed via Homebrew
+
+# Ensure Python, Pipx, and mas are installed via Homebrew
 echo "Installing Python and Pipx via Homebrew..."
 brew install python pipx
 
 # Ensure Pipx path is added to PATH
-echo "Ensuring pipx path is added to PATH..."
 pipx ensurepath
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"
@@ -25,7 +25,7 @@ export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"
 # Install Ansible via Pipx (skip if already installed)
 if ! command -v ansible &> /dev/null; then
     echo "Installing Ansible via Pipx..."
-    pipx install ansible
+    pipx install --include-deps ansible
 else
     echo "Ansible is already installed. Skipping installation."
 fi
@@ -38,8 +38,7 @@ fi
 
 # Install required Ansible Galaxy roles and collections
 echo "Installing Ansible Galaxy roles and collections..."
-ansible-galaxy collection install geerlingguy.mac
-ansible-galaxy role install elliotweiser.osx-command-line-tools
+ansible-galaxy install -r requirements.yml
 
 # Run the macOS playbook
 echo "Running macOS setup playbook..."

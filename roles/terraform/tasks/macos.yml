@@ -1,4 +1,9 @@
 ---
+- name: Ensure hashicorp/tap is tapped
+  community.general.homebrew_tap:
+    name: hashicorp/tap
+    state: present
+
 - name: Install Terraform on macOS
   homebrew:
     name: hashicorp/tap/terraform
