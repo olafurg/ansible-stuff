@@ -49,7 +49,6 @@
           - swift-shift
           - visual-studio-code
         state: present
-        install_options: force
 
     - name: Ensure specified Homebrew cask apps are not installed
       community.general.homebrew_cask:
