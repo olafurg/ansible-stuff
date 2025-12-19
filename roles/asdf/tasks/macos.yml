@@ -1,6 +1,6 @@
 ---
 - name: Install asdf and dependencies
-  homebrew:
+  community.general.homebrew:
     name:
       - coreutils
       - curl

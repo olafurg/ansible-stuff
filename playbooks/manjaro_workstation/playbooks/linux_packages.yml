@@ -7,12 +7,13 @@
     - ../lists/pacman_package_list.yml
   tasks:
     - name: Upgrade pacman
-      pacman:
+      community.general.pacman:
         upgrade: true
+
     - name: Install pacman packages
-      pacman:
+      community.general.pacman:
         name: "{{ pacman_packages }}"
-        state: latest
+        state: present
 
 - name: Clear pacman cache
   hosts: localhost
@@ -20,4 +21,5 @@
   become: true
   tasks:
     - name: Clear Linux and AUR caches
-      shell: pacman -Scc --noconfirm
+      ansible.builtin.shell: pacman -Scc --noconfirm
+      changed_when: true

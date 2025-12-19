@@ -1,7 +1,7 @@
 ---
 - name: Install Vim
   become: true
-  pacman:
+  community.general.pacman:
     name:
       - vim
     state: present

@@ -23,7 +23,8 @@
 - name: Add Brave repository
   become: true
   ansible.builtin.shell: |
-    echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+    set -o pipefail && echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+  changed_when: true
   when: brave_installed.rc != 0
 
 - name: Update apt cache

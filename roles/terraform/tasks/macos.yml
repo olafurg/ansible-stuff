@@ -5,6 +5,6 @@
     state: present
 
 - name: Install Terraform on macOS
-  homebrew:
+  community.general.homebrew:
     name: hashicorp/tap/terraform
     state: present

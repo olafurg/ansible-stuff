@@ -18,27 +18,20 @@
 # Just to verify the installation worked
 - name: Check if Zsh is installed
   ansible.builtin.command: which zsh
-  register: zsh_installed
-  failed_when: zsh_installed.rc != 0
+  register: oh_my_zsh_pkg_installed
+  failed_when: oh_my_zsh_pkg_installed.rc != 0
   changed_when: false
 
 - name: Check if Zsh is the configured shell
   ansible.builtin.command: echo $SHELL
-  register: current_shell
+  register: oh_my_zsh_current_shell
   changed_when: false
 
-- name: Change default shell to Zsh on Debian/Ubuntu
-  become: true
-  ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
-  when: current_shell.stdout != "/usr/bin/zsh" and ansible_facts['distribution'] in ['Debian', 'Ubuntu']
-
-- name: Change default shell to Zsh on macOS
+- name: Change default shell to Zsh
   ansible.builtin.user:
     name: "{{ ansible_user_id }}"
     shell: /bin/zsh
-  when: current_shell.stdout != "/bin/zsh"
+  when: oh_my_zsh_current_shell.stdout != "/bin/zsh"
 
 - name: Check if .oh-my-zsh exists
   ansible.builtin.stat:

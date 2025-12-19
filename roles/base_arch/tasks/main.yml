@@ -1,7 +1,7 @@
 ---
 - name: Install Arch Linux base packages
   become: true
-  pacman:
+  community.general.pacman:
     name:
       - git
       - htop
@@ -15,11 +15,14 @@
   ansible.builtin.git:
     repo: https://aur.archlinux.org/yay.git
     dest: ~/tmp/yay
+  # noqa: latest[git]
+
 
 - name: Build and install yay
   ansible.builtin.shell:
     cmd: makepkg -si --noconfirm
     chdir: ~/tmp/yay
+  changed_when: true
 
 - name: Clean up yay build directory
   become: true

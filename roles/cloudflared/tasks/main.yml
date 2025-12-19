@@ -54,8 +54,9 @@
 - name: Set up cloudflared to run as a service
   become: true
   ansible.builtin.copy:
-    src: ../files/dnsproxy.service
+    src: dnsproxy.service
     dest: /etc/systemd/system/
+    mode: '0644'
 
 - name: Ensure the cloudflared dnsproxy.service is enabled and running
   become: true

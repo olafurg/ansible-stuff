@@ -5,7 +5,7 @@
 
 - name: Install Visual Studio Code
   become: true
-  snap:
+  community.general.snap:
     name:
       - code
     state: present

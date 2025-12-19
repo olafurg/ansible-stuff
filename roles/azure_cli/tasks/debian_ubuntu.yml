@@ -17,6 +17,7 @@
   become: true
   ansible.builtin.command:
     cmd: /tmp/InstallAzureCLIDeb
+  changed_when: true
   when: azure_cli_installed.rc != 0
 
 - name: Remove Azure CLI installation script

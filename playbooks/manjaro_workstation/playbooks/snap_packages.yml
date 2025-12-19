@@ -7,12 +7,12 @@
     - ../lists/snap_package_list.yml
   tasks:
     - name: Install snaps
-      snap:
+      community.general.snap:
         name: "{{ snap_packages }}"
         state: present
 
     - name: Remove snaps
-      snap:
+      community.general.snap:
         name:
           - hey-mail
         state: absent

@@ -42,6 +42,13 @@
           - swift-shift
           - visual-studio-code
         state: present
+    
+    - name: Install Homebrew cask apps (arm64 only)
+      community.general.homebrew_cask:
+        name:
+          - chatgpt
+        state: present
+      when: ansible_architecture == "arm64"
 
     - name: Ensure specified Homebrew cask apps are not installed
       community.general.homebrew_cask:

@@ -15,10 +15,14 @@ offline: false
 # Skip specific rules (uncomment to skip)
 skip_list:
   - yaml[line-length]  # Allow longer lines in YAML files
-  # - name[casing]  # Uncomment to skip task name casing checks
-  # - fqcn[action-core]  # Uncomment to skip FQCN checks for core modules
+  - role-name  # Allow existing role naming
+  - key-order  # Ignore task key ordering
+  - yaml[trailing-spaces] # Ignore trailing spaces
 
 # Warn on specific rules instead of failing
 warn_list:
   - experimental  # Experimental rules are warnings only
   - var-naming[no-role-prefix]  # Warn on variable naming without role prefix
+  - command-instead-of-shell # Warn only
+  # - name # Warn for missing names
+  - risky-file-permissions # Warn on file permissions

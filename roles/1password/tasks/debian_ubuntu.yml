@@ -1,8 +1,8 @@
 ---
 # Check if 1Password is already installed
 - name: Check if 1Password is already installed
-  ansible.builtin.shell: "dpkg -l | grep -qw 1password"
-  register: onepassword_app_installed
+  ansible.builtin.shell: "set -o pipefail && dpkg -l | grep -qw 1password"
+  register: onepassword_app_installed # noqa: var-naming
   failed_when: false
   changed_when: false
 
@@ -11,6 +11,7 @@
   ansible.builtin.get_url:
     url: https://downloads.1password.com/linux/debian/amd64/stable/1password-latest.deb
     dest: /tmp/
+    mode: '0644'
   when: onepassword_app_installed.rc != 0
 
 - name: Install 1Password deb file

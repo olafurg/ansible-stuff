@@ -1,6 +1,6 @@
 ---
 - name: Install Vim
-  homebrew:
+  community.general.homebrew:
     name:
       - macvim
     state: present

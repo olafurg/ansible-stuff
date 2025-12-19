@@ -1,7 +1,7 @@
 ---
 - name: Install WSL utilities
   become: true
-  pacman:
+  community.general.pacman:
     name:
       - wslu
     state: present

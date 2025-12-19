@@ -1,7 +1,7 @@
 ---
 - name: Install Zsh
   become: true
-  pacman:
+  community.general.pacman:
     name: zsh
     state: present
 
@@ -21,10 +21,13 @@
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     dest: /tmp
+    mode: '0755'
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Install Oh My Zsh
   ansible.builtin.command: sh /tmp/install.sh
+  changed_when: true
+
   when: not oh_my_zsh_installed.stat.exists
 
 - name: Remove existing custom directory (if it exists)

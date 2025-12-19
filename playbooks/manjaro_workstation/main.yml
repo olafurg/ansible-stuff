@@ -1,4 +1,4 @@
 ---
-- import_playbook: playbooks/linux_packages.yml
-- import_playbook: playbooks/snap_packages.yml
-- import_playbook: playbooks/linux_services.yml
+- import_playbook: playbooks/linux_packages.yml # noqa: name[play]
+- import_playbook: playbooks/snap_packages.yml # noqa: name[play]
+- import_playbook: playbooks/linux_services.yml # noqa: name[play]

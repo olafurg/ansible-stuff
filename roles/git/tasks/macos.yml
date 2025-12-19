@@ -1,6 +1,6 @@
 ---
 - name: Install Git
-  homebrew:
+  community.general.homebrew:
     name:
       - git
     state: present

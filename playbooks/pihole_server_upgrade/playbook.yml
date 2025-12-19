@@ -4,4 +4,5 @@
   become: true
   tasks:
     - name: Run upgrade command
-      shell: pihole -up >> /tmp/pihole-upgrade.txt
+      ansible.builtin.shell: set -o pipefail && pihole -up >> /tmp/pihole-upgrade.txt
+      changed_when: true

@@ -5,5 +5,5 @@
   become: true
 
   tasks:
-    - name:
+    - name: Reload systemd
       ansible.builtin.systemd:

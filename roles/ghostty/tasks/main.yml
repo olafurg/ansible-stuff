@@ -11,11 +11,14 @@
   when: ansible_facts['os_family'] in ['Darwin']
 
 # Configure Ghostty for all OSes
-- block:
+- name: Configure Ghostty
+  block:
+
     - name: Ensure the parent directory exists
       ansible.builtin.file:
         path: "{{ ansible_facts.env.HOME }}/.config/ghostty"
         state: directory
+        mode: '0755'
 
     - name: Create symlink for config
       ansible.builtin.file:
@@ -23,4 +26,3 @@
         dest: "{{ ansible_facts.env.HOME }}/.config/ghostty/config"
         state: link
         force: true
-  when: ansible_facts['os_family'] in ['Debian', "Ubuntu", "Darwin"]
