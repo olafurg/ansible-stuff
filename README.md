@@ -1,39 +1,54 @@
-# Ansible stuff
+# Ansible Config
 
 [![Ansible Lint](https://github.com/olafurg/ansible-stuff/actions/workflows/ci.yml/badge.svg)](https://github.com/olafurg/ansible-stuff/actions/workflows/ci.yml)
 
-My Ansible config. Installations and config/dotfiles.
+My personal Ansible configuration, installations, and dotfiles.
 
-## macOS
-Run the playbook's `setup.sh` script, from the repo root directory.
+## Usage
 
-    playbooks/macos_setup/setup.sh
+Each OS/platform has its own playbook directory with a `setup.sh` script to handle prerequisites and execution.
 
-The script ensures prerequisites are installed and runs the setup playbook. Those being for example Homebrew, Python, Pipx and Ansible.
+### macOS
+Run from the root directory:
+```bash
+./playbooks/macos_workstation/setup.sh
+```
 
-After the initial setup you can keep running the setup script or run only the playbook if you're sure you have the environment set up. See the script for how the playbook is run.
+### Arch Linux workstation
+Run from the root directory:
+```bash
+./playbooks/arch_linux_workstation/setup.sh
+```
 
-## Linux Debian/Ubuntu
-Run the playbook's `setup.sh` script, from the repo root directory. For example:
+### Debian/Ubuntu workstation
+Run from the root directory:
+```bash
+./playbooks/debian_ubuntu_workstation/setup.sh
+```
 
-    playbooks/debian_ubuntu_workstation/setup.sh
+### Other Platforms
+- **Manjaro:** See `playbooks/manjaro_workstation/README.md`
+- **WSL:** See relevant `*_wsl` directories in `playbooks/`
 
-The script ensures prerequisites are installed and runs the setup playbook. Those being for Ansible.
+## Development
 
-After the initial setup you can keep running the setup script or run only the playbook if you're sure you have the environment set up. See the script for how the playbook is run.
+### Linting & Formatting
+This repo uses `ansible-lint` and `pre-commit` to maintain quality.
 
-## Linux Manjaro
-See README.md in that playbook dir. Needs integrating with roles/configs.
+1.  **Install Pre-commit Hooks** (runs automatically on git commit):
+    ```bash
+    pre-commit install
+    ```
 
-## Windows
-See README.md in that playbook dir. Very little.
+2.  **Run Linting Manually:**
+    ```bash
+    ansible-lint
+    ```
 
-## When conditionals
-To use in OS conditionals.
+3.  **Run Formatting Manually:**
+    ```bash
+    pre-commit run --all-files
+    ```
 
-Example:
-  ```
-  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu', 'Darwin', 'Windows']
-  ```
-
-  https://techviewleo.com/list-of-ansible-os-family-distributions-facts/
+### Reference
+- **OS Families:** [Ansible OS Family Facts](https://techviewleo.com/list-of-ansible-os-family-distributions-facts/)
