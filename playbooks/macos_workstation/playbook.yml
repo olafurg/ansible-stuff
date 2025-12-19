@@ -48,6 +48,7 @@
           - spotify
           - swift-shift
           - visual-studio-code
+          - whatsapp
         state: present
 
     - name: Install Homebrew cask apps (arm64 only)
