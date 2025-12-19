@@ -1,4 +1,4 @@
-# Ansible Config
+# Ansible Stuff
 
 [![Ansible Lint](https://github.com/olafurg/ansible-stuff/actions/workflows/ci.yml/badge.svg)](https://github.com/olafurg/ansible-stuff/actions/workflows/ci.yml)
 
