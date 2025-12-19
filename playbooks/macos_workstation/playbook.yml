@@ -48,7 +48,7 @@
         name:
           - chatgpt
         state: present
-      when: ansible_architecture == "arm64"
+      when: ansible_facts['architecture'] == "arm64"
 
     - name: Ensure specified Homebrew cask apps are not installed
       community.general.homebrew_cask:

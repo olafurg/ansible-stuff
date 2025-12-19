@@ -34,7 +34,7 @@
   ansible.builtin.copy:
     dest: /etc/apt/sources.list.d/github-cli.list
     content: |
-      deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+      deb [arch={{ ansible_facts['architecture'] }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
     mode: '0644'
   when: gh_cli_installed.rc != 0
 

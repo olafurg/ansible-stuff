@@ -3,4 +3,3 @@
 sudo apt install -y socat
 
 mkdir $HOME/.1password
-

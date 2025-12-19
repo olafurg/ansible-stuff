@@ -234,4 +234,3 @@ endfun
 if has("autocmd")
     autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rb,*.md,*.haml :call CleanExtraSpaces()
 endif
-
