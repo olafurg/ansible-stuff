@@ -26,8 +26,11 @@ export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"
 if ! command -v ansible &> /dev/null; then
     echo "Installing Ansible via Pipx..."
     pipx install --include-deps ansible
+    pipx inject ansible pipx
 else
     echo "Ansible is already installed. Skipping installation."
+    # Ensure pipx is injected even if ansible was already installed
+    pipx inject ansible pipx &> /dev/null || true
 fi
 
 # Verify Ansible installation

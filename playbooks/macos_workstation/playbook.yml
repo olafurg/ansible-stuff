@@ -12,8 +12,15 @@
     - tmux
     - vim
 
-  # Homebrew apps that require no config files to be arranged
+  # Apps that require no config files to be arranged
   tasks:
+    - name: Install pipx apps
+      community.general.pipx:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - ansible-lint
+
     - name: Install Homebrew (no-cask) apps
       community.general.homebrew:
         name:
@@ -50,7 +57,7 @@
         state: present
       when: ansible_facts['architecture'] == "arm64"
 
-    - name: Ensure specified Homebrew cask apps are not installed
+    - name: Ensure specified Homebrew cask apps are absent
       community.general.homebrew_cask:
         name:
           - easy-move-plus-resize # Deprecated, replaced with Swift Shift
