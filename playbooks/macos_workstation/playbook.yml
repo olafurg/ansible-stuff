@@ -42,7 +42,7 @@
           - swift-shift
           - visual-studio-code
         state: present
-    
+
     - name: Install Homebrew cask apps (arm64 only)
       community.general.homebrew_cask:
         name:
