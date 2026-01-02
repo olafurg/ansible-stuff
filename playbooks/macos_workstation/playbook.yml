@@ -51,12 +51,12 @@
           - whatsapp
         state: present
 
-    - name: Install Homebrew cask apps (arm64 only)
+    - name: Install Homebrew cask apps (on non-Intel)
       community.general.homebrew_cask:
         name:
           - chatgpt
         state: present
-      when: ansible_facts['architecture'] == "arm64"
+      when: ansible_facts['architecture'] not in ['x86_64', 'i386', 'i686']
 
     - name: Ensure specified Homebrew cask apps are absent
       community.general.homebrew_cask:
