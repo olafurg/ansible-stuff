@@ -72,6 +72,14 @@
     state: link
     force: true
 
+- name: Disable Oh My Zsh update checks via zstyle
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
+    regexp: "^zstyle ':omz:update' mode"
+    line: "zstyle ':omz:update' mode disabled"
+    insertbefore: '^source \$ZSH/oh-my-zsh\.sh'
+    create: true
+
 - name: Append custom sourcing to .zshrc for aliases
   ansible.builtin.blockinfile:
     path: "{{ ansible_facts.env.HOME }}/.zshrc"

@@ -7,6 +7,7 @@
     - base_arch
     - oh_my_zsh
     - git
+    - opencode
     - gh
     - vim
     - terraform

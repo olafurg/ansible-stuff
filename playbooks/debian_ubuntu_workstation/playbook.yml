@@ -10,10 +10,11 @@
     - asdf
     - azure_cli
     - brave
-    - gh
-    - ghostty
-    - git
-    - ruby
+     - gh
+     - ghostty
+     - git
+     - opencode
+     - ruby
     - signal
     - spotify
     - terminator
