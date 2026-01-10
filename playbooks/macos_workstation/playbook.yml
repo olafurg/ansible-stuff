@@ -6,9 +6,9 @@
   roles:
     - oh_my_zsh
     - git
-     - ghostty
-     - opencode
-     - terraform
+    - ghostty
+    - opencode
+    - terraform
     - tmux
     - vim
 
