@@ -1,0 +1,15 @@
+---
+- name: Install OpenCode on Debian/Ubuntu
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+  tags: [opencode]
+
+- name: Install OpenCode on macOS
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] in ['Darwin']
+  tags: [opencode]
+
+- name: Install OpenCode on Arch Linux
+  ansible.builtin.include_tasks: arch_linux.yml
+  when: ansible_facts['os_family'] == 'Archlinux'
+  tags: [opencode]

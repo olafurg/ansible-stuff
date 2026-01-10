@@ -1,0 +1,38 @@
+---
+- name: Check if opencode command exists
+  ansible.builtin.shell: which opencode 2>/dev/null || true
+  register: opencode_command_check
+  changed_when: false
+
+- name: Check if OpenCode is installed via curl method
+  ansible.builtin.stat:
+    path: "{{ ansible_facts.env.HOME }}/.opencode/bin/opencode"
+  register: opencode_curl_install
+  when: opencode_command_check.stdout | length > 0
+
+- name: Get path of installed opencode binary
+  ansible.builtin.shell: readlink -f $(which opencode)
+  register: opencode_binary_path
+  when: opencode_command_check.stdout | length > 0
+  changed_when: false
+
+- name: Remove curl-installed OpenCode if present and not managed by Homebrew
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.opencode"
+    state: absent
+  when:
+    - opencode_curl_install.stat is defined
+    - opencode_curl_install.stat.exists
+    - opencode_binary_path.stdout is defined
+    - "'/opt/homebrew' not in opencode_binary_path.stdout"
+    - "'/usr/local' not in opencode_binary_path.stdout"
+
+- name: Tap OpenCode Homebrew repository
+  community.general.homebrew_tap:
+    name: anomalyco/tap
+    state: present
+
+- name: Install OpenCode via Homebrew
+  community.general.homebrew:
+    name: anomalyco/tap/opencode
+    state: present
