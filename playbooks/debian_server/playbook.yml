@@ -1,0 +1,10 @@
+---
+# Baseline playbook for Debian 13 (Trixie) LXC/VM servers
+# Applies to: openclaw, pihole, mattermost, ollama, and any future servers
+# Run: ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.yml
+- name: Set up Debian server baseline
+  hosts: servers
+  become: true
+
+  roles:
+    - base_debian_server

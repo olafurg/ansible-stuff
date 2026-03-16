@@ -1,0 +1,89 @@
+---
+- name: Update and upgrade apt packages
+  become: true
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: true
+    cache_valid_time: 86400
+
+- name: Install Debian server base packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - curl
+      - dnsutils
+      - fail2ban
+      - git
+      - htop
+      - tmux
+      - tree
+      - ufw
+      - unattended-upgrades
+      - vim
+      - wget
+    state: present
+
+- name: Set timezone to Atlantic/Reykjavik
+  become: true
+  community.general.timezone:
+    name: Atlantic/Reykjavik
+
+- name: Configure unattended-upgrades
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    content: |
+      Unattended-Upgrade::Allowed-Origins {
+          "${distro_id}:${distro_codename}";
+          "${distro_id}:${distro_codename}-security";
+          "${distro_id}ESMApps:${distro_codename}-apps-security";
+          "${distro_id}ESM:${distro_codename}-infra-security";
+      };
+      Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+      Unattended-Upgrade::MinimalSteps "true";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+      Unattended-Upgrade::Automatic-Reboot "false";
+    mode: '0644'
+
+- name: Enable unattended-upgrades
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+    mode: '0644'
+
+- name: Harden SSH - disable password auth
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop:
+    - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
+    - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin prohibit-password' }
+    - { regexp: '^#?X11Forwarding', line: 'X11Forwarding no' }
+  notify: Restart sshd
+
+- name: Enable UFW
+  become: true
+  community.general.ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+
+- name: Allow SSH through UFW
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: Enable fail2ban
+  become: true
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true
