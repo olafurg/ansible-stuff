@@ -4,7 +4,7 @@ Baseline role for all Debian 13 (Trixie) homelab servers. Provides a known-good,
 
 ## What it does
 
-- **Packages**: installs essential server utilities (curl, git, htop, tmux, vim, etc.)
+- **Packages**: installs essential server utilities (ansible, curl, git, htop, tmux, vim, etc.)
 - **Timezone**: sets `Atlantic/Reykjavik`
 - **Auto-updates**: configures `unattended-upgrades` for security patches (no auto-reboot)
 - **SSH keys**: deploys authorized keys before hardening (prevents lockout)

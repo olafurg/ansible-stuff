@@ -8,6 +8,7 @@
 - name: Install Debian server base packages
   ansible.builtin.apt:
     name:
+      - ansible
       - curl
       - dnsutils
       - fail2ban
