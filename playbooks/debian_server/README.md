@@ -20,7 +20,7 @@ ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.y
 
 ## Prerequisites
 
-- SSH access to target servers (password or key)
+- SSH key access to target servers (password access is disabled by this playbook — on first run, either key or password works; after that, key only)
 - `inventories/group_vars/servers.yml` with `base_debian_server_authorized_keys` populated
 - Collections installed: `ansible-galaxy collection install -r requirements.yml`
 
