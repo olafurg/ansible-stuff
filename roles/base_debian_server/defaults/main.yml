@@ -1,0 +1,5 @@
+---
+# List of SSH public keys to authorize for root access on all servers.
+# Override in inventories/group_vars/servers.yml or host_vars/<host>.yml
+# Role will fail gracefully if this is empty (no keys deployed, no lockout risk).
+authorized_keys: []
