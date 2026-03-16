@@ -54,6 +54,14 @@
       APT::Periodic::Unattended-Upgrade "1";
     mode: '0644'
 
+- name: Deploy authorized SSH keys
+  become: true
+  ansible.posix.authorized_key:
+    user: root
+    state: present
+    key: "{{ item }}"
+  loop: "{{ authorized_keys }}"
+
 - name: Harden SSH - disable password auth
   become: true
   # NOTE: This requires SSH key auth to be configured before running.
