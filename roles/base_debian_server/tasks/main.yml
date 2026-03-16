@@ -54,7 +54,7 @@
     user: root
     state: present
     key: "{{ item }}"
-  loop: "{{ authorized_keys }}"
+  loop: "{{ base_debian_server_authorized_keys }}"
 
 - name: Harden SSH - disable password auth
   ansible.builtin.lineinfile:
