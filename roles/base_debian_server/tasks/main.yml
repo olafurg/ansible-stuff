@@ -56,6 +56,10 @@
 
 - name: Harden SSH - disable password auth
   become: true
+  # NOTE: This requires SSH key auth to be configured before running.
+  # PasswordAuthentication no means only key-based login works.
+  # Ensure your key is in authorized_keys before applying, or you will be locked out.
+  # Break-glass: access via Proxmox console (no SSH needed).
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "{{ item.regexp }}"
