@@ -4,7 +4,7 @@ Baseline role for all Debian 13 (Trixie) homelab servers. Provides a known-good,
 
 ## What it does
 
-- **Packages**: installs essential server utilities (ansible, curl, git, htop, tmux, vim, etc.)
+- **Packages**: installs essential server utilities (ansible, curl, git, htop, tmux, vim, nmap, traceroute, whois, etc.)
 - **Timezone**: sets `Atlantic/Reykjavik`
 - **Auto-updates**: configures `unattended-upgrades` for security patches (no auto-reboot)
 - **SSH keys**: deploys authorized keys before hardening (prevents lockout)
@@ -44,3 +44,7 @@ ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.y
 - **Break-glass**: if SSH access is lost, use the Proxmox console — it does not require SSH.
 - **UFW**: only port 22 is open after this role runs. Service-specific playbooks add their own ports.
 - **Reboot**: `unattended-upgrades` will not auto-reboot. Kernel updates require a manual reboot.
+
+## Related
+
+- [`base_debian_ubuntu`](../base_debian_ubuntu/) — workstation baseline for Debian/Ubuntu desktops and WSL. No hardening, includes workstation-specific tools. Use this for servers, that for desktops.

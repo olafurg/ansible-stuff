@@ -21,3 +21,4 @@
       - tree
       - vim
       - whois
+# See also: roles/base_debian_server for server hardening (UFW, fail2ban, SSH key-only, auto-updates)

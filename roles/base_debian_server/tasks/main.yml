@@ -14,12 +14,15 @@
       - fail2ban
       - git
       - htop
+      - nmap
       - tmux
+      - traceroute
       - tree
       - ufw
       - unattended-upgrades
       - vim
       - wget
+      - whois
     state: present
 
 - name: Set timezone to Atlantic/Reykjavik
