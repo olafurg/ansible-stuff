@@ -20,15 +20,23 @@ Baseline role for all Debian 13 (Trixie) homelab servers. Provides a known-good,
 
 ## Usage
 
-This role is not meant to be run standalone. It is the foundation for server-specific playbooks:
+This role can be used in two ways:
+
+**1. Standalone baseline** — via the `debian_server` playbook, to bring any server to a known-good state:
+
+```bash
+ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.yml
+```
+
+**2. As the first role in a service-specific playbook** — apply the baseline then layer on service configuration:
 
 ```yaml
-- name: Set up my server
-  hosts: my_server
+- name: Set up Mattermost server
+  hosts: mattermost
   become: true
   roles:
-    - base_debian_server
-    - my_service_role
+    - base_debian_server  # baseline first
+    - mattermost          # then service-specific
 ```
 
 ## Notes
