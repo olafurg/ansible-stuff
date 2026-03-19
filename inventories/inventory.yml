@@ -14,9 +14,6 @@ all:
         openclaw:
           ansible_host: 10.10.10.2
           ansible_user: root
-        pihole:
-          ansible_host: 10.10.10.200
-          ansible_user: root
         mattermost:
           ansible_host: 10.10.10.201
           ansible_user: root
