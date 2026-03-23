@@ -1,0 +1,8 @@
+---
+- name: Install GitHub CLI on Debian/Ubuntu
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Install GitHub CLI on Arch Linux
+  ansible.builtin.include_tasks: arch_linux.yml
+  when: ansible_facts['os_family'] == 'Archlinux'

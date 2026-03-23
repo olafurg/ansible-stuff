@@ -1,0 +1,12 @@
+---
+- name: Include snapd role for this installation
+  ansible.builtin.import_role:
+    name: snapd
+
+- name: Install Visual Studio Code
+  become: true
+  community.general.snap:
+    name:
+      - code
+    state: present
+    classic: true

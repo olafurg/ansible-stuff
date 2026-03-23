@@ -1,0 +1,22 @@
+---
+- name: Install asdf and dependencies
+  community.general.homebrew:
+    name:
+      - coreutils
+      - curl
+      - asdf # Should be last, the others are dependencies
+    state: present
+
+- name: Add asdf initialization to .zshrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
+    regexp: '.*libexec\/asdf\.sh.*'
+    line: '. $(brew --prefix asdf)/libexec/asdf.sh'
+    state: present
+
+- name: Create symlink for .asdfrc
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.asdfrc"
+    dest: "{{ ansible_facts.env.HOME }}/.asdfrc"
+    state: link
+    force: true

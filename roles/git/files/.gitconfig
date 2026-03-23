@@ -1,0 +1,21 @@
+[push]
+	default = simple
+[pull]
+	rebase = true
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+[user]
+	email = 1510904+olafurg@users.noreply.github.com
+	name = Olafur Gudmundsson
+[credential]
+	helper = cache --timeout=3600
+[core]
+	editor = vim
+	autocrlf = input
+	filemode = false
+	excludesfile = $HOME/.gitignore
+[init]
+	defaultBranch = main

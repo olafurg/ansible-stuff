@@ -1,0 +1,24 @@
+---
+- name: Update and upgrade apt packages
+  become: true
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: true
+    cache_valid_time: 86400 # One day
+
+- name: Install Debian/Ubuntu base packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - ansible
+      - curl
+      - dnsutils # dig, nslookup, nsupdate
+      - git
+      - htop
+      - masscan
+      - nmap
+      - traceroute
+      - tree
+      - vim
+      - whois
+# See also: roles/base_debian_server for server hardening (UFW, fail2ban, SSH key-only, auto-updates)

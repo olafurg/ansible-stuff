@@ -1,0 +1,32 @@
+---
+- name: Install Vim
+  become: true
+  community.general.pacman:
+    name:
+      - vim
+    state: present
+
+- name: Create symlink for .vimrc
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.vimrc"
+    dest: $HOME/.vimrc
+    state: link
+    force: true
+
+- name: Remove existing ~/.vim/UltiSnips directory (if it exists)
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.vim/UltiSnips"
+    state: absent
+
+- name: Ensure ~/.vim directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.vim"
+    state: directory
+    mode: '0755'
+
+- name: Create symlink for .vim/UltiSnips folder
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.vim/UltiSnips"
+    dest: "{{ ansible_env.HOME }}/.vim/UltiSnips"
+    state: link
+    force: true

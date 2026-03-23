@@ -1,0 +1,32 @@
+---
+- name: Install Git
+  community.general.homebrew:
+    name:
+      - git
+      - pipx
+    state: present
+
+- name: Check if pre-commit is installed via pipx
+  ansible.builtin.command: pipx list --short
+  register: pipx_list
+  changed_when: false
+  failed_when: false
+
+- name: Install pre-commit via pipx
+  ansible.builtin.command: pipx install pre-commit
+  when: "'pre-commit' not in pipx_list.stdout"
+  changed_when: true
+
+- name: Create symlink for .gitconfig
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.gitconfig"
+    dest: "{{ ansible_facts.env.HOME }}/.gitconfig"
+    state: link
+    force: true
+
+- name: Create symlink for .gitignore
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.gitignore"
+    dest: "{{ ansible_facts.env.HOME }}/.gitignore"
+    state: link
+    force: true

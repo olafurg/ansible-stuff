@@ -1,0 +1,8 @@
+---
+- name: Upgrade Pihole software
+  hosts: pihole
+  become: true
+  tasks:
+    - name: Run upgrade command
+      ansible.builtin.shell: set -o pipefail && pihole -up >> /tmp/pihole-upgrade.txt
+      changed_when: true

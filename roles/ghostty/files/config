@@ -1,0 +1,6 @@
+font-family = "CaskaydiaCove Nerd Font"
+font-size = 13
+window-width = 130
+window-height = 50
+window-padding-x = 6
+theme = dark:Catppuccin Frappe,light:Catppuccin Latte

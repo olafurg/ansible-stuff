@@ -1,0 +1,6 @@
+---
+- name: Restart Pi-hole
+  become: true
+  ansible.builtin.service:
+    name: pihole-FTL
+    state: restarted

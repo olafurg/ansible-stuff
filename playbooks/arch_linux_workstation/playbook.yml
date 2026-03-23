@@ -1,0 +1,16 @@
+---
+- name: Set up Arch Linux localhost
+  hosts: localhost
+  connection: local
+
+  roles:
+    - base_arch
+    - oh_my_zsh
+    - git
+    - opencode
+    - gh
+    - vim
+    - terraform
+    #   - tmux
+    #   - azure_cli
+    #   - 1password_wsl

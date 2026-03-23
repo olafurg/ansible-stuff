@@ -1,0 +1,25 @@
+---
+- name: Install desired Pacman packages
+  hosts: localhost
+  connection: local
+  become: true
+  vars_files:
+    - ../lists/pacman_package_list.yml
+  tasks:
+    - name: Upgrade pacman
+      community.general.pacman:
+        upgrade: true
+
+    - name: Install pacman packages
+      community.general.pacman:
+        name: "{{ pacman_packages }}"
+        state: present
+
+- name: Clear pacman cache
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: Clear Linux and AUR caches
+      ansible.builtin.shell: pacman -Scc --noconfirm
+      changed_when: true

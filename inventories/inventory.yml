@@ -1,0 +1,22 @@
+---
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+
+  children:
+    debian_ubuntu:
+      hosts:
+        localhost:
+
+    servers:
+      hosts:
+        openclaw:
+          ansible_host: 10.10.10.2
+          ansible_user: root
+        mattermost:
+          ansible_host: 10.10.10.201
+          ansible_user: root
+        ollama:
+          ansible_host: 10.10.10.202
+          ansible_user: root

@@ -1,0 +1,27 @@
+---
+# From here: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
+- name: Check if Azure CLI is installed
+  ansible.builtin.command: "which az"
+  register: azure_cli_installed
+  failed_when: false
+  changed_when: false
+
+- name: Download Azure CLI installation script
+  ansible.builtin.get_url:
+    url: https://aka.ms/InstallAzureCLIDeb
+    dest: /tmp/InstallAzureCLIDeb
+    mode: '0755'
+  when: azure_cli_installed.rc != 0
+
+- name: Run Azure CLI installation script
+  become: true
+  ansible.builtin.command:
+    cmd: /tmp/InstallAzureCLIDeb
+  changed_when: true
+  when: azure_cli_installed.rc != 0
+
+- name: Remove Azure CLI installation script
+  ansible.builtin.file:
+    path: /tmp/InstallAzureCLIDeb
+    state: absent
+  when: azure_cli_installed.rc != 0

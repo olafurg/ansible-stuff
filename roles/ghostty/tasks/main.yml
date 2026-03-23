@@ -1,0 +1,28 @@
+---
+- name: Install Ghostty on Debian/Ubuntu
+  vars:
+    ghostty_version: "1.0.1"
+    ghostty_deb_url: "https://github.com/mkasberg/ghostty-ubuntu/releases/download/1.0.1-0-ppa1/ghostty_1.0.1-0.ppa1_amd64_22.04.deb"
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+
+- name: Install Ghostty on macOS
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] in ['Darwin']
+
+# Configure Ghostty for all OSes
+- name: Configure Ghostty
+  block:
+
+    - name: Ensure the parent directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_facts.env.HOME }}/.config/ghostty"
+        state: directory
+        mode: '0755'
+
+    - name: Create symlink for config
+      ansible.builtin.file:
+        src: "{{ role_path }}/files/config"
+        dest: "{{ ansible_facts.env.HOME }}/.config/ghostty/config"
+        state: link
+        force: true

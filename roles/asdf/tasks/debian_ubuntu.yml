@@ -1,0 +1,44 @@
+---
+- name: Check if asdf is installed
+  ansible.builtin.command: "which asdf"
+  register: asdf_installed
+  failed_when: false
+  changed_when: false
+
+- name: Install asdf prerequisites
+  become: true
+  ansible.builtin.apt:
+    name:
+      - git
+      - curl
+      - build-essential
+      - libffi-dev
+      - libssl-dev
+      - libreadline-dev
+      - libyaml-dev
+    state: present
+  when: asdf_installed.rc != 0
+
+- name: Clone the asdf repo
+  ansible.builtin.git:
+    repo: 'https://github.com/asdf-vm/asdf.git'
+    dest: '{{ ansible_env.HOME }}/.asdf'
+    version: 'v0.15.0'
+    clone: true
+    update: true
+  become: false
+  when: asdf_installed.rc != 0
+
+- name: Add asdf initialization to .zshrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '.*asdf\.sh.*'
+    line: '. "$HOME/.asdf/asdf.sh"'
+    state: present
+
+- name: Create symlink for .asdfrc
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.asdfrc"
+    dest: "{{ ansible_env.HOME }}/.asdfrc"
+    state: link
+    force: true

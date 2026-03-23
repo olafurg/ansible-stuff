@@ -1,0 +1,38 @@
+---
+# For new versions of Ghostty, update the version number
+# and the URL in the playbook.
+- name: Check if Ghostty is installed
+  ansible.builtin.shell: "set -o pipefail && ghostty --version | head -n 1 | awk '{print $2}'"
+  register: ghostty_version_installed
+  failed_when: false
+  changed_when: false
+
+- name: Compare installed version with desired version
+  ansible.builtin.set_fact:
+    ghostty_needs_update: "{{ ghostty_version_installed.stdout | default('0.0.0') != ghostty_version }}"
+
+# - name: Debug version info
+#   debug:
+#     msg:
+#       - "Installed version: {{ ghostty_version_installed.stdout | default('not installed') }}"
+#       - "Desired version: {{ ghostty_version }}"
+#       - "Needs update: {{ ghostty_needs_update }}"
+
+- name: Download Ghostty deb file
+  ansible.builtin.get_url:
+    url: "{{ ghostty_deb_url }}"
+    dest: /tmp/
+    mode: '0644'
+  when: ghostty_needs_update
+
+- name: Install Ghostty deb file
+  become: true
+  ansible.builtin.apt:
+    deb: /tmp/ghostty*.deb
+  when: ghostty_needs_update
+
+- name: Remove Ghostty deb file
+  ansible.builtin.file:
+    path: /tmp/ghostty*.deb
+    state: absent
+  when: ghostty_needs_update

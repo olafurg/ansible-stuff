@@ -1,0 +1,21 @@
+---
+- name: Install Git
+  become: true
+  ansible.builtin.apt:
+    name:
+      - git
+    state: present
+
+- name: Create symlink for .gitconfig
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.gitconfig"
+    dest: "{{ ansible_env.HOME }}/.gitconfig"
+    state: link
+    force: true
+
+- name: Create symlink for .gitignore
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/.gitignore"
+    dest: "{{ ansible_env.HOME }}/.gitignore"
+    state: link
+    force: true

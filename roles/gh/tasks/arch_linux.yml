@@ -1,0 +1,7 @@
+---
+# From here: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+- name: Install GitHub CLI
+  become: true
+  community.general.pacman:
+    name: github-cli
+    state: present

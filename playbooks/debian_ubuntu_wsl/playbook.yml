@@ -1,0 +1,19 @@
+---
+- name: Set up Debian/Ubuntu WSL localhost
+  hosts: localhost
+  connection: local
+
+  roles:
+    - base_debian_ubuntu
+    - oh_my_zsh
+    - git
+    - gh
+    - vim
+    - tmux
+    - terraform
+    - azure_cli
+    - 1password_wsl
+    # - asdf
+    # - prometheus
+    # - grafana
+    # - node_exporter

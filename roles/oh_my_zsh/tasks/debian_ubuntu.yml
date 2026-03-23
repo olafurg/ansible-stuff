@@ -1,0 +1,92 @@
+---
+- name: Install Zsh and Git on Debian/Ubuntu
+  become: true
+  ansible.builtin.apt:
+    name:
+      - zsh
+      - git
+    state: present
+
+# Just to verify the installation worked
+- name: Check if Zsh is installed
+  ansible.builtin.command: which zsh
+  register: oh_my_zsh_zsh_installed
+  failed_when: zsh_installed.rc != 0
+  changed_when: false
+
+- name: Check if Zsh is the configured shell
+  ansible.builtin.command: echo $SHELL
+  register: oh_my_zsh_current_shell
+  changed_when: false
+
+- name: Change default shell to Zsh on Debian/Ubuntu
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+
+- name: Check if .oh-my-zsh exists
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_installed
+  changed_when: false
+
+- name: Get Oh My Zsh install script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp
+    mode: '0755'
+
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Install Oh My Zsh
+  ansible.builtin.command: sh /tmp/install.sh
+  when: not oh_my_zsh_installed.stat.exists
+  changed_when: true
+
+- name: Remove existing custom directory (if it exists)
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+    state: absent
+
+- name: Ensure custom directory structure exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - "{{ ansible_env.HOME }}/.oh-my-zsh/custom"
+
+- name: Create symlink to distro-specific aliases
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/custom/aliases_debian_ubuntu.zsh"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/aliases.zsh"
+    state: link
+    force: true
+
+- name: Disable Oh My Zsh update checks via zstyle
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: "^zstyle ':omz:update' mode"
+    line: "zstyle ':omz:update' mode disabled"
+    insertbefore: '^source \$ZSH/oh-my-zsh\.sh'
+    create: true
+
+- name: Append custom sourcing to .zshrc for aliases
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      # Source distro-specific aliases if they exist
+      if [ -f "$HOME/.oh-my-zsh/custom/aliases.zsh" ]; then
+        source "$HOME/.oh-my-zsh/custom/aliases.zsh"
+      fi
+
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - oh-my-zsh custom aliases"
+    insertafter: "source $ZSH/oh-my-zsh.sh"
+
+- name: Ask user to restart terminal
+  ansible.builtin.debug:
+    msg:
+      - "PLEASE RESTART YOUR TERMINAL SESSION TO ENSURE CHANGES TAKE EFFECT"
+  changed_when: false
+  when: not oh_my_zsh_installed.stat.exists

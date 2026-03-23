@@ -1,0 +1,13 @@
+---
+- name: Ensure snapd is installed
+  become: true
+  ansible.builtin.apt:
+    name: snapd
+    state: present
+
+- name: Ensure snapd is enabled and running
+  become: true
+  ansible.builtin.systemd:
+    name: snapd
+    enabled: true
+    state: started

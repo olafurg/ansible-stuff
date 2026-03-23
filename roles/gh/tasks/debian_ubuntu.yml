@@ -1,0 +1,47 @@
+---
+# From here: https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+- name: Check if GitHub CLI is installed
+  ansible.builtin.command: "which gh"
+  register: gh_cli_installed
+  failed_when: false
+  changed_when: false
+
+- name: Ensure wget is installed
+  become: true
+  ansible.builtin.apt:
+    name: wget
+    state: present
+  when: gh_cli_installed.rc != 0
+
+- name: Ensure /etc/apt/keyrings exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: gh_cli_installed.rc != 0
+
+- name: Download GitHub CLI keyring
+  become: true
+  ansible.builtin.get_url:
+    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    dest: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    mode: '0644'
+  when: gh_cli_installed.rc != 0
+
+- name: Add GitHub CLI apt repository
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/github-cli.list
+    content: |
+      deb [arch={{ ansible_facts['architecture'] }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+    mode: '0644'
+  when: gh_cli_installed.rc != 0
+
+- name: Update sources and install GitHub CLI
+  become: true
+  ansible.builtin.apt:
+    name: gh
+    state: present
+    update_cache: true
+  when: gh_cli_installed.rc != 0

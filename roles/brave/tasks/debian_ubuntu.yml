@@ -1,0 +1,41 @@
+---
+- name: Check if Brave is installed
+  ansible.builtin.command: "which brave-browser"
+  register: brave_installed
+  failed_when: false
+  changed_when: false
+
+- name: Ensure Brave prerequisites are installed
+  become: true
+  ansible.builtin.apt:
+    name: curl
+    state: present
+  when: brave_installed.rc != 0
+
+- name: Get Brave repository key
+  become: true
+  ansible.builtin.get_url:
+    url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    mode: '0644'
+  when: brave_installed.rc != 0
+
+- name: Add Brave repository
+  become: true
+  ansible.builtin.shell: |
+    set -o pipefail && echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+  changed_when: true
+  when: brave_installed.rc != 0
+
+- name: Update apt cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  when: brave_installed.rc != 0
+
+- name: Install Brave
+  become: true
+  ansible.builtin.apt:
+    name: brave-browser
+    state: present
+  when: brave_installed.rc != 0

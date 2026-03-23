@@ -1,0 +1,65 @@
+---
+- name: Set up macOS
+  hosts: localhost
+
+  # Base roles and non-Homebrew-Apps and/or apps which require config files to be arranged
+  roles:
+    - oh_my_zsh
+    - git
+    - ghostty
+    - opencode
+    - terraform
+    - tmux
+    - vim
+
+  # Apps that require no config files to be arranged
+  tasks:
+    - name: Install pipx apps
+      community.general.pipx:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - ansible-lint
+
+    - name: Install Homebrew (no-cask) apps
+      community.general.homebrew:
+        name:
+          - awscli
+          - azure-cli
+          - gh
+          - htop
+          - tree
+          - wget
+        state: present
+
+    - name: Install Homebrew cask apps
+      community.general.homebrew_cask:
+        name:
+          - 1password
+          - brave-browser
+          - discord
+          - firefox
+          - flux
+          - font-jetbrains-mono
+          - raycast
+          - rectangle
+          - shottr
+          - signal
+          - spotify
+          - swift-shift
+          - visual-studio-code
+          - whatsapp
+        state: present
+
+    - name: Install Homebrew cask apps (on non-Intel)
+      community.general.homebrew_cask:
+        name:
+          - chatgpt
+        state: present
+      when: ansible_facts['architecture'] not in ['x86_64', 'i386', 'i686']
+
+    - name: Ensure specified Homebrew cask apps are absent
+      community.general.homebrew_cask:
+        name:
+          - easy-move-plus-resize # Deprecated, replaced with Swift Shift
+        state: absent

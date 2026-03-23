@@ -1,0 +1,208 @@
+---
+########################################################################
+# 1) Pi-hole Installation/Basic Setup
+########################################################################
+
+- name: Update package index
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install prerequisites
+  become: true
+  ansible.builtin.apt:
+    name:
+      - curl
+      - bash
+      - sqlite3
+    state: present
+
+- name: Check if Pi-hole is already installed
+  become: true
+  ansible.builtin.stat:
+    path: /etc/pihole
+  register: pihole_installed
+
+- name: Download Pi-hole install script
+  ansible.builtin.get_url:
+    url: https://install.pi-hole.net
+    dest: /tmp/install-pihole.sh
+    mode: '0755'
+  when: not pihole_installed.stat.exists
+
+- name: Install Pi-hole (if not already installed)
+  become: true
+  ansible.builtin.command: bash /tmp/install-pihole.sh
+  changed_when: true
+  when: not pihole_installed.stat.exists
+
+- name: Ensure Pi-hole service is running
+  become: true
+  ansible.builtin.service:
+    name: pihole-FTL
+    state: started
+    enabled: true
+
+########################################################################
+# 2) Network / DNS Configuration
+########################################################################
+
+- name: Configure DNS packet size
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/dnsmasq.d/99-edns.conf
+    line: edns-packet-max=1232
+    state: present
+    create: true
+  notify: Restart Pi-hole
+
+- name: Respond only on interface eth0 - remove old config line 1
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/dnsmasq.d/01-pihole.conf
+    regexp: '(^local-service.*)'
+    state: absent
+  notify: Restart Pi-hole
+
+- name: Respond only on interface eth0 - set correct config line 1
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/dnsmasq.d/01-pihole.conf
+    insertafter: '(^bogus-priv)'
+    line: 'interface=eth0'  # Respond only on interface eth0
+    state: present
+  notify: Restart Pi-hole
+
+- name: Respond only on interface eth0 - remove old config line 2
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/pihole/setupVars.conf
+    regexp: '(^DNSMASQ_LISTENING.*)'
+    state: absent
+  notify: Restart Pi-hole
+
+- name: Respond only on interface eth0 - set correct config line 2
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/pihole/setupVars.conf
+    insertafter: '(^DNS_BOGUS.*)'
+    line: 'DNSMASQ_LISTENING=single'
+    state: present
+  notify: Restart Pi-hole
+
+########################################################################
+# 3) Handle Pi-hole Adlists
+########################################################################
+
+- name: Retrieve current adlists
+  become: true
+  ansible.builtin.command: pihole -g
+  register: pihole_current_adlists_output
+  changed_when: false
+
+- name: Parse current adlists
+  ansible.builtin.set_fact:
+    pihole_current_adlists: "{{ pihole_current_adlists_output.stdout_lines | select('search', '^http') | list }}"
+
+- name: Define desired adlists
+  ansible.builtin.set_fact:
+    pihole_desired_adlists:
+      # EasyList
+      - https://v.firebog.net/hosts/Easylist.txt
+
+      # Suspicious
+      - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+      - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+      - https://v.firebog.net/hosts/static/w3kbl.txt
+
+      # Advertising
+      - https://v.firebog.net/hosts/Easyprivacy.txt
+      - https://v.firebog.net/hosts/Prigent-Ads.txt
+      - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+
+      # Malicious
+      - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+      - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+      - https://v.firebog.net/hosts/Prigent-Crypto.txt
+      - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+      - https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+      - https://phishing.army/download/phishing_army_blocklist_extended.txt
+      - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+      - https://v.firebog.net/hosts/RPiList-Malware.txt
+      - https://v.firebog.net/hosts/RPiList-Phishing.txt
+      - https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+      - https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+      - https://urlhaus.abuse.ch/downloads/hostfile/
+
+- name: Add missing adlists
+  when: pihole_desired_adlists | difference(pihole_current_adlists) | length > 0
+  block:
+    - name: Insert each missing adlist
+      become: true
+      ansible.builtin.shell: >
+        set -o pipefail &&
+        sqlite3 /etc/pihole/gravity.db
+        "INSERT OR IGNORE INTO adlist (address, enabled)
+        VALUES ('{{ item }}', 1);"
+      loop: "{{ pihole_desired_adlists | difference(pihole_current_adlists) }}"
+      changed_when: true
+
+    - name: Update Pi-hole gravity
+      become: true
+      ansible.builtin.command: pihole -g
+      changed_when: true
+      notify: Restart Pi-hole
+
+
+########################################################################
+# 4) Manage Pi-hole Whitelist
+########################################################################
+
+- name: Retrieve current whitelist from Pi-hole
+  become: true
+  ansible.builtin.shell: >
+    set -o pipefail &&
+    sqlite3 /etc/pihole/gravity.db
+    "SELECT domain FROM domainlist WHERE type=0;"
+  register: pihole_whitelist_output
+  changed_when: false
+
+- name: Parse current whitelist
+  ansible.builtin.set_fact:
+    pihole_current_whitelist: "{{ pihole_whitelist_output.stdout_lines }}"
+
+- name: Define desired whitelist
+  ansible.builtin.set_fact:
+    pihole_desired_whitelist:
+      - t.ly
+      - www.bit.ly
+      - bit.ly
+      - ow.ly
+      - tinyurl.com
+      - cdn.optimizely.com # (Used by Origin for content delivery)
+      - split.io # (Used by EA Desktop. Symptom: Missing download button)
+      - s.shopify.com
+
+- name: Add missing whitelisted domains
+  when: pihole_desired_whitelist | difference(pihole_current_whitelist) | length > 0
+  block:
+
+    - name: Insert each missing whitelist entry
+      become: true
+      ansible.builtin.shell: >
+        set -o pipefail &&
+
+        sqlite3 /etc/pihole/gravity.db
+        "INSERT OR IGNORE INTO domainlist (domain, type, enabled)
+         VALUES ('{{ item }}', 0, 1);"
+      loop: "{{ pihole_desired_whitelist | difference(pihole_current_whitelist) }}"
+      changed_when: true
+
+
+    - name: Reload Pi-hole DNS lists
+      become: true
+      ansible.builtin.command: pihole restartdns reload-lists
+      changed_when: true
+      notify: Restart Pi-hole

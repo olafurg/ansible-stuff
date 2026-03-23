@@ -1,0 +1,12 @@
+---
+- name: Install Oh My Zsh on Debian/Ubuntu
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+
+- name: Install Oh My Zsh on macOS
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] in ['Darwin']
+
+- name: Install Oh My Zsh on Arch Linux
+  ansible.builtin.include_tasks: arch_linux.yml
+  when: ansible_facts['os_family'] in ['Archlinux']

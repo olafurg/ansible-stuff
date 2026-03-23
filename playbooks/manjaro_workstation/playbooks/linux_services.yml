@@ -1,0 +1,9 @@
+---
+- name: Ensure services are running
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Reload systemd
+      ansible.builtin.systemd:

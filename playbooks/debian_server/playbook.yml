@@ -1,0 +1,7 @@
+---
+- name: Set up Debian server baseline
+  hosts: servers
+  become: true
+
+  roles:
+    - base_debian_server

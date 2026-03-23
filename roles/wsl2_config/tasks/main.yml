@@ -1,0 +1,14 @@
+---
+- name: Install WSL utilities
+  become: true
+  community.general.pacman:
+    name:
+      - wslu
+    state: present
+
+- name: Set BROWSER environment variable for WSL2
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'export BROWSER=wslview'
+    regexp: '^export BROWSER='
+    state: present

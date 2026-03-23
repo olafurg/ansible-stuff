@@ -1,0 +1,8 @@
+---
+- name: Pihole setup
+  hosts: pihole
+
+  roles:
+    - base_debian_ubuntu
+    - pihole
+    # - cloudflared

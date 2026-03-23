@@ -1,0 +1,38 @@
+---
+name: Ansible Lint
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint:
+    name: Lint Ansible Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install ansible-lint yamllint
+
+      - name: Run yamllint
+        run: |
+          yamllint .
+
+      - name: Install Ansible requirements
+        run: |
+          ansible-galaxy install -r requirements.yml
+
+      - name: Run ansible-lint
+        run: |
+          ansible-lint playbooks/*/playbook.yml roles/*/tasks/*.yml
