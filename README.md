@@ -26,6 +26,18 @@ Run from the root directory:
 ./playbooks/debian_ubuntu_workstation/setup.sh
 ```
 
+### Debian server baseline
+Apply the generic Debian server baseline with:
+```bash
+ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.yml
+```
+
+### Proxmox host
+Apply the Proxmox hypervisor baseline with:
+```bash
+ansible-playbook playbooks/proxmox_host/playbook.yml -i inventories/inventory.yml
+```
+
 ### Other Platforms
 - **Manjaro:** See `playbooks/manjaro_workstation/README.md`
 - **WSL:** See relevant `*_wsl` directories in `playbooks/`

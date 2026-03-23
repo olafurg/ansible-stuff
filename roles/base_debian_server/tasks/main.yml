@@ -77,12 +77,15 @@
     state: enabled
     policy: deny
     direction: incoming
+  when: base_debian_server_manage_firewall | bool
 
-- name: Allow SSH through UFW
+- name: Allow configured TCP ports through UFW
   community.general.ufw:
     rule: allow
-    port: '22'
+    port: '{{ item | string }}'
     proto: tcp
+  loop: '{{ base_debian_server_firewall_allowed_tcp_ports }}'
+  when: base_debian_server_manage_firewall | bool
 
 - name: Enable fail2ban
   ansible.builtin.service:
