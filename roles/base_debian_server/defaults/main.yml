@@ -3,3 +3,12 @@
 # Override in inventories/group_vars/servers.yml or host_vars/<host>.yml
 # Role will fail gracefully if this is empty (no keys deployed, no lockout risk).
 base_debian_server_authorized_keys: []
+
+# Whether this role should manage a host firewall.
+# Leave true for normal Debian servers; disable on hosts like Proxmox where
+# another firewall model is preferred.
+base_debian_server_manage_firewall: true
+
+# Firewall ports to allow when firewall management is enabled.
+base_debian_server_firewall_allowed_tcp_ports:
+  - 22

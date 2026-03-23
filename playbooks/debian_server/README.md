@@ -23,6 +23,7 @@ ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.y
 - SSH key access to target servers (password access is disabled by this playbook — on first run, either key or password works; after that, key only)
 - `inventories/group_vars/servers.yml` with `base_debian_server_authorized_keys` populated
 - Collections installed: `ansible-galaxy collection install -r requirements.yml`
+- Hosts that should not use UFW (for example Proxmox hypervisors) should use a dedicated playbook or set `base_debian_server_manage_firewall: false`
 
 ## What gets applied
 
