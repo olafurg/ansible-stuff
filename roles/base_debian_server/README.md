@@ -17,6 +17,8 @@ Baseline role for all Debian 13 (Trixie) homelab servers. Provides a known-good,
 | Variable | Default | Description |
 |---|---|---|
 | `base_debian_server_authorized_keys` | `[]` | List of SSH public key strings to authorize for root. Override in `group_vars/servers.yml` or `host_vars/<host>.yml` |
+| `base_debian_server_manage_firewall` | `true` | Whether the role should enable/manage UFW |
+| `base_debian_server_firewall_allowed_tcp_ports` | `[22]` | TCP ports to allow through UFW when firewall management is enabled |
 
 ## Usage
 
@@ -42,7 +44,8 @@ ansible-playbook playbooks/debian_server/playbook.yml -i inventories/inventory.y
 ## Notes
 
 - **Break-glass**: if SSH access is lost, use the Proxmox console — it does not require SSH.
-- **UFW**: only port 22 is open after this role runs. Service-specific playbooks add their own ports.
+- **UFW**: by default only port 22 is open after this role runs. Service-specific playbooks can add their own ports or disable firewall management entirely.
+- **Proxmox hosts**: prefer a dedicated Proxmox playbook/role and disable UFW management there unless you explicitly want UFW on the hypervisor.
 - **Reboot**: `unattended-upgrades` will not auto-reboot. Kernel updates require a manual reboot.
 
 ## Related
