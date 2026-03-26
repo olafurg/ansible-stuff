@@ -14,10 +14,16 @@
 
   # Apps that require no config files to be arranged
   tasks:
+    - name: Find pipx executable
+      ansible.builtin.command: which pipx
+      register: pipx_executable
+      changed_when: false
+
     - name: Install pipx apps
       community.general.pipx:
         name: "{{ item }}"
         state: present
+        executable: "{{ pipx_executable.stdout }}"
       loop:
         - ansible-lint
 
