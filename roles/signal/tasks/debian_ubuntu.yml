@@ -1,9 +1,37 @@
 ---
-- name: Include snapd role for this installation
-  ansible.builtin.import_role:
-    name: snapd
+# From https://signal.org/download/linux/
+- name: Check if Signal is installed
+  ansible.builtin.shell: "dpkg-query -W -f='${Status}' signal-desktop 2>/dev/null | grep -q 'install ok installed'"
+  register: signal_installed
+  failed_when: false
+  changed_when: false
+
+- name: Add Signal GPG key
+  become: true
+  ansible.builtin.shell: >
+    curl -fsSL https://updates.signal.org/desktop/apt/keys.asc
+    | gpg --dearmor -o /usr/share/keyrings/signal-desktop-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/signal-desktop-keyring.gpg
+  when: signal_installed.rc != 0
+
+- name: Add Signal apt repository
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/signal-xenial.list
+    content: "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main\n"
+    mode: '0644'
+  when: signal_installed.rc != 0
+
+- name: Update apt cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  when: signal_installed.rc != 0
 
 - name: Install Signal
-  community.general.snap:
+  become: true
+  ansible.builtin.apt:
     name: signal-desktop
     state: present
+  when: signal_installed.rc != 0

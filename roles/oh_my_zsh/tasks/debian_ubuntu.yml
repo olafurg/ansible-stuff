@@ -11,7 +11,7 @@
 - name: Check if Zsh is installed
   ansible.builtin.command: which zsh
   register: oh_my_zsh_zsh_installed
-  failed_when: zsh_installed.rc != 0
+  failed_when: oh_my_zsh_zsh_installed.rc != 0
   changed_when: false
 
 - name: Check if Zsh is the configured shell

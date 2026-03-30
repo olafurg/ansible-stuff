@@ -1,38 +1,38 @@
 ---
-# For new versions of Ghostty, update the version number
-# and the URL in the playbook.
 - name: Check if Ghostty is installed
-  ansible.builtin.shell: "set -o pipefail && ghostty --version | head -n 1 | awk '{print $2}'"
-  register: ghostty_version_installed
+  ansible.builtin.shell: "dpkg-query -W -f='${Status}' ghostty 2>/dev/null | grep -q 'install ok installed'"
+  register: ghostty_installed
   failed_when: false
   changed_when: false
 
-- name: Compare installed version with desired version
-  ansible.builtin.set_fact:
-    ghostty_needs_update: "{{ ghostty_version_installed.stdout | default('0.0.0') != ghostty_version }}"
+- name: Add Ghostty debian.griffo.io signing key
+  become: true
+  ansible.builtin.shell: >
+    curl -fsSL https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc
+    | gpg --dearmor -o /usr/share/keyrings/debian.griffo.io.gpg
+  args:
+    creates: /usr/share/keyrings/debian.griffo.io.gpg
+  when: ghostty_installed.rc != 0
 
-# - name: Debug version info
-#   debug:
-#     msg:
-#       - "Installed version: {{ ghostty_version_installed.stdout | default('not installed') }}"
-#       - "Desired version: {{ ghostty_version }}"
-#       - "Needs update: {{ ghostty_needs_update }}"
+- name: Add Ghostty apt repository
+  become: true
+  ansible.builtin.shell: >
+    echo "deb [signed-by=/usr/share/keyrings/debian.griffo.io.gpg]
+    https://debian.griffo.io/apt $(lsb_release -sc) main"
+    | tee /etc/apt/sources.list.d/debian.griffo.io.list
+  args:
+    creates: /etc/apt/sources.list.d/debian.griffo.io.list
+  when: ghostty_installed.rc != 0
 
-- name: Download Ghostty deb file
-  ansible.builtin.get_url:
-    url: "{{ ghostty_deb_url }}"
-    dest: /tmp/
-    mode: '0644'
-  when: ghostty_needs_update
-
-- name: Install Ghostty deb file
+- name: Update apt cache
   become: true
   ansible.builtin.apt:
-    deb: /tmp/ghostty*.deb
-  when: ghostty_needs_update
+    update_cache: true
+  when: ghostty_installed.rc != 0
 
-- name: Remove Ghostty deb file
-  ansible.builtin.file:
-    path: /tmp/ghostty*.deb
-    state: absent
-  when: ghostty_needs_update
+- name: Install Ghostty
+  become: true
+  ansible.builtin.apt:
+    name: ghostty
+    state: present
+  when: ghostty_installed.rc != 0
