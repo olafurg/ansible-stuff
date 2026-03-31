@@ -5,3 +5,4 @@
 
   roles:
     - base_debian_server
+    - safe_chain
