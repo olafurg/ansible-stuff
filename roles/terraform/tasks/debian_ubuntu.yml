@@ -6,11 +6,17 @@
   failed_when: false
   changed_when: false
 
-- name: Download and install HashiCorp GPG key
+- name: Download HashiCorp GPG key
   become: true
-  ansible.builtin.shell: >
-    curl -fsSL https://apt.releases.hashicorp.com/gpg
-    | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  ansible.builtin.get_url:
+    url: https://apt.releases.hashicorp.com/gpg
+    dest: /tmp/hashicorp-gpg-key.asc
+    mode: '0644'
+  when: terraform_check.rc != 0
+
+- name: Dearmor HashiCorp GPG key
+  become: true
+  ansible.builtin.command: gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg /tmp/hashicorp-gpg-key.asc
   args:
     creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
   when: terraform_check.rc != 0
@@ -19,8 +25,10 @@
   become: true
   ansible.builtin.copy:
     dest: /etc/apt/sources.list.d/hashicorp.list
-    content: |
-      deb [arch={{ 'amd64' if ansible_facts['architecture'] == 'x86_64' else ansible_facts['architecture'] }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_facts['lsb']['codename'] | default('focal') }} main
+    content: >-
+      deb [arch={{ 'amd64' if ansible_facts['architecture'] == 'x86_64' else ansible_facts['architecture'] }}
+      signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg]
+      https://apt.releases.hashicorp.com {{ ansible_facts['lsb']['codename'] | default('focal') }} main
     mode: '0644'
   when: terraform_check.rc != 0
 

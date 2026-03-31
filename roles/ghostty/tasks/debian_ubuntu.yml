@@ -1,27 +1,31 @@
 ---
 - name: Check if Ghostty is installed
-  ansible.builtin.shell: "dpkg-query -W -f='${Status}' ghostty 2>/dev/null | grep -q 'install ok installed'"
+  ansible.builtin.command: dpkg-query -W -f='${Status}' ghostty
   register: ghostty_installed
   failed_when: false
   changed_when: false
 
-- name: Add Ghostty debian.griffo.io signing key
+- name: Download Ghostty signing key
   become: true
-  ansible.builtin.shell: >
-    curl -fsSL https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc
-    | gpg --dearmor -o /usr/share/keyrings/debian.griffo.io.gpg
+  ansible.builtin.get_url:
+    url: https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc
+    dest: /tmp/ghostty-signing-key.asc
+    mode: '0644'
+  when: ghostty_installed.rc != 0
+
+- name: Dearmor Ghostty signing key
+  become: true
+  ansible.builtin.command: gpg --dearmor -o /usr/share/keyrings/debian.griffo.io.gpg /tmp/ghostty-signing-key.asc
   args:
     creates: /usr/share/keyrings/debian.griffo.io.gpg
   when: ghostty_installed.rc != 0
 
 - name: Add Ghostty apt repository
   become: true
-  ansible.builtin.shell: >
-    echo "deb [signed-by=/usr/share/keyrings/debian.griffo.io.gpg]
-    https://debian.griffo.io/apt $(lsb_release -sc) main"
-    | tee /etc/apt/sources.list.d/debian.griffo.io.list
-  args:
-    creates: /etc/apt/sources.list.d/debian.griffo.io.list
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/debian.griffo.io.list
+    content: "deb [signed-by=/usr/share/keyrings/debian.griffo.io.gpg] https://debian.griffo.io/apt {{ ansible_facts['lsb']['codename'] }} main\n"
+    mode: '0644'
   when: ghostty_installed.rc != 0
 
 - name: Update apt cache

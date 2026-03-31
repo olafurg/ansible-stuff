@@ -1,16 +1,22 @@
 ---
 # From https://signal.org/download/linux/
 - name: Check if Signal is installed
-  ansible.builtin.shell: "dpkg-query -W -f='${Status}' signal-desktop 2>/dev/null | grep -q 'install ok installed'"
+  ansible.builtin.command: dpkg-query -W -f='${Status}' signal-desktop
   register: signal_installed
   failed_when: false
   changed_when: false
 
-- name: Add Signal GPG key
+- name: Download Signal GPG key
   become: true
-  ansible.builtin.shell: >
-    curl -fsSL https://updates.signal.org/desktop/apt/keys.asc
-    | gpg --dearmor -o /usr/share/keyrings/signal-desktop-keyring.gpg
+  ansible.builtin.get_url:
+    url: https://updates.signal.org/desktop/apt/keys.asc
+    dest: /tmp/signal-keys.asc
+    mode: '0644'
+  when: signal_installed.rc != 0
+
+- name: Dearmor Signal GPG key
+  become: true
+  ansible.builtin.command: gpg --dearmor -o /usr/share/keyrings/signal-desktop-keyring.gpg /tmp/signal-keys.asc
   args:
     creates: /usr/share/keyrings/signal-desktop-keyring.gpg
   when: signal_installed.rc != 0
