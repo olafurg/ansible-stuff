@@ -4,13 +4,38 @@ SHELL := /bin/zsh
 EXTRA_PATH := $(HOME)/.local/bin:$(HOME)/.local/pipx/venvs/ansible/bin:$(HOME)/.local/pipx/venvs/ansible-lint/bin
 CMD := export PATH="$(EXTRA_PATH):$$PATH";
 
-.PHONY: help lint lint-yaml lint-ansible check macos debian clean
+.PHONY: help setup lint lint-yaml lint-ansible check macos debian clean
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
 	@echo ''
 	@echo 'Available targets:'
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+setup: ## Bootstrap this machine (installs Ansible, dependencies, runs playbook)
+	@if [ "$$(uname)" = "Darwin" ]; then \
+		echo "Detected macOS"; \
+		./playbooks/macos_workstation/setup.sh; \
+	elif grep -qi "arch" /etc/os-release 2>/dev/null; then \
+		if grep -qi "microsoft" /proc/version 2>/dev/null; then \
+			echo "Detected Arch Linux (WSL)"; \
+			./playbooks/arch_linux_wsl/setup.sh; \
+		else \
+			echo "Detected Arch Linux"; \
+			./playbooks/arch_linux_workstation/setup.sh; \
+		fi; \
+	elif grep -qiE "debian|ubuntu" /etc/os-release 2>/dev/null; then \
+		if grep -qi "microsoft" /proc/version 2>/dev/null; then \
+			echo "Detected Debian/Ubuntu (WSL)"; \
+			./playbooks/debian_ubuntu_wsl/setup.sh; \
+		else \
+			echo "Detected Debian/Ubuntu"; \
+			./playbooks/debian_ubuntu_workstation/setup.sh; \
+		fi; \
+	else \
+		echo "ERROR: Unsupported OS. Run the appropriate setup.sh manually."; \
+		exit 1; \
+	fi
 
 lint: lint-yaml lint-ansible ## Run all linters
 
