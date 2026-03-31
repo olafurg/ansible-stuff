@@ -1,8 +1,10 @@
 # Set PATH to include pipx-installed tools
 # GNU Make 3.81 (macOS default) can't reliably export PATH, so we prepend it in each recipe.
 SHELL := /bin/zsh
-EXTRA_PATH := $(HOME)/.local/bin:$(HOME)/.local/pipx/venvs/ansible/bin:$(HOME)/.local/pipx/venvs/ansible-lint/bin
-CMD := export PATH="$(EXTRA_PATH):$$PATH";
+LINT_PATH := $(HOME)/.local/pipx/venvs/ansible-lint/bin
+ANSIBLE_PATH := $(HOME)/.local/bin:$(HOME)/.local/pipx/venvs/ansible/bin
+LINT_CMD := export PATH="$(LINT_PATH):$$PATH";
+ANSIBLE_CMD := export PATH="$(ANSIBLE_PATH):$$PATH";
 
 .PHONY: help setup lint lint-yaml lint-ansible check macos debian clean
 
@@ -41,23 +43,23 @@ lint: lint-yaml lint-ansible ## Run all linters
 
 lint-yaml: ## Run yamllint on all YAML files
 	@echo "Running yamllint..."
-	@$(CMD) yamllint .
+	@$(LINT_CMD) yamllint .
 
 lint-ansible: ## Run ansible-lint on playbooks and roles
 	@echo "Running ansible-lint..."
-	@$(CMD) ansible-lint playbooks/*/playbook.yml roles/*/tasks/*.yml
+	@$(LINT_CMD) ansible-lint playbooks/*/playbook.yml roles/*/tasks/*.yml
 
 check: ## Run syntax check on all playbooks
 	@echo "Checking macOS playbook syntax..."
-	@$(CMD) ansible-playbook playbooks/macos_workstation/playbook.yml --syntax-check
+	@$(ANSIBLE_CMD) ansible-playbook playbooks/macos_workstation/playbook.yml --syntax-check
 	@echo "Checking Debian/Ubuntu playbook syntax..."
-	@$(CMD) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml --syntax-check
+	@$(ANSIBLE_CMD) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml --syntax-check
 
 macos: ## Run macOS playbook
-	@$(CMD) ansible-playbook playbooks/macos_workstation/playbook.yml -K
+	@$(ANSIBLE_CMD) ansible-playbook playbooks/macos_workstation/playbook.yml -K
 
 debian: ## Run Debian/Ubuntu playbook
-	@$(CMD) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml -K
+	@$(ANSIBLE_CMD) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml -K
 
 clean: ## Clean up temporary files
 	@echo "Cleaning up..."

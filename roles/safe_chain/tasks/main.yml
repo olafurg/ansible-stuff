@@ -1,0 +1,27 @@
+---
+- name: Check if safe-chain is installed
+  ansible.builtin.command: safe-chain --version
+  register: safe_chain_check
+  failed_when: false
+  changed_when: false
+  tags: [safe_chain]
+
+- name: Download safe-chain installer
+  ansible.builtin.get_url:
+    url: https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh
+    dest: /tmp/install-safe-chain.sh
+    mode: '0755'
+  when: safe_chain_check.rc != 0
+  tags: [safe_chain]
+
+- name: Run safe-chain installer
+  ansible.builtin.command: /tmp/install-safe-chain.sh
+  when: safe_chain_check.rc != 0
+  changed_when: true
+  tags: [safe_chain]
+
+- name: Run safe-chain setup
+  ansible.builtin.command: "{{ ansible_facts.env.HOME }}/.safe-chain/bin/safe-chain setup"
+  when: safe_chain_check.rc != 0
+  changed_when: true
+  tags: [safe_chain]
