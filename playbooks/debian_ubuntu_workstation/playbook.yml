@@ -7,7 +7,7 @@
     - base_debian_ubuntu # Must be first in the list
     - oh_my_zsh
     - 1password
-    - asdf
+    - mise
     - azure_cli
     - brave
     - gh

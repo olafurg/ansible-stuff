@@ -11,6 +11,7 @@
     - terraform
     - tmux
     - vim
+    - mise
     - safe_chain
 
   # Apps that require no config files to be arranged

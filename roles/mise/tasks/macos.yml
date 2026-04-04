@@ -1,0 +1,12 @@
+---
+- name: Install mise
+  community.general.homebrew:
+    name: mise
+    state: present
+
+- name: Add mise activation to .zshrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
+    regexp: '.*mise activate.*'
+    line: 'eval "$(mise activate zsh)"'
+    state: present

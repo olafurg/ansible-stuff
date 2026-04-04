@@ -1,0 +1,24 @@
+---
+- name: Install mise on Debian/Ubuntu
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Install mise on macOS
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] in ['Darwin']
+
+- name: Install Node.js LTS via mise
+  ansible.builtin.command:
+    cmd: mise install node@lts
+  register: mise_install_node
+  changed_when: "'installed' in mise_install_node.stdout"
+  environment:
+    PATH: "{{ ansible_facts.env.HOME }}/.local/bin:{{ ansible_facts.env.PATH }}"
+
+- name: Set Node.js LTS as global default
+  ansible.builtin.command:
+    cmd: mise use --global node@lts
+  register: mise_use_node
+  changed_when: "'installed' in mise_use_node.stdout"
+  environment:
+    PATH: "{{ ansible_facts.env.HOME }}/.local/bin:{{ ansible_facts.env.PATH }}"

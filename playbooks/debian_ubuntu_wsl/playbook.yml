@@ -13,7 +13,7 @@
     - terraform
     - azure_cli
     - 1password_wsl
-    # - asdf
+    # - mise
     # - prometheus
     # - grafana
     # - node_exporter
