@@ -16,7 +16,7 @@
 	editor = vim
 	autocrlf = input
 	filemode = false
-	excludesfile = $HOME/.gitignore
+	excludesfile = ~/.gitignore
 [init]
 	defaultBranch = main
 [filter "lfs"]

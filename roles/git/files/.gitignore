@@ -14,3 +14,6 @@ undodir/*
 .vscode
 
 wget-log*
+
+# Claude Code local config
+.claude/
