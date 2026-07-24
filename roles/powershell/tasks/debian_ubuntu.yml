@@ -1,0 +1,43 @@
+---
+# From here: https://learn.microsoft.com/en-us/powershell/scripting/install/install-debian
+- name: Check if PowerShell is installed
+  ansible.builtin.command: "which pwsh"
+  register: powershell_installed
+  failed_when: false
+  changed_when: false
+
+- name: Determine PowerShell apt repository OS identifiers
+  ansible.builtin.set_fact:
+    powershell_repo_os: "{{ ansible_facts['distribution'] | lower }}"
+    powershell_repo_version: >-
+      {{ ansible_facts['distribution_major_version']
+      if ansible_facts['distribution'] == 'Debian'
+      else ansible_facts['distribution_version'] }}
+  when: powershell_installed.rc != 0
+
+- name: Download Microsoft repository GPG keys package
+  ansible.builtin.get_url:
+    url: "https://packages.microsoft.com/config/{{ powershell_repo_os }}/{{ powershell_repo_version }}/packages-microsoft-prod.deb"
+    dest: /tmp/packages-microsoft-prod.deb
+    mode: '0644'
+  when: powershell_installed.rc != 0
+
+- name: Register Microsoft repository GPG keys
+  become: true
+  ansible.builtin.apt:
+    deb: /tmp/packages-microsoft-prod.deb
+  when: powershell_installed.rc != 0
+
+- name: Remove Microsoft repository GPG keys package file
+  ansible.builtin.file:
+    path: /tmp/packages-microsoft-prod.deb
+    state: absent
+  when: powershell_installed.rc != 0
+
+- name: Update apt cache and install PowerShell
+  become: true
+  ansible.builtin.apt:
+    name: powershell
+    state: present
+    update_cache: true
+  when: powershell_installed.rc != 0

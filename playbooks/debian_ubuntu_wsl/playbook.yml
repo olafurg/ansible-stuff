@@ -12,6 +12,7 @@
     - tmux
     - terraform
     - azure_cli
+    - powershell
     - 1password_wsl
     # - mise
     # - prometheus
