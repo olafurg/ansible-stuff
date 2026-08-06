@@ -14,7 +14,7 @@
     - azure_cli
     - powershell
     - 1password_wsl
-    # - mise
+    - mise
     # - prometheus
     # - grafana
     # - node_exporter
