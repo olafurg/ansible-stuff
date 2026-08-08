@@ -1,0 +1,37 @@
+---
+# Windows Terminal stores its configuration on the Windows side, inside the
+# packaged-app sandbox. This role runs from WSL (the control environment for the
+# windows11_workstation playbook) and writes across to the Windows filesystem
+# via /mnt/c. See the playbook README for the full execution model.
+- name: Configure Windows Terminal
+  when: "'microsoft' in ansible_facts['kernel'] | lower"
+  block:
+
+    - name: Resolve the Windows Terminal LocalState directory
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          wslpath -u "$(cmd.exe /c echo %LOCALAPPDATA% | tr -d '\r')"
+        chdir: /mnt/c
+        executable: /bin/bash
+      register: windows_terminal_localappdata
+      changed_when: false
+
+    - name: Set Windows Terminal settings directory
+      ansible.builtin.set_fact:
+        windows_terminal_settings_dir: >-
+          {{ windows_terminal_localappdata.stdout | trim
+          }}/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState
+
+    - name: Ensure the Windows Terminal LocalState directory exists
+      ansible.builtin.file:
+        path: "{{ windows_terminal_settings_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Deploy Windows Terminal settings
+      ansible.builtin.copy:
+        src: "{{ role_path }}/files/settings.json"
+        dest: "{{ windows_terminal_settings_dir }}/settings.json"
+        mode: '0644'
+        backup: true
