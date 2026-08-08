@@ -3,6 +3,11 @@
 # packaged-app sandbox. This role runs from WSL (the control environment for the
 # windows11_workstation playbook) and writes across to the Windows filesystem
 # via /mnt/c. See the playbook README for the full execution model.
+#
+# We MERGE our managed keys into the live settings.json rather than overwriting
+# it: Windows Terminal auto-generates profiles (WSL distros, PowerShell, Git
+# Bash) and tombstones any generated profile that is missing from the file, so a
+# whole-file overwrite would make those profiles disappear for good.
 - name: Configure Windows Terminal
   when: "'microsoft' in ansible_facts['kernel'] | lower"
   block:
@@ -17,21 +22,18 @@
       register: windows_terminal_localappdata
       changed_when: false
 
-    - name: Set Windows Terminal settings directory
+    - name: Set the Windows Terminal settings path
       ansible.builtin.set_fact:
-        windows_terminal_settings_dir: >-
+        windows_terminal_settings: >-
           {{ windows_terminal_localappdata.stdout | trim
-          }}/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState
+          }}/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
 
-    - name: Ensure the Windows Terminal LocalState directory exists
-      ansible.builtin.file:
-        path: "{{ windows_terminal_settings_dir }}"
-        state: directory
-        mode: '0755'
-
-    - name: Deploy Windows Terminal settings
-      ansible.builtin.copy:
-        src: "{{ role_path }}/files/settings.json"
-        dest: "{{ windows_terminal_settings_dir }}/settings.json"
-        mode: '0644'
-        backup: true
+    - name: Merge managed settings into Windows Terminal settings.json
+      ansible.builtin.command:
+        argv:
+          - python3
+          - "{{ role_path }}/files/merge_settings.py"
+          - "{{ role_path }}/files/settings.json"
+          - "{{ windows_terminal_settings }}"
+      register: windows_terminal_merge
+      changed_when: "'CHANGED' in windows_terminal_merge.stdout"

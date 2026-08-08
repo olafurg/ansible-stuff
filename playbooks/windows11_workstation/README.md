@@ -48,10 +48,13 @@ Comment out any unwanted roles in `playbook.yml` first.
 Currently implemented:
 - **Windows Terminal** — Catppuccin Frappe/Latte color schemes that auto-switch with the system light/dark theme
 
-> **How the Windows Terminal role works:** it writes a managed `settings.json` to
-> `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\` (reached from WSL via `/mnt/c`).
-> Any existing settings.json is backed up first. Windows Terminal still auto-generates the PowerShell/WSL
-> profiles at runtime; this role only manages the theme, color schemes, and default font.
+> **How the Windows Terminal role works:** it *merges* managed keys into the live `settings.json` at
+> `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\` (reached from WSL via `/mnt/c`),
+> rather than overwriting the file. A whole-file overwrite would wipe Windows Terminal's auto-generated
+> profiles (WSL distros, PowerShell, Git Bash) — and because WT records generated profiles in `state.json`,
+> it would then treat them as user-deleted and refuse to regenerate them. The merge preserves that list and
+> only sets the theme, Catppuccin color schemes, default font, and the default profile (Debian). The previous
+> file is backed up to `settings.json.ansible.bak`.
 
 Planned (see the commented role list in `playbook.yml`): base Windows tweaks,
 winget apps (Brave, Discord, PowerToys, Signal, Spotify), 1Password + SSH agent,
