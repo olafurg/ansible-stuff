@@ -22,3 +22,19 @@
   changed_when: "'installed' in mise_use_node.stdout"
   environment:
     PATH: "{{ ansible_facts.env.HOME }}/.local/bin:{{ ansible_facts.env.PATH }}"
+
+- name: Install pnpm via mise
+  ansible.builtin.command:
+    cmd: mise install pnpm@latest
+  register: mise_install_pnpm
+  changed_when: "'installed' in mise_install_pnpm.stdout"
+  environment:
+    PATH: "{{ ansible_facts.env.HOME }}/.local/bin:{{ ansible_facts.env.PATH }}"
+
+- name: Set pnpm as global default
+  ansible.builtin.command:
+    cmd: mise use --global pnpm@latest
+  register: mise_use_pnpm
+  changed_when: "'installed' in mise_use_pnpm.stdout"
+  environment:
+    PATH: "{{ ansible_facts.env.HOME }}/.local/bin:{{ ansible_facts.env.PATH }}"
