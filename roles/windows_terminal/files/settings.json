@@ -1,7 +1,7 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "theme": "system",
-    "defaultProfile": "{c5a9e8b2-7f34-4d1e-9c6a-0b1d2e3f4a5b}",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "profiles": {
         "defaults": {
             "colorScheme": {
