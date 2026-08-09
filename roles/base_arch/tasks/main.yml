@@ -8,24 +8,52 @@
       - bind # dig and friends: https://wiki.archlinux.org/title/Bind
       - fastfetch # System info
       - base-devel # Required for AUR packages
+      - go # Build dependency for yay
       - inetutils # telnet and friends: https://wiki.archlinux.org/title/Telnet
     state: present
 
-- name: Clone yay repository
-  ansible.builtin.git:
-    repo: https://aur.archlinux.org/yay.git
-    dest: ~/tmp/yay
-  # noqa: latest[git]
+- name: Check whether yay is already installed
+  ansible.builtin.command: pacman -Q yay
+  # noqa: command-instead-of-module
+  register: base_arch_yay
+  changed_when: false
+  failed_when: false
 
+- name: Install yay from the AUR
+  when: base_arch_yay.rc != 0
+  block:
 
-- name: Build and install yay
-  ansible.builtin.shell:
-    cmd: makepkg -si --noconfirm
-    chdir: ~/tmp/yay
-  changed_when: true
+    - name: Clone yay repository
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/yay.git
+        dest: "{{ ansible_facts.env.HOME }}/tmp/yay"
+      # noqa: latest[git]
 
-- name: Clean up yay build directory
-  become: true
-  ansible.builtin.file:
-    path: ~/tmp/yay
-    state: absent
+    # Build as the unprivileged user (makepkg refuses to run as root). Build
+    # dependencies are pre-installed above, so `-s` never invokes sudo.
+    - name: Build the yay package
+      ansible.builtin.command:
+        cmd: makepkg -sf --noconfirm
+        chdir: "{{ ansible_facts.env.HOME }}/tmp/yay"
+      changed_when: true
+
+    - name: Find the built yay package
+      ansible.builtin.find:
+        paths: "{{ ansible_facts.env.HOME }}/tmp/yay"
+        patterns: "yay-*.pkg.tar.*"
+        excludes: "*-debug-*"
+      register: base_arch_yay_pkg
+
+    # Install via Ansible's become instead of makepkg's own sudo, which has no
+    # TTY under Ansible and cannot read a password.
+    - name: Install yay with pacman
+      become: true
+      ansible.builtin.command:
+        cmd: "pacman -U --noconfirm {{ base_arch_yay_pkg.files | map(attribute='path') | join(' ') }}"
+      # noqa: command-instead-of-module
+      changed_when: true
+
+    - name: Clean up yay build directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts.env.HOME }}/tmp/yay"
+        state: absent
