@@ -2,6 +2,8 @@
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "theme": "system",
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "initialCols": 130,
+    "initialRows": 50,
     "profiles": {
         "defaults": {
             "colorScheme": {
