@@ -53,8 +53,13 @@ Currently implemented:
 > rather than overwriting the file. A whole-file overwrite would wipe Windows Terminal's auto-generated
 > profiles (WSL distros, PowerShell, Git Bash) — and because WT records generated profiles in `state.json`,
 > it would then treat them as user-deleted and refuse to regenerate them. The merge preserves that list and
-> only sets the theme, Catppuccin color schemes, default font, and the default profile (Debian). The previous
-> file is backed up to `settings.json.ansible.bak`.
+> only sets the theme, Catppuccin color schemes, and default font. The previous file is backed up to
+> `settings.json.ansible.bak`.
+>
+> Debian is added as an explicit **static** profile (`commandline: wsl.exe -d Debian`, no `source`) and set as
+> the default. A static profile is used deliberately: WT's WSL generator assigns non-deterministic GUIDs, and a
+> stub referencing the wrong GUID would be hidden. The trade-off is that if WT's generator later creates its own
+> Debian profile, you may see two "Debian" entries — delete the generated one (or `state.json`) if so.
 
 Planned (see the commented role list in `playbook.yml`): base Windows tweaks,
 winget apps (Brave, Discord, PowerToys, Signal, Spotify), 1Password + SSH agent,
