@@ -12,7 +12,7 @@ all:
     servers:
       hosts:
         openclaw:
-          ansible_host: 10.10.10.2
+          ansible_host: 192.168.1.10
           ansible_user: root
         mattermost:
           ansible_host: 10.10.10.201

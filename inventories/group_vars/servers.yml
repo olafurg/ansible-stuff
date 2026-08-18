@@ -3,4 +3,4 @@
 # Add any key that should have access to all homelab servers
 base_debian_server_authorized_keys:
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP7Hgs8WON7d7kSFeWrr2cbTiuSJF1PVL3MzJ+mc2g3S oli@device"
-  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG5fdUcsuBb6FfWK3mWtvPqEtn78dt5uWYsm/48XK9DW saga@openclaw"
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChEvbVcYLpJkdrhEyN0P55Q4jFMJzKkSDRBYiXb+8mD steini@openclaw-nuc"
