@@ -6,7 +6,7 @@ This playbook automates the setup of a Windows 11 workstation with all necessary
 
 Ansible's control node cannot run on native Windows, so setup happens in two phases:
 
-1. **PowerShell bootstrap (pre-WSL):** Anything that must exist before Ansible can run — installing WSL itself (`wsl --install`) and any bootstrap apps — is done from an elevated PowerShell prompt. Ansible cannot own this step because it cannot run before WSL exists.
+1. **PowerShell bootstrap (pre-WSL):** Anything that must exist before Ansible can run — installing WSL itself and the Debian and Arch Linux distributions — is done from an elevated PowerShell prompt. Ansible cannot own this step because it cannot run before WSL exists.
 2. **Ansible-in-WSL (this playbook):** Once WSL is present, the playbook runs *inside* WSL. Roles that configure Windows itself (e.g. `windows_terminal`) reach the Windows filesystem via `/mnt/c` — no WinRM or Windows Ansible collections required.
 
 ## Prerequisites
@@ -20,28 +20,44 @@ Everything else is installed by the two steps below.
 
 ### Phase 1 — Windows (elevated PowerShell)
 
-Install WSL. This is the only step that runs outside WSL.
+Install WSL plus the Debian and Arch Linux distributions. This is the only step
+that runs outside WSL.
 
 ```powershell
 playbooks\windows11_workstation\bootstrap.ps1
 ```
 
-(Equivalent to running `wsl --install`.) Reboot if prompted, then launch **Ubuntu**
-from the Start menu and create your UNIX user.
+Both are official Microsoft Store distros, so each gets its own Start menu
+entry and Windows Terminal profile icon automatically — no extra config
+needed. Reboot if prompted, then launch **Debian** and/or **archlinux** from
+the Start menu and create your UNIX user for each.
 
-### Phase 2 — inside WSL (Ubuntu)
+### Phase 2 — inside WSL
 
 Clone the repo into your **WSL home** (`~`), not `/mnt/c` — Ansible ignores
 `ansible.cfg` on the world-writable `/mnt/c` mount, which breaks role resolution.
+Do this inside each distro you installed:
 
 ```bash
+# Debian
 sudo apt update && sudo apt -y install git
 git clone https://github.com/olafurg/ansible-stuff.git ~/ansible-stuff
+~/ansible-stuff/playbooks/debian_ubuntu_wsl/setup.sh   # Debian/WSL-specific roles (npm, etc.)
 ~/ansible-stuff/playbooks/windows11_workstation/setup.sh
 ```
 
-`setup.sh` installs Ansible, cd's to the repo root, and runs the playbook.
-Comment out any unwanted roles in `playbook.yml` first.
+```bash
+# archlinux
+sudo pacman -Syu --needed git
+git clone https://github.com/olafurg/ansible-stuff.git ~/ansible-stuff
+~/ansible-stuff/playbooks/arch_linux_wsl/setup.sh      # Arch/WSL-specific roles
+```
+
+Only run `windows11_workstation/setup.sh` (which configures Windows Terminal)
+from one distro — running it from both would just overwrite the same
+Windows-side settings file twice. `setup.sh` installs Ansible, cd's to the
+repo root, and runs its playbook. Comment out any unwanted roles in the
+relevant `playbook.yml` first.
 
 ## What Gets Configured
 
@@ -68,6 +84,7 @@ Git, and Visual Studio Code. These roles still need to be built.
 ## Troubleshooting
 
 - **"role not found":** you're running from `/mnt/c`. Clone into your WSL home (`~`) instead — see Phase 2.
-- **`wsl --install` did nothing:** ensure you ran PowerShell as Administrator, then reboot.
+- **`bootstrap.ps1` did nothing:** ensure you ran PowerShell as Administrator, then reboot.
+- **No icon / generic penguin icon for a distro:** Windows Terminal profile icons for WSL distros come from a fragment the distro's own Microsoft Store package ships — this is automatic for Debian and archlinux installed via `bootstrap.ps1`, but a manually-imported or non-Store distro won't have one.
 - Check that Windows 11 is up to date and you have a stable internet connection.
 - Re-run with `-vvv` for verbose Ansible output.
