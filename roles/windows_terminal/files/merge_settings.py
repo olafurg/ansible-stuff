@@ -8,9 +8,11 @@ not recreate it (a "tombstone"). Overwriting the whole file therefore wipes the
 generated profiles and tombstones them. So we MERGE our managed keys into the
 existing file instead, preserving the generated profile list.
 
-The managed fragment re-adds the Debian profile by its dynamic GUID. That GUID
-is a deterministic UUIDv5 of the distro name, so it is the same on every
-machine and WT adopts our stub as the real Debian profile (no duplicate).
+The managed fragment re-adds the Debian profile under the GUID WT's own WSL
+generator uses: UUIDv5 of the UTF-16LE distro name in the namespace
+{2bde4a90-d05f-401c-9492-e40884ead1d8}. That is the same on every machine, so WT
+adopts our stub as the real Debian profile (no duplicate) and, because the GUID
+is now present in settings.json, stops tombstoning the generated one.
 
 Usage: merge_settings.py <managed.json> <live-settings.json>
 Prints CHANGED or UNCHANGED.

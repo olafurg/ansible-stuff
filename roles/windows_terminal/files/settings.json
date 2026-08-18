@@ -16,8 +16,16 @@
             }
         },
         "list": [
+            // Debian: the GUID below is *not* arbitrary. Windows Terminal's WSL
+            // profile generator derives a profile GUID deterministically as
+            // UUIDv5(ns={2bde4a90-d05f-401c-9492-e40884ead1d8}, utf16le(distro name)),
+            // so "Debian" always yields {58ad8b0c-...}. Reusing it means WT merges
+            // this entry with its own generated Debian profile instead of creating a
+            // duplicate, and — crucially — the GUID's presence in settings.json stops
+            // WT from treating the generated profile as user-deleted (see state.json
+            // "generatedProfiles" tombstoning, explained in merge_settings.py).
             {
-                "guid": "{c5a9e8b2-7f34-4d1e-9c6a-0b1d2e3f4a5b}",
+                "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
                 "name": "Debian",
                 "commandline": "wsl.exe -d Debian --cd ~",
                 "hidden": false

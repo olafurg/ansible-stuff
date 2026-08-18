@@ -72,10 +72,17 @@ Currently implemented:
 > only sets the theme, Catppuccin color schemes, and default font. The previous file is backed up to
 > `settings.json.ansible.bak`.
 >
-> Debian is added as an explicit **static** profile (`commandline: wsl.exe -d Debian`, no `source`) and set as
-> the default. A static profile is used deliberately: WT's WSL generator assigns non-deterministic GUIDs, and a
-> stub referencing the wrong GUID would be hidden. The trade-off is that if WT's generator later creates its own
-> Debian profile, you may see two "Debian" entries — delete the generated one (or `state.json`) if so.
+> Debian is added as an explicit **static** profile (`commandline: wsl.exe -d Debian --cd ~`, no `source`), while
+> PowerShell 7 stays the default profile. The static entry deliberately reuses the GUID WT's own WSL generator
+> would assign to a distro named `Debian` — that GUID is deterministic, `UUIDv5(ns={2bde4a90-d05f-401c-9492-e40884ead1d8},
+> utf16le("Debian"))` = `{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}` — so it is the same on every machine. Reusing it
+> means WT merges the generated profile (icon and all) into ours instead of showing two "Debian" entries, and it
+> keeps the GUID present in `settings.json`, which is what stops WT from tombstoning the generated profile.
+>
+> Distros installed by modern WSL (e.g. `archlinux`) instead get their own profile *fragment* at
+> `%LOCALAPPDATA%\Microsoft\Windows Terminal\Fragments\Microsoft.WSL\{guid}.json`, which supplies their icon and
+> hides the legacy generated profile. The Microsoft Store Debian package does not ship one, which is why Debian
+> needs the entry above.
 
 Planned (see the commented role list in `playbook.yml`): base Windows tweaks,
 winget apps (Brave, Discord, PowerToys, Signal, Spotify), 1Password + SSH agent,
@@ -85,6 +92,16 @@ Git, and Visual Studio Code. These roles still need to be built.
 
 - **"role not found":** you're running from `/mnt/c`. Clone into your WSL home (`~`) instead — see Phase 2.
 - **`bootstrap.ps1` did nothing:** ensure you ran PowerShell as Administrator, then reboot.
-- **No icon / generic penguin icon for a distro:** Windows Terminal profile icons for WSL distros come from a fragment the distro's own Microsoft Store package ships — this is automatic for Debian and archlinux installed via `bootstrap.ps1`, but a manually-imported or non-Store distro won't have one.
+- **A distro is installed (`wsl -l -v` lists it) but missing from the Windows Terminal dropdown:** its generated
+  profile has been *tombstoned*. WT records every profile GUID it generates in
+  `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\state.json` under
+  `generatedProfiles`; if a recorded GUID is absent from `settings.json`, WT treats it as user-deleted and never
+  shows it again. Re-running this playbook fixes it for Debian (the managed profile puts the GUID back). For any
+  other distro: close Windows Terminal, delete that distro's GUID from `generatedProfiles` in `state.json`, and
+  relaunch.
+- **Generic penguin instead of the distro's logo:** expected for Debian. Windows Terminal takes WSL profile icons
+  from a *fragment* the distro registers at install time. Modern tar-based installs (e.g. `archlinux`) write one;
+  the Microsoft Store Debian package does not (its `AppxManifest.xml` declares only an `appExecutionAlias`), so WT
+  has no icon to use. Set `icon` explicitly on the profile if you want the Debian logo.
 - Check that Windows 11 is up to date and you have a stable internet connection.
 - Re-run with `-vvv` for verbose Ansible output.
