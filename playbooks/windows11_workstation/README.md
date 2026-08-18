@@ -43,7 +43,6 @@ Do this inside each distro you installed:
 sudo apt update && sudo apt -y install git
 git clone https://github.com/olafurg/ansible-stuff.git ~/ansible-stuff
 ~/ansible-stuff/playbooks/debian_ubuntu_wsl/setup.sh   # Debian/WSL-specific roles (npm, etc.)
-~/ansible-stuff/playbooks/windows11_workstation/setup.sh
 ```
 
 ```bash
@@ -53,11 +52,20 @@ git clone https://github.com/olafurg/ansible-stuff.git ~/ansible-stuff
 ~/ansible-stuff/playbooks/arch_linux_wsl/setup.sh      # Arch/WSL-specific roles
 ```
 
-Only run `windows11_workstation/setup.sh` (which configures Windows Terminal)
-from one distro — running it from both would just overwrite the same
-Windows-side settings file twice. `setup.sh` installs Ansible, cd's to the
-repo root, and runs its playbook. Comment out any unwanted roles in the
-relevant `playbook.yml` first.
+Then, from **either** distro (once — not both), configure the Windows side:
+
+```bash
+~/ansible-stuff/playbooks/windows11_workstation/setup.sh
+```
+
+This playbook writes only to the Windows filesystem via `/mnt/c`, so unlike the
+per-distro scripts above it is distro-agnostic: it detects apt/pacman/dnf for
+its prerequisites and behaves identically from Debian or Arch. Running it from
+both distros is harmless but pointless — it would just merge the same keys into
+the same Windows-side settings file twice.
+
+Each `setup.sh` installs Ansible, cd's to the repo root, and runs its playbook.
+Comment out any unwanted roles in the relevant `playbook.yml` first.
 
 ## What Gets Configured
 
