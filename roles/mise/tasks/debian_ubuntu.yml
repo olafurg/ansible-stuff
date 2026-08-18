@@ -40,7 +40,7 @@
 
 - name: Add mise activation to .zshrc
   ansible.builtin.lineinfile:
-    path: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}/.zshrc"
+    path: "/home/{{ ansible_facts.env.SUDO_USER | default(ansible_facts.user_id) }}/.zshrc"
     regexp: '.*mise activate.*'
     line: 'eval "$(mise activate zsh)"'
     state: present

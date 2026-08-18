@@ -22,17 +22,17 @@
 - name: Clone the asdf repo
   ansible.builtin.git:
     repo: 'https://github.com/asdf-vm/asdf.git'
-    dest: '/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}/.asdf'
+    dest: '/home/{{ ansible_facts.env.SUDO_USER | default(ansible_facts.user_id) }}/.asdf'
     version: 'v0.15.0'
     clone: true
     update: true
   become: true
-  become_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+  become_user: "{{ ansible_facts.env.SUDO_USER | default(ansible_facts.user_id) }}"
   when: asdf_installed.rc != 0
 
 - name: Add asdf initialization to .zshrc
   ansible.builtin.lineinfile:
-    path: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}/.zshrc"
+    path: "/home/{{ ansible_facts.env.SUDO_USER | default(ansible_facts.user_id) }}/.zshrc"
     regexp: '.*asdf\.sh.*'
     line: '. "$HOME/.asdf/asdf.sh"'
     state: present
@@ -41,6 +41,6 @@
 - name: Create symlink for .asdfrc
   ansible.builtin.file:
     src: "{{ role_path }}/files/.asdfrc"
-    dest: "/home/{{ ansible_env.SUDO_USER | default(ansible_user_id) }}/.asdfrc"
+    dest: "/home/{{ ansible_facts.env.SUDO_USER | default(ansible_facts.user_id) }}/.asdfrc"
     state: link
     force: true

@@ -2,7 +2,7 @@
 
 - name: Ensure ~/.local/bin directory exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.local/bin"
+    path: "{{ ansible_facts.env.HOME }}/.local/bin"
     state: directory
     mode: '0755'
 
@@ -17,7 +17,7 @@
 
 - name: Set BROWSER environment variable for WSL2
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: 'export BROWSER=wslview'
     regexp: '^export BROWSER='
     state: present

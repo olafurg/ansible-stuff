@@ -2,13 +2,13 @@
 - name: Create symlink for .gemrc
   ansible.builtin.file:
     src: "{{ role_path }}/files/.gemrc"
-    dest: "{{ ansible_env.HOME }}/.gemrc"
+    dest: "{{ ansible_facts.env.HOME }}/.gemrc"
     state: link
     force: true
 
 - name: Create symlink for .rspec
   ansible.builtin.file:
     src: "{{ role_path }}/files/.rspec"
-    dest: "{{ ansible_env.HOME }}/.rspec"
+    dest: "{{ ansible_facts.env.HOME }}/.rspec"
     state: link
     force: true

@@ -4,4 +4,4 @@
     set -o pipefail
     curl -fsSL https://opencode.ai/install | bash
   args:
-    creates: "{{ ansible_env.HOME }}/.opencode/bin/opencode"
+    creates: "{{ ansible_facts.env.HOME }}/.opencode/bin/opencode"
