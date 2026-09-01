@@ -5,6 +5,7 @@
   # Base roles and non-Homebrew-Apps and/or apps which require config files to be arranged
   roles:
     - oh_my_zsh
+    - pipx
     - git
     - ghostty
     - opencode
@@ -16,19 +17,6 @@
 
   # Apps that require no config files to be arranged
   tasks:
-    - name: Find pipx executable
-      ansible.builtin.command: which pipx
-      register: pipx_executable
-      changed_when: false
-
-    - name: Install pipx apps
-      community.general.pipx:
-        name: "{{ item }}"
-        state: present
-        executable: "{{ pipx_executable.stdout }}"
-      loop:
-        - ansible-lint
-
     - name: Install Homebrew (no-cask) apps
       community.general.homebrew:
         name:

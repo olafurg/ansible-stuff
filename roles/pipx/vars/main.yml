@@ -1,0 +1,8 @@
+---
+# Apps installed as their own pipx app so each gets a ~/.local/bin shim.
+# yamllint is a transitive dependency of ansible-lint, but pipx only shims the
+# app it is told to install, so it has to be named explicitly here.
+pipx_apps:
+  - ansible-lint
+  - yamllint
+  - pre-commit

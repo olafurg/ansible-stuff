@@ -6,6 +6,7 @@
   roles:
     - base_arch
     - oh_my_zsh
+    - pipx
     - git
     - opencode
     - gh

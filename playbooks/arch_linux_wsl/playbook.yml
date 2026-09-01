@@ -6,6 +6,7 @@
     - base_arch
     - arch_wsl # ONLY if running on WSL
     - oh_my_zsh
+    - pipx
     - git
     - gh
     - vim

@@ -6,6 +6,7 @@
   roles:
     - base_debian_ubuntu
     - oh_my_zsh
+    - pipx
     - git
     - gh
     - vim

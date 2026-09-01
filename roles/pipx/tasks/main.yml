@@ -1,0 +1,33 @@
+---
+- name: Install pipx on Debian/Ubuntu
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+  tags: [pipx]
+
+- name: Install pipx on Arch Linux
+  ansible.builtin.include_tasks: arch_linux.yml
+  when: ansible_facts['os_family'] == 'Archlinux'
+  tags: [pipx]
+
+- name: Install pipx on macOS
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] == 'Darwin'
+  tags: [pipx]
+
+# Homebrew's pipx is not on Ansible's PATH, so the module is pointed at it
+# explicitly rather than relying on a bare `pipx` lookup.
+- name: Find pipx executable
+  ansible.builtin.command: which pipx
+  become: false
+  register: pipx_executable
+  changed_when: false
+  tags: [pipx]
+
+- name: Install pipx apps
+  community.general.pipx:
+    name: "{{ item }}"
+    state: present
+    executable: "{{ pipx_executable.stdout }}"
+  become: false
+  loop: "{{ pipx_apps }}"
+  tags: [pipx]

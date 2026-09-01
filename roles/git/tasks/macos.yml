@@ -3,19 +3,7 @@
   community.general.homebrew:
     name:
       - git
-      - pipx
     state: present
-
-- name: Check if pre-commit is installed via pipx
-  ansible.builtin.command: pipx list --short
-  register: pipx_list
-  changed_when: false
-  failed_when: false
-
-- name: Install pre-commit via pipx
-  ansible.builtin.command: pipx install pre-commit
-  when: "'pre-commit' not in pipx_list.stdout"
-  changed_when: true
 
 - name: Create symlink for .gitconfig
   ansible.builtin.file:

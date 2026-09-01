@@ -1,0 +1,7 @@
+---
+- name: Install pipx
+  become: true
+  ansible.builtin.apt:
+    name:
+      - pipx
+    state: present
