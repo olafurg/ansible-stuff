@@ -6,7 +6,12 @@ SHELL := /bin/sh
 TOOL_PATH := $(HOME)/.local/bin
 RUN := export PATH="$(TOOL_PATH):$$PATH";
 
-.PHONY: help setup lint lint-yaml lint-ansible check macos debian clean
+.PHONY: help setup lint lint-yaml lint-ansible check \
+	macos arch arch-wsl debian debian-wsl debian-server clean
+
+# The Arch WSL image ships without a generated locale, so Ansible falls back to
+# ASCII and mangles non-ASCII output unless one is forced. Matches setup.sh.
+ARCH_LOCALE := LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -70,11 +75,28 @@ check: require-ansible-playbook ## Run syntax check on all playbooks
 	done; \
 	[ -z "$$failed" ] || { echo "Syntax check failed. Re-run the failing playbook with --syntax-check for detail."; exit 1; }
 
-macos: require-ansible-playbook ## Run macOS playbook
+# Local machine playbooks. -K prompts once for the sudo password. These run the
+# playbook only; use `make setup` to install the prerequisites first on a new box.
+macos: require-ansible-playbook ## Run the macOS workstation playbook
 	@$(RUN) ansible-playbook playbooks/macos_workstation/playbook.yml -K
 
-debian: require-ansible-playbook ## Run Debian/Ubuntu playbook
+arch: require-ansible-playbook ## Run the Arch workstation playbook
+	@$(RUN) $(ARCH_LOCALE) ansible-playbook playbooks/arch_linux_workstation/playbook.yml -K
+
+arch-wsl: require-ansible-playbook ## Run the Arch WSL playbook
+	@$(RUN) $(ARCH_LOCALE) ansible-playbook playbooks/arch_linux_wsl/playbook.yml -K
+
+debian: require-ansible-playbook ## Run the Debian/Ubuntu workstation playbook
 	@$(RUN) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml -K
+
+debian-wsl: require-ansible-playbook ## Run the Debian/Ubuntu WSL playbook
+	@$(RUN) ansible-playbook playbooks/debian_ubuntu_wsl/playbook.yml -K
+
+# Remote, unlike every target above: connects to the `servers` group as root
+# over SSH, so there is no become step for -K to answer. Defaults to every
+# server in the inventory — scope to one with LIMIT=<host>.
+debian-server: require-ansible-playbook ## Run the Debian server playbook (LIMIT=host to scope)
+	@$(RUN) ansible-playbook playbooks/debian_server/playbook.yml $(if $(LIMIT),--limit $(LIMIT))
 
 clean: ## Clean up temporary files
 	@echo "Cleaning up..."
