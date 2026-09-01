@@ -1,10 +1,10 @@
-# Set PATH to include pipx-installed tools
+# pipx shims every app it installs into ~/.local/bin on all platforms, so that
+# is the only directory worth prepending. Anything installed by a system
+# package manager instead (ansible on Arch, say) is picked up from $PATH.
 # GNU Make 3.81 (macOS default) can't reliably export PATH, so we prepend it in each recipe.
-SHELL := /bin/zsh
-LINT_PATH := $(HOME)/.local/pipx/venvs/ansible-lint/bin
-ANSIBLE_PATH := $(HOME)/.local/bin:$(HOME)/.local/pipx/venvs/ansible/bin
-LINT_CMD := export PATH="$(LINT_PATH):$$PATH";
-ANSIBLE_CMD := export PATH="$(ANSIBLE_PATH):$$PATH";
+SHELL := /bin/sh
+TOOL_PATH := $(HOME)/.local/bin
+RUN := export PATH="$(TOOL_PATH):$$PATH";
 
 .PHONY: help setup lint lint-yaml lint-ansible check macos debian clean
 
@@ -41,25 +41,40 @@ setup: ## Bootstrap this machine (installs Ansible, dependencies, runs playbook)
 
 lint: lint-yaml lint-ansible ## Run all linters
 
-lint-yaml: ## Run yamllint on all YAML files
+# Fail with something actionable instead of "command not found".
+require-%:
+	@$(RUN) command -v $* >/dev/null 2>&1 || { \
+		echo "ERROR: $* not found."; \
+		echo "Install it with 'make setup' (the pipx role), or: pipx install $*"; \
+		exit 1; \
+	}
+
+lint-yaml: require-yamllint ## Run yamllint on all YAML files
 	@echo "Running yamllint..."
-	@$(LINT_CMD) yamllint .
+	@$(RUN) yamllint .
 
-lint-ansible: ## Run ansible-lint on playbooks and roles
+lint-ansible: require-ansible-lint ## Run ansible-lint on playbooks and roles
 	@echo "Running ansible-lint..."
-	@$(LINT_CMD) ansible-lint playbooks/*/playbook.yml roles/*/tasks/*.yml
+	@$(RUN) ansible-lint playbooks/*/playbook.yml roles/*/tasks/*.yml
 
-check: ## Run syntax check on all playbooks
-	@echo "Checking macOS playbook syntax..."
-	@$(ANSIBLE_CMD) ansible-playbook playbooks/macos_workstation/playbook.yml --syntax-check
-	@echo "Checking Debian/Ubuntu playbook syntax..."
-	@$(ANSIBLE_CMD) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml --syntax-check
+check: require-ansible-playbook ## Run syntax check on all playbooks
+	@echo "Checking playbook syntax..."
+	@$(RUN) for p in playbooks/*/playbook.yml; do \
+		printf '  %-28s ' "$$(basename $$(dirname $$p))"; \
+		if ansible-playbook "$$p" --syntax-check >/dev/null 2>&1; then \
+			echo "OK"; \
+		else \
+			echo "FAIL"; \
+			failed=1; \
+		fi; \
+	done; \
+	[ -z "$$failed" ] || { echo "Syntax check failed. Re-run the failing playbook with --syntax-check for detail."; exit 1; }
 
-macos: ## Run macOS playbook
-	@$(ANSIBLE_CMD) ansible-playbook playbooks/macos_workstation/playbook.yml -K
+macos: require-ansible-playbook ## Run macOS playbook
+	@$(RUN) ansible-playbook playbooks/macos_workstation/playbook.yml -K
 
-debian: ## Run Debian/Ubuntu playbook
-	@$(ANSIBLE_CMD) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml -K
+debian: require-ansible-playbook ## Run Debian/Ubuntu playbook
+	@$(RUN) ansible-playbook playbooks/debian_ubuntu_workstation/playbook.yml -K
 
 clean: ## Clean up temporary files
 	@echo "Cleaning up..."
