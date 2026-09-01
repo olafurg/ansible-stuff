@@ -72,6 +72,18 @@ def load_jsonc(path):
         return json.loads(strip_jsonc(text))
 
 
+# Lists that must be unioned entry-by-entry rather than replaced wholesale,
+# and the field that identifies an entry in each. Anything not listed here is
+# overwritten by the managed value, so a list only belongs here if the live file
+# can legitimately hold entries of its own that we must not clobber.
+LIST_MERGE_KEYS = {
+    "schemes": "name",      # colour schemes, ours plus any the user added
+    "list": "guid",         # profiles, mostly WT-generated (see tombstoning above)
+    "actions": "id",        # action definitions, ours plus any the user added
+    "keybindings": "keys",  # key bindings, one entry per keystroke
+}
+
+
 def merge_by_key(existing, incoming, key):
     """Union two lists of dicts on a key; incoming wins on a match."""
     result = list(existing)
@@ -88,10 +100,8 @@ def merge_by_key(existing, incoming, key):
 
 def deep_merge(base, overlay):
     for key, value in overlay.items():
-        if key == "schemes" and isinstance(value, list):
-            base[key] = merge_by_key(base.get(key, []), value, "name")
-        elif key == "list" and isinstance(value, list):
-            base[key] = merge_by_key(base.get(key, []), value, "guid")
+        if key in LIST_MERGE_KEYS and isinstance(value, list):
+            base[key] = merge_by_key(base.get(key, []), value, LIST_MERGE_KEYS[key])
         elif isinstance(value, dict) and isinstance(base.get(key), dict):
             deep_merge(base[key], value)
         else:

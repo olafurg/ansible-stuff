@@ -1,6 +1,28 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "theme": "system",
+    // Shift+Enter is made to send ESC+CR, the same bytes Alt/Option+Enter
+    // sends, which Claude Code reads as "insert a newline" instead of
+    // "submit". Windows Terminal is documented as supporting Shift+Enter
+    // unaided, but does not distinguish it from Enter here, so the binding
+    // makes it explicit. Ctrl+J is the built-in fallback in any terminal.
+    // Split action/keybinding form is what WT 1.19+ writes back itself, so
+    // re-running the merge stays idempotent.
+    "actions": [
+        {
+            "command": {
+                "action": "sendInput",
+                "input": "\u001b\r"
+            },
+            "id": "User.newlineForClaudeCode"
+        }
+    ],
+    "keybindings": [
+        {
+            "id": "User.newlineForClaudeCode",
+            "keys": "shift+enter"
+        }
+    ],
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
     "initialCols": 130,
     "initialRows": 50,
