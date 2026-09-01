@@ -12,4 +12,4 @@
     - terraform
     #   - tmux
     #   - azure_cli
-    #   - 1password_wsl
+    - 1password_wsl

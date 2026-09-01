@@ -1,10 +1,12 @@
 # WSL piece is taken from here mostly: https://dev.to/d4vsanchez/use-1password-ssh-agent-in-wsl-2j6m
 ---
-- name: Install WSL prerequisites for 1Password setup
-  become: true
-  ansible.builtin.apt:
-    name: socat
-    state: present
+- name: Install WSL prerequisites for 1Password setup on Debian/Ubuntu
+  ansible.builtin.include_tasks: debian_ubuntu.yml
+  when: ansible_facts['os_family'] in ['Debian', 'Ubuntu']
+
+- name: Install WSL prerequisites for 1Password setup on Arch Linux
+  ansible.builtin.include_tasks: arch_linux.yml
+  when: ansible_facts['os_family'] == 'Archlinux'
 
 - name: Make ~/.1password directory
   ansible.builtin.file:

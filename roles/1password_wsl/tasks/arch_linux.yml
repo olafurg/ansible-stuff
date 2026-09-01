@@ -1,0 +1,7 @@
+---
+- name: Install socat
+  become: true
+  community.general.pacman:
+    name:
+      - socat
+    state: present
