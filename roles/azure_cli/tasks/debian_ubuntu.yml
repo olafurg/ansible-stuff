@@ -1,27 +1,53 @@
 ---
 # From here: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
-- name: Check if Azure CLI is installed
-  ansible.builtin.command: "which az"
-  register: azure_cli_installed
-  failed_when: false
-  changed_when: false
+# Microsoft doesn't publish a repo for every release (e.g. no trixie), so fall
+# back to the newest supported suite the same way InstallAzureCLIDeb does.
+- name: Determine Azure CLI apt repository suite
+  ansible.builtin.set_fact:
+    azure_cli_repo_suite: >-
+      {{ ansible_facts['distribution_release']
+      if ansible_facts['distribution_release'] in ['bookworm', 'bullseye', 'jammy', 'noble']
+      else ('bookworm' if ansible_facts['distribution'] == 'Debian' else 'noble') }}
 
-- name: Download Azure CLI installation script
-  ansible.builtin.get_url:
-    url: https://aka.ms/InstallAzureCLIDeb
-    dest: /tmp/InstallAzureCLIDeb
-    mode: '0755'
-  when: azure_cli_installed.rc != 0
-
-- name: Run Azure CLI installation script
+- name: Ensure /etc/apt/keyrings exists
   become: true
-  ansible.builtin.command:
-    cmd: /tmp/InstallAzureCLIDeb
-  changed_when: true
-  when: azure_cli_installed.rc != 0
-
-- name: Remove Azure CLI installation script
   ansible.builtin.file:
-    path: /tmp/InstallAzureCLIDeb
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+# Always refresh the key: older copies carry a SHA1 binding signature that
+# apt's sqv verifier rejects on Debian 13+.
+- name: Download Microsoft signing key
+  become: true
+  ansible.builtin.get_url:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    dest: /etc/apt/keyrings/microsoft.asc
+    mode: '0644'
+    force: true
+
+- name: Remove stale dearmored Microsoft signing key
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings/microsoft.gpg
     state: absent
-  when: azure_cli_installed.rc != 0
+
+- name: Add Azure CLI apt repository
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/azure-cli.sources
+    content: |
+      Types: deb
+      URIs: https://packages.microsoft.com/repos/azure-cli/
+      Suites: {{ azure_cli_repo_suite }}
+      Components: main
+      Architectures: {{ 'amd64' if ansible_facts['architecture'] == 'x86_64' else 'arm64' }}
+      Signed-by: /etc/apt/keyrings/microsoft.asc
+    mode: '0644'
+
+- name: Update sources and install Azure CLI
+  become: true
+  ansible.builtin.apt:
+    name: azure-cli
+    state: present
+    update_cache: true
