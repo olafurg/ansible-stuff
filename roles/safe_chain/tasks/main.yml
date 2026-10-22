@@ -8,8 +8,9 @@
 
 - name: Download safe-chain installer
   ansible.builtin.get_url:
-    url: https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh
+    url: https://github.com/AikidoSec/safe-chain/releases/download/{{ safe_chain_version }}/install-safe-chain.sh
     dest: /tmp/install-safe-chain.sh
+    checksum: "sha256:{{ safe_chain_installer_sha256 }}"
     mode: '0755'
   when: safe_chain_check.rc != 0
   tags: [safe_chain]

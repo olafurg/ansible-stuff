@@ -1,0 +1,6 @@
+---
+# Pinned safe-chain release, per the safe-chain README. To upgrade, bump the
+# version and copy the matching install-safe-chain.sh SHA256 from that
+# release's README install instructions.
+safe_chain_version: "1.5.25"
+safe_chain_installer_sha256: "83069f6db4215cccf6a26bdd6e65a5c2366b9d24322b2d5d2862d47385e56682"
