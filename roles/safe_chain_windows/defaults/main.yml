@@ -1,0 +1,6 @@
+---
+# Pinned safe-chain release, per the safe-chain README. To upgrade, bump the
+# version and copy the matching install-safe-chain.ps1 SHA256 from that
+# release's README install instructions.
+safe_chain_windows_version: "1.5.25"
+safe_chain_windows_installer_sha256: "9F813B5ADCA1574ED19F51E9B33C6BC0E2E492E0E85168131E180084F55375FF"

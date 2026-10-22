@@ -1,0 +1,44 @@
+---
+# Installs Aikido safe-chain on the Windows side. Like windows_terminal, this
+# role runs from WSL (the control environment for the windows11_workstation
+# playbook) and reaches Windows through interop, so it cannot reuse the
+# safe_chain role: that would install the Linux build into the WSL distro.
+#
+# The PowerShell installer also runs `safe-chain setup`, which adds the shell
+# integration to the Windows PowerShell profiles.
+- name: Install safe-chain on Windows
+  when: "'microsoft' in ansible_facts['kernel'] | lower"
+  tags: [safe_chain_windows]
+  block:
+
+    - name: Resolve the Windows user profile directory
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          wslpath -u "$(cmd.exe /c echo %USERPROFILE% | tr -d '\r')"
+        chdir: /mnt/c
+        executable: /bin/bash
+      register: safe_chain_windows_userprofile
+      changed_when: false
+
+    - name: Run the safe-chain PowerShell installer
+      ansible.builtin.command:
+        argv:
+          - powershell.exe
+          - -NoProfile
+          - -ExecutionPolicy
+          - Bypass
+          - -Command
+          - >-
+            $installer = Join-Path $env:TEMP 'install-safe-chain.ps1';
+            $releases = 'https://github.com/AikidoSec/safe-chain/releases/download';
+            Invoke-WebRequest "$releases/{{ safe_chain_windows_version }}/install-safe-chain.ps1"
+            -OutFile $installer -UseBasicParsing;
+            $hash = (Get-FileHash $installer -Algorithm SHA256).Hash;
+            if ($hash -ne '{{ safe_chain_windows_installer_sha256 }}') {
+            Remove-Item $installer -ErrorAction SilentlyContinue;
+            throw 'Checksum verification failed for install-safe-chain.ps1' };
+            & $installer;
+            Remove-Item $installer
+        chdir: /mnt/c
+        creates: "{{ safe_chain_windows_userprofile.stdout | trim }}/.safe-chain/bin/safe-chain.exe"

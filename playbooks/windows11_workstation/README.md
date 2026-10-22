@@ -71,6 +71,8 @@ Comment out any unwanted roles in the relevant `playbook.yml` first.
 
 Currently implemented:
 - **Windows Terminal** — Catppuccin Frappe/Latte color schemes that auto-switch with the system light/dark theme
+- **Aikido safe-chain** — installed via its PowerShell installer (run through `powershell.exe` from WSL), which also
+  hooks it into the PowerShell profiles. Skipped if `%USERPROFILE%\.safe-chain\bin\safe-chain.exe` already exists.
 
 > **How the Windows Terminal role works:** it *merges* managed keys into the live `settings.json` at
 > `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\` (reached from WSL via `/mnt/c`),

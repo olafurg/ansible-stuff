@@ -5,6 +5,7 @@
 
   roles:
     - windows_terminal
+    - safe_chain_windows
 
   # Aspirational roles still to be built for the Windows side:
   #   - base_windows  # Must be first in the list
