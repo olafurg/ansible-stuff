@@ -16,6 +16,7 @@
     - powershell
     - 1password_wsl
     - mise
+    - safe_chain
     # - prometheus
     # - grafana
     # - node_exporter
