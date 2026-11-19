@@ -4,6 +4,16 @@
     name: hashicorp/tap
     state: present
 
+- name: Read trusted Homebrew entries
+  ansible.builtin.command: brew trust --json v1
+  register: terraform_brew_trust
+  changed_when: false
+
+- name: Trust the Terraform formula from hashicorp/tap
+  ansible.builtin.command: brew trust --formula hashicorp/tap/terraform
+  when: "'hashicorp/tap/terraform' not in terraform_brew_trust.stdout"
+  changed_when: true
+
 - name: Install Terraform on macOS
   community.general.homebrew:
     name: hashicorp/tap/terraform
