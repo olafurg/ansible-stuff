@@ -8,6 +8,7 @@
     - pipx
     - git
     - ghostty
+    - powershell
     - terraform
     - tmux
     - vim

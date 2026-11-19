@@ -2,3 +2,7 @@
 - name: Install PowerShell on Debian/Ubuntu
   ansible.builtin.include_tasks: debian_ubuntu.yml
   when: ansible_facts['distribution'] in ['Debian', 'Ubuntu']
+
+- name: Install PowerShell on macOS
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] in ['Darwin']

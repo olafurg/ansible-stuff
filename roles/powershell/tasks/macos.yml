@@ -1,0 +1,6 @@
+---
+# From here: https://learn.microsoft.com/en-us/powershell/scripting/install/install-powershell-on-macos
+- name: Install PowerShell on macOS
+  community.general.homebrew:
+    name: powershell
+    state: present
