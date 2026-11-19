@@ -30,11 +30,10 @@
     - name: Install Homebrew cask apps
       community.general.homebrew_cask:
         name:
-          - 1password
           - brave-browser
           - discord
           - firefox
-          - flux
+          - flux-app
           - font-jetbrains-mono
           - raycast
           - rectangle
@@ -45,12 +44,15 @@
           - visual-studio-code
           - whatsapp
         state: present
+        # Take over apps already in /Applications that were installed outside Homebrew
+        install_options: adopt
 
     - name: Install Homebrew cask apps (on non-Intel)
       community.general.homebrew_cask:
         name:
           - chatgpt
         state: present
+        install_options: adopt
       when: ansible_facts['architecture'] not in ['x86_64', 'i386', 'i686']
 
     - name: Ensure specified Homebrew cask apps are absent
