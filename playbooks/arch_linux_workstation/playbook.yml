@@ -8,7 +8,6 @@
     - oh_my_zsh
     - pipx
     - git
-    - opencode
     - gh
     - vim
     - terraform

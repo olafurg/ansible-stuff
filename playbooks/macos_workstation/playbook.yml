@@ -8,7 +8,6 @@
     - pipx
     - git
     - ghostty
-    - opencode
     - terraform
     - tmux
     - vim
