@@ -22,6 +22,7 @@
         name:
           - awscli
           - azure-cli
+          - btop
           - gh
           - htop
           - tree

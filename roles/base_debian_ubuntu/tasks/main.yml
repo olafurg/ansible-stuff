@@ -11,6 +11,7 @@
   ansible.builtin.apt:
     name:
       - ansible
+      - btop
       - curl
       - dnsutils # dig, nslookup, nsupdate
       - git

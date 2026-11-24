@@ -3,6 +3,7 @@
   become: true
   community.general.pacman:
     name:
+      - btop
       - git
       - htop
       - bind # dig and friends: https://wiki.archlinux.org/title/Bind

@@ -9,6 +9,7 @@
   ansible.builtin.apt:
     name:
       - ansible
+      - btop
       - curl
       - dnsutils
       - fail2ban
